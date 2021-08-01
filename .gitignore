@@ -1,3 +1,7 @@
 node_modules
 build
 dist
+.sass-cache
+react/public/bootstrap/*.css
+react/public/bootstrap/*.css.map
+react-template
