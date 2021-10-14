@@ -1,7 +1,0 @@
-fabric
-decorator
-flask
-flask_praetorian
-flask_sqlalchemy
-uwsgi
-csgoinvshuffle

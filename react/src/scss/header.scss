@@ -1,0 +1,12 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+
+.header {
+    background-color: $light;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+

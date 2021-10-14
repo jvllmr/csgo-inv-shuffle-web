@@ -1,0 +1,14 @@
+
+
+$light: #3c4044;
+
+@import 'bootstrap/scss/bootstrap';
+@import './scss/header.scss';
+@import './scss/footer.scss';
+@import './scss/content.scss';
+@import './scss/item.scss';
+
+
+body {
+    background-color: $dark;
+};
