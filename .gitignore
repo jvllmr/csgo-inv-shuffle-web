@@ -5,3 +5,4 @@ dist
 react/public/bootstrap/*.css
 react/public/bootstrap/*.css.map
 react-template
+__pycache__

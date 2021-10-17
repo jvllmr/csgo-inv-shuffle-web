@@ -28,7 +28,7 @@ def compile_react(c):
 @task
 def react(c):
     with c.cd('./react'):
-        c.run('npm start')
+        c.run('npm start', replace_env=False)
 
 @task 
 def test(c):

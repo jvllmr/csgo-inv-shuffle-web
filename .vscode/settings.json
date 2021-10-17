@@ -1,0 +1,5 @@
+{
+  "python.languageServer": "Jedi",
+  "python.formatting.provider": "black",
+  "python.pythonPath": "/home/janv/Schreibtisch/csgo-inv-shuffle-web/.venv/bin/python"
+}

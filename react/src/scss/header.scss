@@ -1,12 +1,21 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
 
 .header {
-    background-color: $light;
-    display: flex;
-    justify-content: space-evenly;
+  background-color: $light;
+  position: fixed;
+  min-width: 100vw;
+  top: 0;
 }
 
+.t-icon {
+  display: inline-block;
+  margin-left: 30vw;
+  padding: 1vw;
+}
 
-
+.ct-icon {
+  padding: 1vw;
+  display: inline-block;
+  margin-left: 30vw;
+}
