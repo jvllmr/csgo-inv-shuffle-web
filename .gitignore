@@ -6,3 +6,4 @@ react/public/bootstrap/*.css
 react/public/bootstrap/*.css.map
 react-template
 __pycache__
+test.py

@@ -11,7 +11,8 @@
       "module": "flask",
       "env": {
         "FLASK_APP": "${workspaceFolder}/csgo-inv-shuffle-web/flaskapp.py",
-        "FLASK_ENV": "development"
+        "FLASK_ENV": "development",
+        "STEAM_API_KEY": "${env:STEAM_API_KEY}"
       },
       "args": ["run", "--no-debugger"],
       "jinja": false
