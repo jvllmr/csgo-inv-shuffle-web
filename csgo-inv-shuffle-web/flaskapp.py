@@ -3,6 +3,7 @@ from flask.json import JSONEncoder
 import os, requests
 from csgoinvshuffle.inventory import get_inventory
 from csgoinvshuffle.item import Item
+from csgoinvshuffle.exceptions import InventoryIsPrivateException
 import flask_praetorian
 from typing import NamedTuple
 from urllib.parse import urlencode
@@ -117,7 +118,10 @@ def get_item_icon(item_id):
 @flask_praetorian.auth_required
 def get_inv():
     steam_id = flask_praetorian.current_user_id()
-    return jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
+    try:
+        return jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
+    except InventoryIsPrivateException:
+        abort(403)
 
 
 def get_profile_data() -> xml_et.Element:
