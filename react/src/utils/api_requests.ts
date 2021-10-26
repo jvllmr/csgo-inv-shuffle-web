@@ -15,7 +15,15 @@ async function basic_request(
     path = api_url + path;
   }
 
-  return await fetch(path, args);
+  return await fetch(path, args).then(
+    (resp: Response) => {
+      if (resp.status === 401) { 
+      GET("/refresh_token") ;
+      return basic_request(method, path, body);
+    }
+      return resp;
+    }
+  );
 }
 
 export async function GET(path: string): Promise<Response> {

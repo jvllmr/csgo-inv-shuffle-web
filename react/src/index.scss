@@ -1,15 +1,20 @@
-
-
 $light: #3c4044;
 
-@import 'bootstrap/scss/bootstrap';
-@import './scss/header.scss';
-@import './scss/footer.scss';
-@import './scss/content.scss';
-@import './scss/item.scss';
-@import './scss/user.scss';
-
+@import "bootstrap/scss/bootstrap";
+@import "./scss/header.scss";
+@import "./scss/footer.scss";
+@import "./scss/content.scss";
+@import "./scss/item.scss";
+@import "./scss/user.scss";
 
 body {
-    background-color: $dark;
-};
+	background-color: $dark;
+}
+
+.no-select {
+	-webkit-user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}

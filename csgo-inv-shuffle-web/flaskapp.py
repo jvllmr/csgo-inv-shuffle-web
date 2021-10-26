@@ -1,25 +1,30 @@
-from flask import Flask, request, jsonify, Response, abort, stream_with_context
+from flask import Flask, request, jsonify, Response, abort
 from flask.json import JSONEncoder
 import os, requests
-from csgoinvshuffle.inventory import parse_inventory
+from csgoinvshuffle.inventory import get_inventory
 from csgoinvshuffle.item import Item
 import flask_praetorian
 from typing import NamedTuple
 from urllib.parse import urlencode
 from flask_cors import CORS
+from xml.etree import ElementTree as xml_et
 
 
 class DummyUserClass(NamedTuple):
     identity: int
     rolenames: list = []
 
+    @classmethod
+    def identify(cls, id):
+        return cls(id, [])
+
 
 class CustomGuard(flask_praetorian.Praetorian):
     def _validate_user_class(self, user_class):
         return user_class
 
-class CustomJSONEncoder(JSONEncoder):
 
+class CustomJSONEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, Item):
             return dict(o)
@@ -40,9 +45,6 @@ else:
 
 guard = CustomGuard(app, DummyUserClass)
 CORS(app)
-
-steam_api_key = os.environ.get("STEAM_API_KEY")
-
 
 
 @app.get("/auth")
@@ -74,51 +76,69 @@ def auth():
         abort(400)
 
 
+@app.get("/refresh_token")
+def refresh_token():
+    token = guard.read_token()
+    token = guard.refresh_jwt_token(token)
+    resp = Response("Valid")
+    resp.set_cookie(
+        "access_token", token, samesite="lax", httponly=True, max_age=86_400
+    )
+    return resp
+
+
 @app.get("/logout")
 def logout():
     resp = Response()
     resp.set_cookie("access_token", "", samesite="lax", httponly=True)
     return resp
 
+
+"""
+@app.get("/item_icon/<item_id>")
+@flask_praetorian.auth_required
+def get_item_icon(item_id):
+    r = requests.get(
+        f"https://community.cloudflare.steamstatic.com/economy/image/{item_id}"
+    )
+
+    bytes_ = BytesIO(r.content)
+    bytes_.seek(0)
+    img = Image.open(bytes_)
+    img = img.resize((128, 96))
+    ret_bytes = BytesIO()
+    img.save(ret_bytes, format="PNG")
+    ret_bytes.seek(0)
+    return send_file(ret_bytes, mimetype="image/png")
+"""
+
+
 @app.get("/inventory")
 @flask_praetorian.auth_required
 def get_inv():
     steam_id = flask_praetorian.current_user_id()
-    r = requests.get(
-        f"https://steamcommunity.com/profiles/{steam_id}/inventory/json/730/2",
-        
-        params=request.args,
-    )
-    if r.status_code == 200:
-        resp = jsonify(list(filter(lambda x: x.equippable,parse_inventory(r.json(), steam_id))))
-    else:
-        resp = jsonify(r.json())
-    resp.status=r.status_code
-    return resp
+    return jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
 
-def get_profile_data():
+
+def get_profile_data() -> xml_et.Element:
     steam_id = flask_praetorian.current_user_id()
-    return requests.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002?key={steam_api_key}&steamids={steam_id}").json()
+
+    return xml_et.fromstring(
+        requests.get(f"https://steamcommunity.com/profiles/{steam_id}?xml=1").text
+    )
 
 
 @app.get("/profile_picture")
 @flask_praetorian.auth_required
 def get_pp_link():
-    
+    for child in get_profile_data():
+        if child.tag == "avatarIcon":
+            ret = child.text
+
     return (
-        jsonify(
-            {
-                "link": get_profile_data()
-                .get("response", {})
-                .get("players", [])[-1]
-                .get("avatar", None)
-            }
-        ),
+        jsonify(link=ret),
         200,
     )
-
-
-
 
 
 if __name__ == "__main__":
