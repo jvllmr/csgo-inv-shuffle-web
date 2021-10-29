@@ -4,10 +4,10 @@ import { GET } from "../utils/api_requests";
 import { deleteUserID } from "../utils/auth";
 
 export default function Logout() {
-  useEffect(() => {
-    deleteUserID();
-    GET("/logout");
-  }, []);
+	useEffect(() => {
+		deleteUserID();
+		GET("/logout");
+	}, []);
 
-  return <Redirect to="/" />;
+	return <Redirect to="/" />;
 }

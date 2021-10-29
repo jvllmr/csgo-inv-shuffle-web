@@ -1,10 +1,11 @@
 .content {
 	margin-top: 5vh;
+	min-width: 75vw;
 }
 
 .scrollDiv {
 	overflow-y: scroll;
-	max-height: 88.5vh;
+	max-height: calc(95vh - 60px) !important;
 	min-width: 99vw;
-	margin-top: 11.5vh;
+	margin-top: 60px;
 }

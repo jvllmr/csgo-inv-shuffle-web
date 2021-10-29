@@ -1,42 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Inventory from "./inventory";
-import Footer from "./footer"
+import SlotMap from "./slotmap";
+import Footer from "./footer";
 import { Item } from "./item";
-import {DragDropContext, DragStart, DragUpdate, DropResult} from "react-beautiful-dnd"
-export default function Content(){
-	const [slotcount, setSlotCount] = useState(0);
+import {
+	DragDropContext,
+	DragStart,
+	DragUpdate,
+	DropResult,
+} from "react-beautiful-dnd";
+import { Col, Row } from "react-bootstrap";
+
+export default function Content() {
 	const [inventory, setInventory] = useState<Item[]>([]);
+	const [inventoryWidth, setInventoryWidth] = useState(6);
 
 	const onDragEnd = (result: DropResult) => {
-		const {destination, source, draggableId} = result;
+		const { destination, source, draggableId } = result;
 		if (!destination) return;
-		if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+		if (
+			source.droppableId === destination.droppableId ||
+			source.droppableId === "inventory"
+		)
+			return;
+	};
+	const onDragStart = (start: DragStart) => {};
+	const onDragUpdate = (update: DragUpdate) => {};
 
-		const newInventory = [...inventory];
-		const item = newInventory.filter((val: Item) => {return val.id === draggableId})[0]
+	useEffect(() => {
+		const handleResize = () => {
+			setInventoryWidth(6);
+		};
 
-		newInventory.splice(source.index, 1);
-		newInventory.splice(destination.index, 0, item)
-		setInventory(newInventory);
-	}
-	const onDragStart = (start: DragStart) => {}
-	const onDragUpdate = (update: DragUpdate) => {}
-	
-		return (
-			<div className="scrollDiv">
+		window.addEventListener("resize", handleResize);
+		handleResize();
+	}, []);
+
+	return (
+		<div className="scrollDiv">
 			<Container className="content">
-			
-
-			<DragDropContext onDragEnd={onDragEnd}
-			onDragStart={onDragStart}
-			onDragUpdate={onDragUpdate}
-			>
-				<Inventory inventory={inventory} setInventoryCallback={setInventory}/>
-			</DragDropContext>
+				<DragDropContext
+					onDragEnd={onDragEnd}
+					onDragStart={onDragStart}
+					onDragUpdate={onDragUpdate}>
+					<Row xs={2}>
+						<Col>
+							<SlotMap />
+						</Col>
+						<Col>
+							<Inventory
+								inventory={inventory}
+								setInventoryCallback={setInventory}
+								width={inventoryWidth}
+							/>
+						</Col>
+					</Row>
+				</DragDropContext>
 			</Container>
 			<Footer />
-			</div>
-		);
-	
+		</div>
+	);
 }

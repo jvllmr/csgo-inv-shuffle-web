@@ -2,8 +2,9 @@
 @import "bootstrap/scss/variables";
 
 .footer {
-	margin-top: 5vh;
-	width: 99vw;
-	height: 15vh;
+	width: 100vw;
+	height: 4vh;
 	background-color: $light;
+	position: fixed;
+	bottom: 0px;
 }
