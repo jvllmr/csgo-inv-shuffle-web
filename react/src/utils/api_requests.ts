@@ -18,7 +18,11 @@ async function basic_request(
 
 	return await fetch(path, args).then(async (resp: Response) => {
 		if (resp.status === 401 && try_ === 1) {
-			await GET("/refresh_token");
+			await GET("/refresh_token").then(
+				(resp: Response) => {if (
+					resp.status !==200
+				) localStorage.removeItem('inv')}
+			);
 			return basic_request(method, path, body, try_ + 1);
 		}
 		return resp;

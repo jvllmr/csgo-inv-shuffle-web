@@ -86,7 +86,7 @@ export default function Inventory(props: InventoryProps) {
 							<MdSearch color="whitesmoke" />
 						</InputGroup.Text>
 						<Form.Control
-							placeholder="Filter for Name, Sticker, Patch"
+							placeholder="Filter"
 							size="sm"
 							inputMode="search"
 							onChange={(e) => setSearch(e.target.value)}
