@@ -10,11 +10,11 @@ import {
 	DragUpdate,
 	DropResult,
 } from "react-beautiful-dnd";
-import { Col, Row } from "react-bootstrap";
+import { Alert, Col, Modal, Row } from "react-bootstrap";
+import { getInv } from "../utils/inventory";
 
 export default function Content() {
-	const [inventory, setInventory] = useState<Item[]>([]);
-	const [inventoryWidth, setInventoryWidth] = useState(6);
+	const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
 
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source, draggableId } = result;
@@ -27,15 +27,6 @@ export default function Content() {
 	};
 	const onDragStart = (start: DragStart) => {};
 	const onDragUpdate = (update: DragUpdate) => {};
-
-	useEffect(() => {
-		const handleResize = () => {
-			setInventoryWidth(6);
-		};
-
-		window.addEventListener("resize", handleResize);
-		handleResize();
-	}, []);
 
 	return (
 		<div className="scrollDiv">
@@ -51,8 +42,7 @@ export default function Content() {
 						<Col>
 							<Inventory
 								inventory={inventory}
-								setInventoryCallback={setInventory}
-								width={inventoryWidth}
+								setInventoryCallback={(inv: Item[]) => setInventory(inv)}
 							/>
 						</Col>
 					</Row>

@@ -51,35 +51,40 @@ export default function SlotMap(props: SlotMapProps) {
 	});
 
 	return (
-		<Card bg="dark" border="light" style={{ minWidth: "48vw" }}>
-			<Card.Header
-				style={{
-					display: "flex",
-					justifyContent: "space-evenly",
-				}}>
-				<img src="/img/terrorist.png" alt="T SIDE" />
+		<>
+			<Card bg="dark" border="light" style={{ minWidth: "48vw" }}>
+				<Card.Header
+					style={{
+						position: "sticky",
+						top: 0,
+						display: "flex",
+						justifyContent: "space-evenly",
+					}}>
+					<img src="/img/terrorist.png" alt="T SIDE" />
 
-				<img src="/img/ct.png" alt="CT SIDE" />
-			</Card.Header>
-			<Card.Body>
-				{countArray.map((index: number) => {
-					return <div style={{ height: 20 }}></div>;
-				})}
-			</Card.Body>
-			<Card.Footer style={{ display: "flex", justifyContent: "center" }}>
-				<ButtonGroup>
-					{count > 1 && (
-						<Button variant="light" onClick={() => setCount(count - 1)}>
-							<TiMinus />
-						</Button>
-					)}
-					{count < 100 && (
-						<Button variant="light" onClick={() => setCount(count + 1)}>
-							<TiPlus />
-						</Button>
-					)}
-				</ButtonGroup>
-			</Card.Footer>
-		</Card>
+					<img src="/img/ct.png" alt="CT SIDE" />
+				</Card.Header>
+				<Card.Body>
+					{countArray.map((index: number) => {
+						return <div style={{ height: 20 }}></div>;
+					})}
+				</Card.Body>
+				<Card.Footer style={{ display: "flex", justifyContent: "center" }}>
+					<ButtonGroup>
+						{count > 1 && (
+							<Button variant="light" onClick={() => setCount(count - 1)}>
+								<TiMinus />
+							</Button>
+						)}
+						{count < 100 && (
+							<Button variant="light" onClick={() => setCount(count + 1)}>
+								<TiPlus />
+							</Button>
+						)}
+					</ButtonGroup>
+				</Card.Footer>
+			</Card>
+			<div style={{ height: "10vh" }}></div>
+		</>
 	);
 }

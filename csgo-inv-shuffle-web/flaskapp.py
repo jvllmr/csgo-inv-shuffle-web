@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response, abort
+from flask import Flask, request, jsonify, Response, abort, stream_with_context
 from flask.json import JSONEncoder
 import os, requests
 from csgoinvshuffle.inventory import get_inventory
@@ -9,6 +9,7 @@ from typing import NamedTuple
 from urllib.parse import urlencode
 from flask_cors import CORS
 from xml.etree import ElementTree as xml_et
+from flask_caching import Cache
 
 
 class DummyUserClass(NamedTuple):
@@ -37,6 +38,7 @@ app.config["SECRET_KEY"] = "9465988C5E63ED1444BA12EE1B591"
 app.config["JWT_ACCESS_LIFESPAN"] = {"minutes": 15}
 app.config["JWT_REFRESH_LIFESPAN"] = {"hours": 18}
 app.config["CORS_SUPPORTS_CREDENTIALS"] = True
+cache_config={"CACHE_TYPE":"RedisCache"}
 app.json_encoder = CustomJSONEncoder
 if app.debug:
     app.config["CORS_ORIGINS "] = "http://localhost:3000"
@@ -45,6 +47,7 @@ else:
     app.config["CORS_ORIGINS "] = ""
 
 guard = CustomGuard(app, DummyUserClass)
+cache= Cache(app, config=cache_config)
 CORS(app)
 
 
@@ -95,6 +98,11 @@ def logout():
     return resp
 
 
+
+    
+
+
+
 """
 @app.get("/item_icon/<item_id>")
 @flask_praetorian.auth_required
@@ -122,6 +130,8 @@ def get_inv():
         return jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
     except InventoryIsPrivateException:
         abort(403)
+    except requests.HTTPError:
+        abort(429)
 
 
 def get_profile_data() -> xml_et.Element:
@@ -134,6 +144,7 @@ def get_profile_data() -> xml_et.Element:
 
 @app.get("/profile_picture")
 @flask_praetorian.auth_required
+@cache.cached(timeout=1800)
 def get_pp_link():
     for child in get_profile_data():
         if child.tag == "avatarIcon":

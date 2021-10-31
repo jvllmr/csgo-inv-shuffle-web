@@ -18,7 +18,7 @@ export interface Item {
 	name_color: string;
 	market_hash_name: string;
 	custom_name: string;
-	index: number;
+	rarity: string;
 }
 
 interface ItemBoxProps {
@@ -45,7 +45,8 @@ export default function ItemBox(props: ItemBoxProps) {
 					<div
 						{...provided.draggableProps}
 						{...provided.dragHandleProps}
-						ref={provided.innerRef}>
+						ref={provided.innerRef}
+						key={props.item.id}>
 						<Card
 							style={{
 								margin: 2,

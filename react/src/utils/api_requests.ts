@@ -1,4 +1,5 @@
 import { api_url } from "../config";
+import { deleteUserID } from "./auth";
 
 async function basic_request(
 	method: string,
@@ -18,11 +19,12 @@ async function basic_request(
 
 	return await fetch(path, args).then(async (resp: Response) => {
 		if (resp.status === 401 && try_ === 1) {
-			await GET("/refresh_token").then(
-				(resp: Response) => {if (
-					resp.status !==200
-				) localStorage.removeItem('inv')}
-			);
+			await fetch(`${api_url}/refresh_token`, args).then((resp: Response) => {
+				if (resp.status !== 200) {
+					localStorage.removeItem("inv");
+					deleteUserID();
+				}
+			});
 			return basic_request(method, path, body, try_ + 1);
 		}
 		return resp;
