@@ -125,9 +125,14 @@ def get_item_icon(item_id):
 @app.get("/inventory")
 @flask_praetorian.auth_required
 def get_inv():
+    
     steam_id = flask_praetorian.current_user_id()
+    if (cached:= cache.get(f"inventory_{steam_id}") and not request.args.get('no_cache', 0)):
+        return cached
     try:
-        return jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
+        resp = jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
+        cache.set(f"inventory_{steam_id}", resp)
+        return resp
     except InventoryIsPrivateException:
         abort(403)
     except requests.HTTPError:

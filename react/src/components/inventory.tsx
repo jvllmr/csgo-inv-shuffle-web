@@ -144,7 +144,10 @@ export default function Inventory(props: InventoryProps) {
 						</Container>
 					)}
 					{inventory.length && (
-						<Droppable droppableId="inventory" direction="horizontal">
+						<Droppable
+							droppableId="inventory"
+							direction="horizontal"
+							isDropDisabled>
 							{(provided: DroppableProvided) => {
 								return (
 									<Row

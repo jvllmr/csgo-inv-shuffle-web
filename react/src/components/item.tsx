@@ -19,6 +19,9 @@ export interface Item {
 	market_hash_name: string;
 	custom_name: string;
 	rarity: string;
+	shuffle_slots_t: number[];
+	shuffle_slots: number[];
+	shuffle_slots_ct: number[];
 }
 
 interface ItemBoxProps {
@@ -34,13 +37,13 @@ export default function ItemBox(props: ItemBoxProps) {
 	return (
 		<Draggable draggableId={props.item.id} index={props.index}>
 			{(provided: DraggableProvided) => {
-				if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
-					provided.draggableProps.style = {
-						...provided.draggableProps.style,
-						transition: undefined,
-						transform: undefined,
-					};
-				}
+				//if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
+				//	provided.draggableProps.style = {
+				//		...provided.draggableProps.style,
+				//		transition: undefined,
+				//		transform: undefined,
+				//	};
+				//}
 				return (
 					<div
 						{...provided.draggableProps}
@@ -92,6 +95,9 @@ export default function ItemBox(props: ItemBoxProps) {
 								}}>
 								{props.item.custom_name
 									? `"${props.item.custom_name}"`
+									: props.item.shuffle_slots_t.includes(2149974016) ||
+									  props.item.shuffle_slots_ct.includes(3223715840)
+									? props.item.market_hash_name.split("|")[0]
 									: props.item.market_hash_name.split("|")[1]}
 							</Card.Footer>
 						</Card>

@@ -12,12 +12,15 @@ import {
 } from "react-beautiful-dnd";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import { getInv } from "../utils/inventory";
+import { getMap } from "../utils/slotmap";
 
 export default function Content() {
 	const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
+	const [slotmap, setSlotMap] = useState(getMap());
 
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source, draggableId } = result;
+		console.log(source, destination);
 		if (!destination) return;
 		if (
 			source.droppableId === destination.droppableId ||
@@ -29,7 +32,7 @@ export default function Content() {
 	const onDragUpdate = (update: DragUpdate) => {};
 
 	return (
-		<div className="scrollDiv">
+		<div className="scrollDiv" id="scrollDiv">
 			<Container className="content">
 				<DragDropContext
 					onDragEnd={onDragEnd}
@@ -37,7 +40,7 @@ export default function Content() {
 					onDragUpdate={onDragUpdate}>
 					<Row xs={2}>
 						<Col>
-							<SlotMap />
+							<SlotMap map={slotmap} />
 						</Col>
 						<Col>
 							<Inventory
