@@ -158,6 +158,7 @@ export default function Inventory(props: InventoryProps) {
 										xl={4}
 										style={{
 											overflowY: "scroll",
+											overflowX:"hidden",
 											height: "75vh",
 											paddingRight: 10,
 											paddingTop: 10,
