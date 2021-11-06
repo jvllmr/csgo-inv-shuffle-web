@@ -34,6 +34,7 @@ export default function Content() {
 
 		const [item_id] = draggableId.split("_", 1);
 		const map = getMap();
+		let rollback = false;
 
 		if (
 			source.droppableId !== "inventory" &&
@@ -74,6 +75,9 @@ export default function Content() {
 				const items: Item[] = slot[place];
 				for (const it of items) {
 					if (it.id === _item.id) return;
+					for (const ldtslot of slotList) {
+						if (it.shuffle_slots.includes(ldtslot) || it.shuffle_slots_ct.includes(ldtslot) || it.shuffle_slots_t.includes(ldtslot)) return;
+					}
 				}
 
 				items.push(_item);
@@ -106,8 +110,9 @@ export default function Content() {
 		}
 
 		map[+index - 1] = slot;
-
+		if (rollback) return;
 		setSlotMap(map);
+		
 	};
 	const onDragStart = (start: DragStart) => {};
 	const onDragUpdate = (update: DragUpdate) => {};
@@ -118,7 +123,9 @@ export default function Content() {
 				<DragDropContext
 					onDragEnd={onDragEnd}
 					onDragStart={onDragStart}
-					onDragUpdate={onDragUpdate}>
+					onDragUpdate={onDragUpdate}
+					dragHandleUsageInstructions="HI">
+
 					<Row xs={2}>
 						<Col>
 							<SlotMap
