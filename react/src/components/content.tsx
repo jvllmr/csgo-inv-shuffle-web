@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Inventory from "./inventory";
-import SlotMap from "./slotmap";
+import SlotMap, { TeamSide } from "./slotmap";
 import Footer from "./footer";
-import { Item } from "./item";
+import ItemBox, { Item } from "./item";
 import {
 	DragDropContext,
 	DragStart,
@@ -12,21 +12,102 @@ import {
 } from "react-beautiful-dnd";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import { getInv } from "../utils/inventory";
-import { getMap } from "../utils/slotmap";
+import { getMap, Map, setMap } from "../utils/slotmap";
 
 export default function Content() {
 	const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
-	const [slotmap, setSlotMap] = useState(getMap());
-
+	const [slotmap, _setSlotMap] = useState<Map>(getMap());
+	const setSlotMap = (_map: Map) => {
+		setMap(_map);
+		_setSlotMap(_map);
+	};
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source, draggableId } = result;
-		console.log(source, destination);
-		if (!destination) return;
+
 		if (
-			source.droppableId === destination.droppableId ||
+			destination &&
+			source.droppableId === destination.droppableId &&
 			source.droppableId === "inventory"
-		)
+		) {
 			return;
+		}
+
+		const [item_id] = draggableId.split("_", 1);
+		const map = getMap();
+
+		if (
+			source.droppableId !== "inventory" &&
+			(!destination ||
+				(destination && source.droppableId !== destination.droppableId))
+		) {
+			const [team, index] = source.droppableId.split("-", 2);
+
+			const slot = map[+index - 1];
+
+			// @ts-ignore
+			slot[team] = slot[team].filter((val: Item) => {
+				return val.id !== item_id;
+			});
+
+			// @ts-ignore
+			slot["general"] = slot["general"].filter((val: Item) => {
+				return val.id !== item_id;
+			});
+
+			map[+index - 1] = slot;
+		}
+		if (!destination) return;
+		const [team, index] = destination.droppableId.split("-", 2);
+		const slot = map[+index - 1];
+		let item: Item | null = null;
+		for (const it of getInv()) {
+			if (item_id === it.id) {
+				item = it;
+				break;
+			}
+		}
+		if (!item) return;
+		const addToSlot = (place: string, _item: Item, slotList: number[]) => {
+			// @ts-ignore
+			if (slotList.length) {
+				// @ts-ignore
+				const items: Item[] = slot[place];
+				for (const it of items) {
+					if (it.id === _item.id) return;
+				}
+
+				items.push(_item);
+				// @ts-ignore
+				slot[place] = items;
+			}
+		};
+
+		const addToGeneral = () => addToSlot("general", item!, item!.shuffle_slots);
+		const addToCT = () => {
+			if (!item!.shuffle_slots_ct.length) {
+				addToGeneral();
+			} else {
+				addToSlot(TeamSide.CT, item!, item!.shuffle_slots_ct);
+			}
+		};
+
+		const addToT = () => {
+			if (!item!.shuffle_slots_t.length) {
+				addToGeneral();
+			} else {
+				addToSlot(TeamSide.T, item!, item!.shuffle_slots_t);
+			}
+		};
+
+		if (team === TeamSide.T) {
+			addToT();
+		} else if (team === TeamSide.CT) {
+			addToCT();
+		}
+
+		map[+index - 1] = slot;
+
+		setSlotMap(map);
 	};
 	const onDragStart = (start: DragStart) => {};
 	const onDragUpdate = (update: DragUpdate) => {};
@@ -40,7 +121,10 @@ export default function Content() {
 					onDragUpdate={onDragUpdate}>
 					<Row xs={2}>
 						<Col>
-							<SlotMap map={slotmap} />
+							<SlotMap
+								map={slotmap}
+								setSlotMapCallback={(map: Map) => setSlotMap(map)}
+							/>
 						</Col>
 						<Col>
 							<Inventory

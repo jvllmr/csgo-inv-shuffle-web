@@ -48,6 +48,7 @@ else:
 
 guard = CustomGuard(app, DummyUserClass)
 cache= Cache(app, config=cache_config)
+cache.clear()
 CORS(app)
 
 
@@ -127,11 +128,12 @@ def get_item_icon(item_id):
 def get_inv():
     
     steam_id = flask_praetorian.current_user_id()
-    if (cached:= cache.get(f"inventory_{steam_id}") and not request.args.get('no_cache', 0)):
+    if (cached:= cache.get(f"inventory_{steam_id}")) and not request.args.get('no_cache', 0):
         return cached
     try:
         resp = jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
-        cache.set(f"inventory_{steam_id}", resp)
+        
+        cache.set(f"inventory_{steam_id}", resp, timeout=3600)
         return resp
     except InventoryIsPrivateException:
         abort(403)
@@ -149,16 +151,21 @@ def get_profile_data() -> xml_et.Element:
 
 @app.get("/profile_picture")
 @flask_praetorian.auth_required
-@cache.cached(timeout=1800)
+
 def get_pp_link():
+    steam_id = flask_praetorian.current_user_id()
+    if (cached:= cache.get(f"pp_{steam_id}")) and not request.args.get('no_cache', 0):
+        
+        return cached
     for child in get_profile_data():
         if child.tag == "avatarIcon":
             ret = child.text
-
-    return (
+    resp = (
         jsonify(link=ret),
         200,
     )
+    cache.set(f"pp_{steam_id}", resp, timeout=1800)
+    return  resp
 
 
 if __name__ == "__main__":

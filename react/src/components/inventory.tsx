@@ -34,29 +34,31 @@ export default function Inventory(props: InventoryProps) {
 			: props.inventory
 		: props.inventory;
 
-	const fetchInv = () => {
+	const fetchInv = (no_cache: boolean = false) => {
 		if (getUserID()) {
 			setRefreshing(true);
-			GET(`/inventory`).then(async (resp: Response) => {
-				const json = await resp.json();
+			GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
+				async (resp: Response) => {
+					const json = await resp.json();
 
-				if (resp.status === 200) {
-					setInv(json);
-					setRefreshing(false);
-					setError("");
-					return json;
-				} else if (resp.status === 403) {
-					setError("Your Inventory has to be public.");
-				} else if (resp.status === 401) {
-					setError("You have to login to view your inventory.");
-				} else if (resp.status === 429) {
-					setError("Too many refreshes at once. Please try again later.");
-				} else {
-					setError(
-						`Your Inventory could not be loaded. Status code ${resp.status}`
-					);
+					if (resp.status === 200) {
+						setInv(json);
+						setRefreshing(false);
+						setError("");
+						return json;
+					} else if (resp.status === 403) {
+						setError("Your Inventory has to be public.");
+					} else if (resp.status === 401) {
+						setError("You have to login to view your inventory.");
+					} else if (resp.status === 429) {
+						setError("Too many refreshes at once. Please try again later.");
+					} else {
+						setError(
+							`Your Inventory could not be loaded. Status code ${resp.status}`
+						);
+					}
 				}
-			});
+			);
 		}
 
 		if (refreshing) setRefreshing(false);
@@ -103,7 +105,7 @@ export default function Inventory(props: InventoryProps) {
 					{inventory.length && (
 						<>
 							{!refreshing && (
-								<Button variant="light" onClick={fetchInv}>
+								<Button variant="light" onClick={() => fetchInv(true)}>
 									<MdRefresh />
 								</Button>
 							)}
@@ -158,7 +160,7 @@ export default function Inventory(props: InventoryProps) {
 										xl={4}
 										style={{
 											overflowY: "scroll",
-											overflowX:"hidden",
+											overflowX: "hidden",
 											height: "75vh",
 											paddingRight: 10,
 											paddingTop: 10,
@@ -168,11 +170,6 @@ export default function Inventory(props: InventoryProps) {
 										{...provided.droppableProps}>
 										{inventory
 											.filter((item: Item) => {
-												console.log(
-													item.market_hash_name
-														.toLowerCase()
-														.includes(search.toLowerCase())
-												);
 												return (
 													item.custom_name
 														.toLowerCase()
@@ -225,7 +222,14 @@ export default function Inventory(props: InventoryProps) {
 												return 0;
 											})
 											.map((item: Item, index: number) => {
-												return <ItemBox item={item} index={index} />;
+												return (
+													<ItemBox
+														key={item.id}
+														place="inv"
+														item={item}
+														index={index}
+													/>
+												);
 											})}
 										{provided.placeholder}
 									</Row>

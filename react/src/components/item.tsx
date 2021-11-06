@@ -27,6 +27,7 @@ export interface Item {
 interface ItemBoxProps {
 	item: Item;
 	index: number;
+	place: string;
 }
 
 function instanceOfDraggingStyle(data: any): data is DraggingStyle {
@@ -35,15 +36,17 @@ function instanceOfDraggingStyle(data: any): data is DraggingStyle {
 
 export default function ItemBox(props: ItemBoxProps) {
 	return (
-		<Draggable draggableId={props.item.id} index={props.index}>
+		<Draggable
+			draggableId={`${props.item.id}_${props.place}`}
+			index={props.index}>
 			{(provided: DraggableProvided) => {
-				//if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
-				//	provided.draggableProps.style = {
-				//		...provided.draggableProps.style,
-				//		transition: undefined,
-				//		transform: undefined,
-				//	};
-				//}
+				if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
+					provided.draggableProps.style = {
+						...provided.draggableProps.style,
+						transition: undefined,
+						transform: undefined,
+					};
+				}
 				return (
 					<div
 						{...provided.draggableProps}
