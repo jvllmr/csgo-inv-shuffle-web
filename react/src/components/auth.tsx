@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { GET } from "../utils/api_requests";
 import { setUserID } from "../utils/auth";
 
@@ -21,6 +21,6 @@ export default function Auth() {
 			});
 	}, []);
 
-	if (authenticated) return <Redirect to="/" />;
+	if (authenticated) return <Navigate to="/" />;
 	return <>Authenticating...</>;
 }

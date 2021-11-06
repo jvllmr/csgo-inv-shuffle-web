@@ -1,16 +1,12 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
-import { Droppable, DroppableProvided } from "react-beautiful-dnd";
+import React, { useEffect, useState } from "react";
 import {
-	Button,
-	ButtonGroup,
-	Card,
-	Col,
-	Container,
-	Form,
-	Row,
-} from "react-bootstrap";
+	Droppable,
+	DroppableProvided,
+	DroppableStateSnapshot,
+} from "react-beautiful-dnd";
+import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
 import { TiPlus, TiMinus } from "react-icons/ti";
-import { getMap, Map, setMap } from "../utils/slotmap";
+import { getMap, Map } from "../utils/slotmap";
 import ItemBox, { Item } from "./item";
 export enum TeamSide {
 	T = "T",
@@ -37,7 +33,8 @@ function Slot(props: SlotProps) {
 		border: "1px solid #1C2023",
 		width: "20vw",
 		minHeight: 140,
-		overflow: "visible",
+		overflow: "hidden",
+		backgroundColor: "#232329",
 	};
 
 	const items: Item[] = [];
@@ -52,25 +49,37 @@ function Slot(props: SlotProps) {
 
 	return (
 		<Droppable droppableId={`${team}-${props.index}`}>
-			{(provided: DroppableProvided) => {
+			{(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
+				const { isDraggingOver } = snapshot;
+				let style: React.CSSProperties = {};
+				if (isDraggingOver) {
+					style = {
+						zIndex: 500,
+						backgroundColor: "rgba(255,255,255, .2)",
+					};
+				}
+
 				return (
-					<div
-						ref={provided.innerRef}
-						{...provided.droppableProps}
-						style={slotstyle}>
-						<Row xs={4} style={{ paddingRight: 50 }}>
-							{items.map((item: Item, index: number) => {
-								return (
-									<ItemBox
-										key={item.id}
-										place={`${props.side}${props.index}`}
-										item={item}
-										index={index}
-									/>
-								);
-							})}
-							{provided.placeholder}
-						</Row>
+					<div style={style}>
+						<div
+							ref={provided.innerRef}
+							{...provided.droppableProps}
+							style={slotstyle}
+							id={`${props.side}_${props.index}`}>
+							<Row xs={4} style={{ paddingRight: 50 }}>
+								{items.map((item: Item, index: number) => {
+									return (
+										<ItemBox
+											key={item.id}
+											place={`${props.side}${props.index}`}
+											item={item}
+											index={index}
+										/>
+									);
+								})}
+								{provided.placeholder}
+							</Row>
+						</div>
 					</div>
 				);
 			}}

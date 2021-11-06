@@ -4,33 +4,34 @@ import Header from "./components/header";
 
 import Content from "./components/content";
 import "./index.scss";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Auth from "./components/auth";
 import Logout from "./components/logout";
-import HowTo from "./components/howto"
+import HowTo from "./components/howto";
 class Page extends React.Component {
-  render() {
-    return (
-      <Router>
-        <Switch>
-        <Route exact path="/howto">
-            <HowTo />
-          </Route>
-          <Route exact path="/logout">
-            <Logout />
-          </Route>
-          <Route exact path="/auth">
-            <Auth />
-          </Route>
-          <Route path="*">
-            <Header />
-            <Content />
-            
-          </Route>
-        </Switch>
-      </Router>
-    );
-  }
+	render() {
+		return (
+			<Router>
+				<Routes>
+					<Route path="/howto" element={<HowTo />} />
+
+					<Route path="/logout" element={<Logout />} />
+
+					<Route path="/auth" element={<Auth />} />
+
+					<Route
+						path="*"
+						element={
+							<>
+								<Header />
+								<Content />
+							</>
+						}
+					/>
+				</Routes>
+			</Router>
+		);
+	}
 }
 
 ReactDOM.render(<Page />, document.getElementById("root"));

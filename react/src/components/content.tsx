@@ -11,7 +11,12 @@ import {
 	DropResult,
 } from "react-beautiful-dnd";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
-import { getInv } from "../utils/inventory";
+import {
+	getInv,
+	getItem,
+	hasItem,
+	hasIntersectingSlots,
+} from "../utils/inventory";
 import { getMap, Map, setMap } from "../utils/slotmap";
 
 export default function Content() {
@@ -23,6 +28,13 @@ export default function Content() {
 	};
 	const onDragEnd = (result: DropResult) => {
 		const { destination, source, draggableId } = result;
+
+		for (let i = 0; i < getMap().length; i++) {
+			const divElementT = document.getElementById(`T_${i + 1}`);
+			const divElementCT = document.getElementById(`CT_${i + 1}`);
+			if (divElementT) divElementT.style.backgroundColor = "#232329";
+			if (divElementCT) divElementCT.style.backgroundColor = "#232329";
+		}
 
 		if (
 			destination &&
@@ -57,7 +69,10 @@ export default function Content() {
 
 			map[+index - 1] = slot;
 		}
-		if (!destination) return;
+		if (!destination) {
+			setSlotMap(map);
+			return;
+		}
 		const [team, index] = destination.droppableId.split("-", 2);
 		const slot = map[+index - 1];
 		let item: Item | null = null;
@@ -76,7 +91,12 @@ export default function Content() {
 				for (const it of items) {
 					if (it.id === _item.id) return;
 					for (const ldtslot of slotList) {
-						if (it.shuffle_slots.includes(ldtslot) || it.shuffle_slots_ct.includes(ldtslot) || it.shuffle_slots_t.includes(ldtslot)) return;
+						if (
+							it.shuffle_slots.includes(ldtslot) ||
+							it.shuffle_slots_ct.includes(ldtslot) ||
+							it.shuffle_slots_t.includes(ldtslot)
+						)
+							return;
 					}
 				}
 
@@ -112,10 +132,81 @@ export default function Content() {
 		map[+index - 1] = slot;
 		if (rollback) return;
 		setSlotMap(map);
-		
 	};
-	const onDragStart = (start: DragStart) => {};
-	const onDragUpdate = (update: DragUpdate) => {};
+	const onDragStart = (start: DragStart) => {
+		const { source, draggableId } = start;
+		const item = getItem(draggableId.split("_", 1)[0]);
+		if (!item) return;
+		const map = getMap();
+		const red = "rgba(255, 49,57,0.3)";
+		const green = "rgba(35, 255,41,0.2)";
+
+		for (let i = 0; i < map.length; i++) {
+			const cycle_slot = map[i];
+			const index = i + 1;
+			const { CT, T, general } = cycle_slot;
+			const sections = [CT, T, general];
+			const divT = document.getElementById(`T_${index}`);
+			const divCT = document.getElementById(`CT_${index}`);
+			if (!divT || !divCT) continue;
+			const changeTColor = (color: string) => {
+				divT.style.backgroundColor = color;
+			};
+			const changeCTColor = (color: string) => {
+				divCT.style.backgroundColor = color;
+			};
+			const changeBothColors = (color: string) => {
+				changeCTColor(color);
+				changeTColor(color);
+			};
+
+			let isRed = false;
+			for (const section of sections) {
+				let changeColor: Function = changeBothColors;
+				if (section === CT) {
+					changeColor = changeCTColor;
+				} else if (section === T) {
+					changeColor = changeTColor;
+				}
+
+				if (hasItem(item, section)) {
+					changeColor(red);
+					isRed = true;
+					continue;
+				} else if (
+					item.shuffle_slots_ct.length &&
+					source.droppableId.includes(String(index))
+				) {
+					changeCTColor(green);
+					continue;
+				} else if (
+					item.shuffle_slots_t.length &&
+					source.droppableId.includes(String(index))
+				) {
+					changeTColor(green);
+					continue;
+				} else if (hasIntersectingSlots(item, section)) {
+					changeColor(red);
+					isRed = true;
+					continue;
+				} else if (!isRed) {
+					changeColor(green);
+				}
+			}
+
+			if (!item.shuffle_slots_ct.length && !item.shuffle_slots.length) {
+				changeCTColor(red);
+				continue;
+			} else if (!item.shuffle_slots_t.length && !item.shuffle_slots.length) {
+				changeTColor(red);
+				continue;
+			}
+		}
+
+		document.getElementById(
+			source.droppableId.replace("-", "_")
+		)!.style.backgroundColor = "#232329";
+	};
 
 	return (
 		<div className="scrollDiv" id="scrollDiv">
@@ -123,9 +214,7 @@ export default function Content() {
 				<DragDropContext
 					onDragEnd={onDragEnd}
 					onDragStart={onDragStart}
-					onDragUpdate={onDragUpdate}
-					dragHandleUsageInstructions="HI">
-
+					dragHandleUsageInstructions="Instructions.">
 					<Row xs={2}>
 						<Col>
 							<SlotMap

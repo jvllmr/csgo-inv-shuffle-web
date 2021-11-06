@@ -43,10 +43,12 @@ export default function ItemBox(props: ItemBoxProps) {
 				if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
 					provided.draggableProps.style = {
 						...provided.draggableProps.style,
-						transition: undefined,
-						transform: undefined,
+						zIndex: 750,
+						transition: "none",
+						transform: "none",
 					};
 				}
+
 				return (
 					<div
 						{...provided.draggableProps}
