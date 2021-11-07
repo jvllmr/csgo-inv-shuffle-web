@@ -9,6 +9,7 @@ import { TiPlus, TiMinus } from "react-icons/ti";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
 import { getMap, Map } from "../utils/slotmap";
 import ItemBox, { Item } from "./item";
+import { FaTrash } from "react-icons/fa";
 export enum TeamSide {
 	T = "T",
 	CT = "CT",
@@ -33,7 +34,7 @@ function Slot(props: SlotProps) {
 	const slotstyle: React.CSSProperties = {
 		border: "1px solid #1C2023",
 		width: "20vw",
-		minHeight: 140,
+		minHeight: 150,
 		overflow: "hidden",
 		backgroundColor: "#232329",
 	};
@@ -52,7 +53,7 @@ function Slot(props: SlotProps) {
 		<Droppable droppableId={`${team}-${props.index}`}>
 			{(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
 				const { isDraggingOver, draggingOverWith } = snapshot;
-				let style: React.CSSProperties = {};
+				let style: React.CSSProperties = { height: "100%" };
 
 				if (isDraggingOver && draggingOverWith) {
 					const item = getItem(draggingOverWith.split("_", 1)[0]);
@@ -69,6 +70,7 @@ function Slot(props: SlotProps) {
 									(item.shuffle_slots_t.length || item.shuffle_slots.length))))
 					)
 						style = {
+							...style,
 							zIndex: 500,
 							backgroundColor: "rgba(255,255,255, .2)",
 						};
@@ -92,6 +94,9 @@ function Slot(props: SlotProps) {
 										/>
 									);
 								})}
+								{items.length % 4 === 0 && (
+									<div style={{ height: 135, width: 105 }} />
+								)}
 								{provided.placeholder}
 							</Row>
 						</div>
@@ -143,6 +148,31 @@ export default function SlotMap(props: SlotMapProps) {
 					}}>
 					<img src="/img/terrorist.png" alt="T SIDE" />
 
+					<Droppable droppableId="trash">
+						{(
+							provided: DroppableProvided,
+							snapshot: DroppableStateSnapshot
+						) => {
+							provided.placeholder = undefined;
+							const { isDraggingOver } = snapshot;
+							let style: React.CSSProperties = {
+								height: 60,
+								width: 30,
+								color: "rgba(255, 49,57,0.7)",
+							};
+							if (isDraggingOver)
+								style = {
+									...style,
+									color: "rgba(255,255,255, .2)",
+								};
+							return (
+								<div {...provided.droppableProps} ref={provided.innerRef}>
+									<FaTrash style={style} />
+									{provided.placeholder}
+								</div>
+							);
+						}}
+					</Droppable>
 					<img src="/img/ct.png" alt="CT SIDE" />
 				</Card.Header>
 				<Card.Body style={{ padding: 0 }}>

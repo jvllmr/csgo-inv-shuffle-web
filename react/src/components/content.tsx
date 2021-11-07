@@ -59,6 +59,7 @@ export default function Content() {
 			// @ts-ignore
 			if (
 				destination &&
+				destination.droppableId !== "trash" &&
 				(hasItem(
 					item_id,
 					map[+destination.droppableId.split("-", 2)[1] - 1]["general"]
