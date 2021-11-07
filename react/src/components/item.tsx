@@ -31,7 +31,7 @@ interface ItemBoxProps {
 }
 
 function instanceOfDraggingStyle(data: any): data is DraggingStyle {
-	return "zIndex" in data;
+	return "position" in data;
 }
 
 export default function ItemBox(props: ItemBoxProps) {
@@ -40,9 +40,10 @@ export default function ItemBox(props: ItemBoxProps) {
 			draggableId={`${props.item.id}_${props.place}`}
 			index={props.index}>
 			{(provided: DraggableProvided) => {
-				if (!instanceOfDraggingStyle(provided.draggableProps.style)) {
-					provided.draggableProps.style = {
-						...provided.draggableProps.style,
+				const customProps = { ...provided.draggableProps };
+				if (!instanceOfDraggingStyle(customProps.style)) {
+					customProps.style = {
+						...customProps.style,
 						zIndex: 750,
 						transition: "none",
 						transform: "none",
@@ -51,7 +52,7 @@ export default function ItemBox(props: ItemBoxProps) {
 
 				return (
 					<div
-						{...provided.draggableProps}
+						{...customProps}
 						{...provided.dragHandleProps}
 						ref={provided.innerRef}
 						key={props.item.id}>

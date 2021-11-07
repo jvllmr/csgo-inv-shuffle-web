@@ -10,11 +10,12 @@ $input-group-addon-bg: #303440;
 @import "./scss/header.scss";
 @import "./scss/footer.scss";
 @import "./scss/content.scss";
-@import "./scss/item.scss";
+@import "./scss/slot.scss";
 @import "./scss/user.scss";
 
 body {
 	background-color: $dark;
+	z-index: -10;
 }
 
 .no-select {

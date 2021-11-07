@@ -56,6 +56,20 @@ export default function Content() {
 			const [team, index] = source.droppableId.split("-", 2);
 
 			const slot = map[+index - 1];
+			// @ts-ignore
+			if (
+				destination &&
+				(hasItem(
+					item_id,
+					map[+destination.droppableId.split("-", 2)[1] - 1]["general"]
+				) ||
+					hasItem(
+						item_id,
+						// @ts-ignore
+						map[+destination.droppableId.split("-", 2)[1] - 1][team]
+					))
+			)
+				return;
 
 			// @ts-ignore
 			slot[team] = slot[team].filter((val: Item) => {
@@ -203,9 +217,10 @@ export default function Content() {
 			}
 		}
 
-		document.getElementById(
-			source.droppableId.replace("-", "_")
-		)!.style.backgroundColor = "#232329";
+		if (document.getElementById(source.droppableId.replace("-", "_")))
+			document.getElementById(
+				source.droppableId.replace("-", "_")
+			)!.style.backgroundColor = "#232329";
 	};
 
 	return (

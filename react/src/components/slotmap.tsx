@@ -6,6 +6,7 @@ import {
 } from "react-beautiful-dnd";
 import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
 import { TiPlus, TiMinus } from "react-icons/ti";
+import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
 import { getMap, Map } from "../utils/slotmap";
 import ItemBox, { Item } from "./item";
 export enum TeamSide {
@@ -50,22 +51,36 @@ function Slot(props: SlotProps) {
 	return (
 		<Droppable droppableId={`${team}-${props.index}`}>
 			{(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
-				const { isDraggingOver } = snapshot;
+				const { isDraggingOver, draggingOverWith } = snapshot;
 				let style: React.CSSProperties = {};
-				if (isDraggingOver) {
-					style = {
-						zIndex: 500,
-						backgroundColor: "rgba(255,255,255, .2)",
-					};
+
+				if (isDraggingOver && draggingOverWith) {
+					const item = getItem(draggingOverWith.split("_", 1)[0]);
+					if (
+						!item ||
+						(item &&
+							!hasItem(item, items) &&
+							!hasIntersectingSlots(item, items) &&
+							((item &&
+								props.side === TeamSide.CT &&
+								(item.shuffle_slots_ct.length || item.shuffle_slots.length)) ||
+								(item &&
+									props.side === TeamSide.T &&
+									(item.shuffle_slots_t.length || item.shuffle_slots.length))))
+					)
+						style = {
+							zIndex: 500,
+							backgroundColor: "rgba(255,255,255, .2)",
+						};
 				}
 
 				return (
-					<div style={style}>
-						<div
-							ref={provided.innerRef}
-							{...provided.droppableProps}
-							style={slotstyle}
-							id={`${props.side}_${props.index}`}>
+					<div
+						ref={provided.innerRef}
+						{...provided.droppableProps}
+						style={slotstyle}
+						id={`${props.side}_${props.index}`}>
+						<div style={style}>
 							<Row xs={4} style={{ paddingRight: 50 }}>
 								{items.map((item: Item, index: number) => {
 									return (
