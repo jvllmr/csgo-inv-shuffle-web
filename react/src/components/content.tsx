@@ -18,6 +18,8 @@ import {
 	hasIntersectingSlots,
 } from "../utils/inventory";
 import { getMap, Map, setMap } from "../utils/slotmap";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
 export default function Content() {
 	const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
@@ -225,29 +227,31 @@ export default function Content() {
 	};
 
 	return (
-		<div className="scrollDiv" id="scrollDiv">
-			<Container className="content">
-				<DragDropContext
-					onDragEnd={onDragEnd}
-					onDragStart={onDragStart}
-					dragHandleUsageInstructions="Instructions.">
-					<Row xs={2}>
-						<Col>
-							<SlotMap
-								map={slotmap}
-								setSlotMapCallback={(map: Map) => setSlotMap(map)}
-							/>
-						</Col>
-						<Col>
-							<Inventory
-								inventory={inventory}
-								setInventoryCallback={(inv: Item[]) => setInventory(inv)}
-							/>
-						</Col>
-					</Row>
-				</DragDropContext>
-			</Container>
-			<Footer />
-		</div>
+		<SimpleBar className="scrollDiv" id="scrollDiv" autoHide={false}>
+			<div>
+				<Container className="content">
+					<DragDropContext
+						onDragEnd={onDragEnd}
+						onDragStart={onDragStart}
+						dragHandleUsageInstructions="Instructions.">
+						<Row xs={2}>
+							<Col>
+								<SlotMap
+									map={slotmap}
+									setSlotMapCallback={(map: Map) => setSlotMap(map)}
+								/>
+							</Col>
+							<Col>
+								<Inventory
+									inventory={inventory}
+									setInventoryCallback={(inv: Item[]) => setInventory(inv)}
+								/>
+							</Col>
+						</Row>
+					</DragDropContext>
+				</Container>
+				<Footer />
+			</div>
+		</SimpleBar>
 	);
 }

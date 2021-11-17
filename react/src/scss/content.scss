@@ -4,8 +4,7 @@
 }
 
 .scrollDiv {
-	overflow-y: scroll;
-	max-height: calc(96vh - 60px) !important;
+	height: calc(96vh - 60px) !important;
 	min-width: 99vw;
 	margin-top: 60px;
 }

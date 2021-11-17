@@ -17,6 +17,8 @@ import ItemBox, { Item, Sticker } from "./item";
 import User from "./user";
 import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 import { MdRefresh, MdSearch } from "react-icons/md";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 interface InventoryProps {
 	inventory: Item[];
 	setInventoryCallback: Function;
@@ -129,7 +131,7 @@ export default function Inventory(props: InventoryProps) {
 				</Card.Header>
 				<Card.Body
 					style={{
-						padding: 12,
+						padding: 0,
 						paddingTop: 0,
 						paddingBottom: 0,
 					}}>
@@ -152,87 +154,98 @@ export default function Inventory(props: InventoryProps) {
 							isDropDisabled>
 							{(provided: DroppableProvided) => {
 								return (
-									<Row
-										xs={1}
-										sm={1}
-										md={1}
-										lg={2}
-										xl={4}
+									<SimpleBar
 										style={{
-											overflowY: "scroll",
 											overflowX: "hidden",
 											height: "75vh",
-											paddingRight: 10,
-											paddingTop: 10,
-											paddingBottom: 10,
 										}}
-										ref={provided.innerRef}
-										{...provided.droppableProps}>
-										{inventory
-											.filter((item: Item) => {
-												return (
-													item.custom_name
-														.toLowerCase()
-														.includes(search.toLowerCase()) ||
-													item.market_hash_name
-														.toLowerCase()
-														.includes(search.toLowerCase()) ||
-													item.stickers
-														.map((sticker: Sticker) => {
-															return sticker.name
+										autoHide={false}>
+										<div
+											style={{
+												height: "100%",
+												paddingTop: 10,
+												paddingBottom: 10,
+												paddingRight: 28,
+												paddingLeft: 12,
+											}}>
+											<Row
+												xs={1}
+												sm={1}
+												md={1}
+												lg={2}
+												xl={4}
+												style={{
+													height: "100%",
+												}}
+												ref={provided.innerRef}
+												{...provided.droppableProps}>
+												{inventory
+													.filter((item: Item) => {
+														return (
+															item.custom_name
 																.toLowerCase()
-																.includes(search.toLowerCase());
-														})
-														.reduce((prev: boolean, curr: boolean) => {
-															return prev || curr;
-														}, false)
-												);
-											})
-											.sort((x: Item, y: Item) => {
-												const rarity_to_number = {
-													common: 0,
-													uncommon: 1,
-													rare: 2,
-													mythical: 3,
-													legendary: 4,
-													ancient: 5,
-													contraband: 6,
-												};
+																.includes(search.toLowerCase()) ||
+															item.market_hash_name
+																.toLowerCase()
+																.includes(search.toLowerCase()) ||
+															item.stickers
+																.map((sticker: Sticker) => {
+																	return sticker.name
+																		.toLowerCase()
+																		.includes(search.toLowerCase());
+																})
+																.reduce((prev: boolean, curr: boolean) => {
+																	return prev || curr;
+																}, false)
+														);
+													})
+													.sort((x: Item, y: Item) => {
+														const rarity_to_number = {
+															common: 0,
+															uncommon: 1,
+															rare: 2,
+															mythical: 3,
+															legendary: 4,
+															ancient: 5,
+															contraband: 6,
+														};
 
-												if (!x.rarity && !y.rarity) return 0;
-												if (!x.rarity) return -1;
-												if (!y.rarity) return 1;
+														if (!x.rarity && !y.rarity) return 0;
+														if (!x.rarity) return -1;
+														if (!y.rarity) return 1;
 
-												if (
-													// @ts-ignore
-													rarity_to_number[x.rarity.toLowerCase()] <
-													// @ts-ignore
-													rarity_to_number[y.rarity.toLowerCase()]
-												)
-													return 1;
+														if (
+															// @ts-ignore
+															rarity_to_number[x.rarity.toLowerCase()] <
+															// @ts-ignore
+															rarity_to_number[y.rarity.toLowerCase()]
+														)
+															return 1;
 
-												if (
-													// @ts-ignore
-													rarity_to_number[y.rarity.toLowerCase()] >
-													// @ts-ignore
-													rarity_to_number[x.rarity.toLowerCase()]
-												)
-													return -1;
+														if (
+															// @ts-ignore
+															rarity_to_number[y.rarity.toLowerCase()] >
+															// @ts-ignore
+															rarity_to_number[x.rarity.toLowerCase()]
+														)
+															return -1;
 
-												return 0;
-											})
-											.map((item: Item, index: number) => {
-												return (
-													<ItemBox
-														key={item.id}
-														place="inv"
-														item={item}
-														index={index}
-													/>
-												);
-											})}
-										{provided.placeholder}
-									</Row>
+														return 0;
+													})
+													.map((item: Item, index: number) => {
+														return (
+															<ItemBox
+																key={item.id}
+																place="inv"
+																item={item}
+																index={index}
+															/>
+														);
+													})}
+												{provided.placeholder}
+											</Row>
+										</div>
+									</SimpleBar>
 								);
 							}}
 						</Droppable>
