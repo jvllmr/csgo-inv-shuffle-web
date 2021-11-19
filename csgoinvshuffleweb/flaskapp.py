@@ -44,7 +44,7 @@ if app.debug:
     app.config["CORS_ORIGINS "] = "http://localhost:3000"
 
 else:
-    app.config["CORS_ORIGINS "] = ""
+    app.config["CORS_ORIGINS "] = "https://csgoinvshuffle.kreyoo.dev"
 
 guard = CustomGuard(app, DummyUserClass)
 cache= Cache(app, config=cache_config)
