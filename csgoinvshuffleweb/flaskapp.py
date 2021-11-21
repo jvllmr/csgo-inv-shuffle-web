@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify, Response, abort, stream_with_context
 from flask.json import JSONEncoder
-import os, requests
+import os, requests, flask_praetorian, datetime
 from csgoinvshuffle.inventory import get_inventory
 from csgoinvshuffle.item import Item
 from csgoinvshuffle.exceptions import InventoryIsPrivateException
-import flask_praetorian
 from typing import NamedTuple
 from urllib.parse import urlencode
 from flask_cors import CORS
@@ -38,7 +37,7 @@ app.config["SECRET_KEY"] = "9465988C5E63ED1444BA12EE1B591"
 app.config["JWT_ACCESS_LIFESPAN"] = {"minutes": 15}
 app.config["JWT_REFRESH_LIFESPAN"] = {"hours": 18}
 app.config["CORS_SUPPORTS_CREDENTIALS"] = True
-cache_config={"CACHE_TYPE":"RedisCache"}
+cache_config = {"CACHE_TYPE": "RedisCache"}
 app.json_encoder = CustomJSONEncoder
 if app.debug:
     app.config["CORS_ORIGINS "] = "http://localhost:3000"
@@ -47,7 +46,7 @@ else:
     app.config["CORS_ORIGINS "] = "https://csgoinvshuffle.kreyoo.dev"
 
 guard = CustomGuard(app, DummyUserClass)
-cache= Cache(app, config=cache_config)
+cache = Cache(app, config=cache_config)
 cache.clear()
 CORS(app)
 
@@ -99,11 +98,6 @@ def logout():
     return resp
 
 
-
-    
-
-
-
 """
 @app.get("/item_icon/<item_id>")
 @flask_praetorian.auth_required
@@ -126,19 +120,36 @@ def get_item_icon(item_id):
 @app.get("/inventory")
 @flask_praetorian.auth_required
 def get_inv():
-    
+
     steam_id = flask_praetorian.current_user_id()
-    if (cached:= cache.get(f"inventory_{steam_id}")) and not request.args.get('no_cache', 0):
+    if (cached := cache.get(f"inventory_{steam_id}")) and not request.args.get(
+        "no_cache", 0
+    ):
         return cached
     try:
-        resp = jsonify(list(filter(lambda x: x.equippable, get_inventory(steam_id))))
-        
+        if datetime.timedelta(minutes=10) > (
+            re_timeout := (
+                datetime.datetime.now()
+                - (
+                    cache.get(f"timeout_{steam_id}")
+                    or (datetime.datetime.now() - datetime.timedelta(minutes=11))
+                )
+            )
+        ):
+            return f"{600 - re_timeout.seconds}", 429
+
+        def filter_equippable(item: Item):
+            return item.equippable
+
+        resp = jsonify(list(filter(filter_equippable, get_inventory(steam_id))))
         cache.set(f"inventory_{steam_id}", resp, timeout=3600)
+        cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
         return resp
     except InventoryIsPrivateException:
         abort(403)
     except requests.HTTPError:
-        abort(429)
+        cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
+        return "600", 429
 
 
 def get_profile_data() -> xml_et.Element:
@@ -151,11 +162,10 @@ def get_profile_data() -> xml_et.Element:
 
 @app.get("/profile_picture")
 @flask_praetorian.auth_required
-
 def get_pp_link():
     steam_id = flask_praetorian.current_user_id()
-    if (cached:= cache.get(f"pp_{steam_id}")) and not request.args.get('no_cache', 0):
-        
+    if (cached := cache.get(f"pp_{steam_id}")) and not request.args.get("no_cache", 0):
+
         return cached
     for child in get_profile_data():
         if child.tag == "avatarIcon":
@@ -165,7 +175,7 @@ def get_pp_link():
         200,
     )
     cache.set(f"pp_{steam_id}", resp, timeout=1800)
-    return  resp
+    return resp
 
 
 if __name__ == "__main__":

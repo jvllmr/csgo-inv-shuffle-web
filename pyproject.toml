@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "csgo-inv-shuffle-web"
+name = "csgoinvshuffleweb"
 version = "0.1.0"
-description = "csgo-inv-shuffle-web"
+description = "csgoinvshuffleweb"
 authors = ["Jan Vollmer <zunder325@gmail.com>"]
 license = "All Rights reserved"
 

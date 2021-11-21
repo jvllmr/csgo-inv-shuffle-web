@@ -9,25 +9,47 @@ import {
 	Form,
 	InputGroup,
 	Alert,
+	ProgressBar,
 } from "react-bootstrap";
 import { GET } from "../utils/api_requests";
 import { getInv, setInv } from "../utils/inventory";
-import { getUserID } from "../utils/auth";
+import { getUserID, is_authenticated } from "../utils/auth";
 import ItemBox, { Item, Sticker } from "./item";
 import User from "./user";
 import { Droppable, DroppableProvided } from "react-beautiful-dnd";
-import { MdRefresh, MdSearch } from "react-icons/md";
+import { MdCheck, MdRefresh, MdSearch } from "react-icons/md";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+
+interface TimeoutProps {
+	timeout: number
+}
+
+function Timeout(props: TimeoutProps) {
+	const seconds = props.timeout % 60
+	const minutes = Math.floor(props.timeout / 60)
+	return <div>
+
+		<p style={{color: "red", fontSize: 15, marginBottom: 0}}>{`${minutes}:${seconds > 9 ? seconds : `0${seconds}`}`}</p>
+		<ProgressBar style={{height: 4, marginTop: 0}} variant="light" now={((600-props.timeout)/600*100)}/>
+	</div>	
+
+
+}
+
+
 interface InventoryProps {
 	inventory: Item[];
 	setInventoryCallback: Function;
 }
 
+
 export default function Inventory(props: InventoryProps) {
 	const [refreshing, setRefreshing] = useState(false);
 	const [search, setSearch] = useState("");
 	const [error, setError] = useState("");
+	const [refresh_success, setRefreshSuccess] = useState(false);
+	const [timeout, setTimeoutState] = useState(0);
 	const { setInventoryCallback } = props;
 
 	const inventory = getInv()
@@ -42,18 +64,24 @@ export default function Inventory(props: InventoryProps) {
 			GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
 				async (resp: Response) => {
 					const json = await resp.json();
-
+					
 					if (resp.status === 200) {
 						setInv(json);
 						setRefreshing(false);
+						setRefreshSuccess(true);
 						setError("");
+						setTimeout(() => {
+							setTimeoutState(600);
+							setRefreshSuccess(false);
+						}, 3000)
+						
 						return json;
 					} else if (resp.status === 403) {
 						setError("Your Inventory has to be public.");
 					} else if (resp.status === 401) {
 						setError("You have to login to view your inventory.");
 					} else if (resp.status === 429) {
-						setError("Too many refreshes at once. Please try again later.");
+						setTimeoutState(+json)
 					} else {
 						setError(
 							`Your Inventory could not be loaded. Status code ${resp.status}`
@@ -71,7 +99,13 @@ export default function Inventory(props: InventoryProps) {
 		if (!inventory.length) {
 			setInventoryCallback(fetchInv());
 		}
-	}, [inventory.length]);
+		if(timeout) {
+			const timer = setTimeout(()=>{setTimeoutState(timeout-1)}, 1000)
+			return () => {clearTimeout(timer)}
+		} else {
+			setRefreshing(false);
+		}
+	}, [inventory.length, timeout]);
 
 	return (
 		<>
@@ -106,13 +140,15 @@ export default function Inventory(props: InventoryProps) {
 					}}>
 					{inventory.length && (
 						<>
-							{!refreshing && (
+							{refresh_success ? <MdCheck color="green" size={40}/> :
+							timeout ? <Timeout timeout={timeout} /> :
+							(!refreshing && (
 								<Button variant="light" onClick={() => fetchInv(true)}>
 									<MdRefresh />
 								</Button>
-							)}
-							{refreshing && <Spinner animation="border" variant="light" />}
-
+							))
+							|| (refreshing && <Spinner animation="border" variant="light" />)
+							}
 							<Form.Group>
 								<InputGroup>
 									<InputGroup.Text>
@@ -135,7 +171,7 @@ export default function Inventory(props: InventoryProps) {
 						paddingTop: 0,
 						paddingBottom: 0,
 					}}>
-					{!inventory.length && (
+					{(!inventory.length || !is_authenticated()) && (
 						<Container
 							style={{
 								display: "flex",
@@ -147,7 +183,7 @@ export default function Inventory(props: InventoryProps) {
 							</Row>
 						</Container>
 					)}
-					{inventory.length && (
+					{inventory.length && is_authenticated() && (
 						<Droppable
 							droppableId="inventory"
 							direction="horizontal"

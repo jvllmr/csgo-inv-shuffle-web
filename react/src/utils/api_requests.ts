@@ -23,6 +23,7 @@ async function basic_request(
 				if (resp.status !== 200) {
 					localStorage.removeItem("inv");
 					deleteUserID();
+					window.location.reload()
 				}
 			});
 			return basic_request(method, path, body, try_ + 1);
