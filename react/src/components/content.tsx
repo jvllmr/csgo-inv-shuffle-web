@@ -66,11 +66,12 @@ export default function Content() {
 					item_id,
 					map[+destination.droppableId.split("-", 2)[1] - 1]["general"]
 				) ||
-					hasItem(
+					(hasItem(
 						item_id,
 						// @ts-ignore
 						map[+destination.droppableId.split("-", 2)[1] - 1][team]
-					))
+					) && destination.droppableId.split("-", 2)[1] !== index)
+					)
 			)
 				return;
 
@@ -190,6 +191,10 @@ export default function Content() {
 					changeColor(red);
 					isRed = true;
 					continue;
+				} else if (item.shuffle_slots_ct.length && item.shuffle_slots_t.length &&
+					source.droppableId.includes(String(index))) {
+					changeBothColors(green);
+					continue;
 				} else if (
 					item.shuffle_slots_ct.length &&
 					source.droppableId.includes(String(index))
@@ -219,11 +224,16 @@ export default function Content() {
 				continue;
 			}
 		}
+		
+		
+		const source_element = document.getElementById(source.droppableId.replace("-", "_"))
 
-		if (document.getElementById(source.droppableId.replace("-", "_")))
-			document.getElementById(
-				source.droppableId.replace("-", "_")
-			)!.style.backgroundColor = "#232329";
+		if (source_element)
+			source_element.style.backgroundColor = "#232329";
+			
+
+		
+		
 	};
 
 	return (
