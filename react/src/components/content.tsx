@@ -24,7 +24,9 @@ import "simplebar-react/dist/simplebar.min.css";
 export default function Content() {
 	const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
 	const [slotmap, _setSlotMap] = useState<Map>(getMap());
-	const setSlotMap = (_map: Map) => {
+	const [oldSlotMap, setOldSlotMap] = useState<Map>(getMap());
+	const setSlotMap = (_map: Map, no_backup: boolean = false) => {
+		if (!no_backup) setOldSlotMap(_map);
 		setMap(_map);
 		_setSlotMap(_map);
 	};
