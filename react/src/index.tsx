@@ -23,7 +23,7 @@ class Page extends React.Component {
 						path="*"
 						element={
 							<>
-								<Header />
+								<Header mainPage/>
 								<Content />
 							</>
 						}

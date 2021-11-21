@@ -3,10 +3,14 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 
 import User from "./user";
 
-class Header extends React.Component {
-	render() {
+interface HeaderProps {
+	mainPage?: boolean
+}
+
+function Header(props: HeaderProps) {
+	
 		return (
-			<Navbar className="header" fixed="top">
+			<Navbar className="header" fixed="top" variant="dark">
 				
 					<Navbar.Brand href="/"><img style={{maxHeight: 48, maxWidth:48, marginLeft: 20}} src="/img/brand.png" alt="CSGOINVSHUFFLE"/></Navbar.Brand>
 					<Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -25,7 +29,7 @@ class Header extends React.Component {
 				
 			</Navbar>
 		);
-	}
+	
 }
 
 export default Header;
