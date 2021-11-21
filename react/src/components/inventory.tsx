@@ -177,6 +177,7 @@ export default function Inventory(props: InventoryProps) {
 								display: "flex",
 								justifyContent: "center",
 								alignItems: "center",
+								marginTop: 30
 							}}>
 							<Row xs={1}>
 								<User />
