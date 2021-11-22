@@ -37,13 +37,17 @@ app.config["SECRET_KEY"] = "9465988C5E63ED1444BA12EE1B591"
 app.config["JWT_ACCESS_LIFESPAN"] = {"minutes": 15}
 app.config["JWT_REFRESH_LIFESPAN"] = {"hours": 18}
 app.config["CORS_SUPPORTS_CREDENTIALS"] = True
+
+
 cache_config = {"CACHE_TYPE": "RedisCache"}
+
 app.json_encoder = CustomJSONEncoder
 if app.debug:
     app.config["CORS_ORIGINS "] = "http://localhost:3000"
 
 else:
     app.config["CORS_ORIGINS "] = "https://csgoinvshuffle.kreyoo.dev"
+    app.config["CACHE_REDIS_URL"] = os.environ.get("REDIS_TLS_URL")
 
 guard = CustomGuard(app, DummyUserClass)
 cache = Cache(app, config=cache_config)
