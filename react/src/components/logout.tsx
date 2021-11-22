@@ -4,12 +4,12 @@ import { GET } from "../utils/api_requests";
 import { deleteUserID } from "../utils/auth";
 
 export default function Logout() {
-	useEffect(() => {
-		deleteUserID();
-		localStorage.removeItem("inv");
-		localStorage.removeItem("map");
-		GET("/logout");
-	}, []);
+  useEffect(() => {
+    deleteUserID();
+    localStorage.removeItem("inv");
+    localStorage.removeItem("map");
+    GET("/logout");
+  }, []);
 
-	return <Navigate to="/" />;
+  return <Navigate to="/" />;
 }

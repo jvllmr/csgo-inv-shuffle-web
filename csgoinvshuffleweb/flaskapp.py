@@ -99,7 +99,6 @@ def refresh_token():
 @flask_praetorian.auth_required
 def logout():
     steam_id = flask_praetorian.current_user_id()
-    cache.delete(f"timeout_{steam_id}")
     resp = Response()
     resp.set_cookie("access_token", "", samesite="lax", httponly=True)
     return resp

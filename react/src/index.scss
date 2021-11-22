@@ -16,14 +16,14 @@ $nav-link-hover-color: green;
 @import "./scss/user.scss";
 
 body {
-	background-color: $dark;
-	z-index: -10;
+  background-color: $dark;
+  z-index: -10;
 }
 
 .no-select {
-	-webkit-user-drag: none;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
