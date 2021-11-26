@@ -17,19 +17,29 @@ import {
   hasItem,
   hasIntersectingSlots,
 } from "../utils/inventory";
-import { getMap, Map, setMap } from "../utils/slotmap";
+import {
+  appendOneBackward,
+  deleteForward,
+  getMap,
+  Map,
+  setMap,
+} from "../utils/slotmap";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
 export default function Content() {
   const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
   const [slotmap, _setSlotMap] = useState<Map>(getMap());
-  const [oldSlotMap, setOldSlotMap] = useState<Map>(getMap());
   const setSlotMap = (_map: Map, no_backup: boolean = false) => {
-    if (!no_backup) setOldSlotMap(_map);
     setMap(_map);
-    _setSlotMap(_map);
   };
+
+  useEffect(() => {
+    document.addEventListener("SlotMapEvent", () => {
+      _setSlotMap(getMap());
+    });
+  });
+
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
 
@@ -91,6 +101,8 @@ export default function Content() {
     }
     if (!destination) {
       setSlotMap(map);
+      appendOneBackward(map);
+      deleteForward();
       return;
     }
     const [team, index] = destination.droppableId.split("-", 2);
@@ -152,6 +164,8 @@ export default function Content() {
     map[+index - 1] = slot;
     if (rollback) return;
     setSlotMap(map);
+    appendOneBackward(map);
+    deleteForward();
   };
   const onDragStart = (start: DragStart) => {
     const { source, draggableId } = start;

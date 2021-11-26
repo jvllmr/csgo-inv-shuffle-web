@@ -7,9 +7,10 @@ import {
 import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
 import { TiPlus, TiMinus } from "react-icons/ti";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-import { getMap, Map } from "../utils/slotmap";
+import { appendOneBackward, getMap, Map, setMap } from "../utils/slotmap";
 import ItemBox, { Item } from "./item";
 import { FaTrash } from "react-icons/fa";
+import SimpleBar from "simplebar";
 export enum TeamSide {
   T = "T",
   CT = "CT",
@@ -122,7 +123,11 @@ export default function SlotMap(props: SlotMapProps) {
   const scrollToFooter = () => {
     const scrollDiv = document.getElementById("scrollDiv");
     const space = document.getElementById("space");
-    if (space && scrollDiv) scrollDiv.scrollTo(0, space.offsetTop);
+    if (space && scrollDiv)
+      SimpleBar.instances
+        .get(scrollDiv)!
+        .getScrollElement()
+        .scrollTo(0, space.offsetTop);
   };
 
   const { map, setSlotMapCallback } = props;
@@ -134,6 +139,9 @@ export default function SlotMap(props: SlotMapProps) {
       while (map.length < count) map.push({ CT: [], T: [], general: [] });
       setSlotMapCallback(map);
     }
+    document.addEventListener("SlotMapEvent", () => {
+      setCount(getMap().length);
+    });
   }, [count, map, setSlotMapCallback]);
 
   return (
@@ -220,6 +228,7 @@ export default function SlotMap(props: SlotMapProps) {
                     map.pop();
                   }
                   setSlotMapCallback(map);
+                  appendOneBackward(map);
                 }}
               >
                 <TiMinus />
@@ -230,6 +239,7 @@ export default function SlotMap(props: SlotMapProps) {
                 variant="light"
                 onClick={() => {
                   setCount(count + 1);
+                  appendOneBackward(getMap());
                   scrollToFooter();
                 }}
               >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import {
   MdKeyboardArrowLeft,
@@ -8,7 +8,15 @@ import {
   MdOutlineFileUpload,
 } from "react-icons/md";
 import { getUserID, is_authenticated } from "../utils/auth";
-import { getMap } from "../utils/slotmap";
+import {
+  backwardMapsUpdateEvent,
+  forwardMapsUpdateEvent,
+  getMap,
+  haveBackwardMaps,
+  haveForwardMaps,
+  moveBackward,
+  moveForward,
+} from "../utils/slotmap";
 
 import User from "./user";
 
@@ -32,6 +40,19 @@ const downloadExport = () => {
 };
 
 function Header(props: HeaderProps) {
+  const [forward, setForward] = useState(haveForwardMaps());
+  const [backward, setBackward] = useState(haveBackwardMaps());
+
+  useEffect(() => {
+    document.addEventListener("ForwardMapsEvent", () => {
+      setForward(haveForwardMaps());
+    });
+    document.addEventListener("BackwardMapsEvent", () => {
+      console.log(haveBackwardMaps());
+      setBackward(haveBackwardMaps());
+    });
+  });
+
   return (
     <Navbar className="header" fixed="top" variant="dark">
       <Navbar.Brand href="/">
@@ -68,12 +89,26 @@ function Header(props: HeaderProps) {
                 </Button>
               </div>
               <div style={divMarginSyle}>
-                <Button variant="dark">
+                <Button
+                  onClick={() => {
+                    moveBackward();
+                    setBackward(haveBackwardMaps());
+                  }}
+                  variant="dark"
+                  disabled={!backward}
+                >
                   <MdKeyboardArrowLeft />
                 </Button>
               </div>
               <div style={divMarginSyle}>
-                <Button variant="dark">
+                <Button
+                  onClick={() => {
+                    moveForward();
+                    setForward(haveForwardMaps());
+                  }}
+                  variant="dark"
+                  disabled={!forward}
+                >
                   <MdKeyboardArrowRight />{" "}
                 </Button>
               </div>

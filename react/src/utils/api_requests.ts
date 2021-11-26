@@ -1,5 +1,6 @@
 import { api_url } from "../config";
 import { deleteUserID } from "./auth";
+import { deleteBackward, deleteForward, setMap } from "./slotmap";
 
 async function basic_request(
   method: string,
@@ -23,6 +24,9 @@ async function basic_request(
         if (resp.status !== 200) {
           localStorage.removeItem("inv");
           deleteUserID();
+          setMap([]);
+          deleteBackward();
+          deleteForward();
           window.location.reload();
         }
       });

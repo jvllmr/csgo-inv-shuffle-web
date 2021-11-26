@@ -3,6 +3,7 @@ import { Button, Image } from "react-bootstrap";
 import { authLink } from "../config";
 import { GET } from "../utils/api_requests";
 import { is_authenticated } from "../utils/auth";
+import { deleteBackward, deleteForward, setMap } from "../utils/slotmap";
 
 export default function User() {
   const [image, setImage] = useState("");
@@ -15,6 +16,11 @@ export default function User() {
           setImage(json.link);
         }
       });
+    }
+    if (!is_authenticated()) {
+      setMap([]);
+      deleteForward();
+      deleteBackward();
     }
   }, [authstate]);
 
