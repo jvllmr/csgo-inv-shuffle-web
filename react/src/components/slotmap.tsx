@@ -227,8 +227,8 @@ export default function SlotMap(props: SlotMapProps) {
                   while (map.length !== count - 1) {
                     map.pop();
                   }
+                  appendOneBackward(getMap());
                   setSlotMapCallback(map);
-                  appendOneBackward(map);
                 }}
               >
                 <TiMinus />

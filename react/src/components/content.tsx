@@ -100,8 +100,9 @@ export default function Content() {
       map[+index - 1] = slot;
     }
     if (!destination) {
+      appendOneBackward(getMap())
       setSlotMap(map);
-      appendOneBackward(map);
+      
       deleteForward();
       return;
     }
@@ -163,8 +164,8 @@ export default function Content() {
 
     map[+index - 1] = slot;
     if (rollback) return;
+    appendOneBackward(getMap());
     setSlotMap(map);
-    appendOneBackward(map);
     deleteForward();
   };
   const onDragStart = (start: DragStart) => {
