@@ -43,7 +43,7 @@ python-versions = "*"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.0.7"
+version = "2.0.8"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -73,7 +73,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "csgoinvshuffle"
-version = "1.3.0"
+version = "1.3.1"
 description = "A module for creating CS:GO inventory shuffle config files"
 category = "main"
 optional = false
@@ -134,18 +134,11 @@ version = "2.0.1"
 description = "'Extra bindings on py-buzz specifically for flask apps'"
 category = "main"
 optional = false
-python-versions = "^3.6"
-develop = false
+python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
-flask = ">=1.0, <3.0"
-py-buzz = "^2.0.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/kreyoo/flask-buzz.git"
-reference = "master"
-resolved_reference = "ef8bc7f98e8b5b05aac71517069d705a2316cdd1"
+flask = ">=1.0,<3.0"
+py-buzz = ">=2.0.0,<3.0.0"
 
 [[package]]
 name = "flask-caching"
@@ -184,7 +177,7 @@ Flask = "*"
 
 [[package]]
 name = "flask-praetorian"
-version = "1.2.0"
+version = "1.2.1"
 description = "Strong, Simple, and Precise security for Flask APIs (using jwt)"
 category = "main"
 optional = false
@@ -192,8 +185,8 @@ python-versions = "^3.6"
 develop = false
 
 [package.dependencies]
-flask = "^2.0"
-flask-buzz = {git = "https://github.com/kreyoo/flask-buzz.git", branch = "master"}
+flask = ">=1.0, <3.0"
+flask-buzz = ">=0.1.7"
 flask-mail = "^0.9.1"
 passlib = "^1.7"
 pendulum = "^2.1"
@@ -201,9 +194,9 @@ pyjwt = "^2.0"
 
 [package.source]
 type = "git"
-url = "https://github.com/kreyoo/flask-praetorian.git"
-reference = "custom_ver"
-resolved_reference = "cafbe11ea07ea29d5f826735e8f30eb15e1d952c"
+url = "https://github.com/dusktreader/flask-praetorian.git"
+reference = "master"
+resolved_reference = "a073b5262aa123b6c1a9a72a80fc4737c22ae191"
 
 [[package]]
 name = "idna"
@@ -473,7 +466,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "7e6c2f3786f4cc38edc7caedddea0a7d9f2b2d00b93e040346149d992e30e9c0"
+content-hash = "86a16c0d4f9a3e1ad4f660968b13922a09c171dede9095d7697eb48509aec727"
 
 [metadata.files]
 black = [
@@ -488,8 +481,8 @@ certifi = [
     {file = "certifi-2021.10.8.tar.gz", hash = "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872"},
 ]
 charset-normalizer = [
-    {file = "charset-normalizer-2.0.7.tar.gz", hash = "sha256:e019de665e2bcf9c2b64e2e5aa025fa991da8720daa3c1138cadd2fd1856aed0"},
-    {file = "charset_normalizer-2.0.7-py3-none-any.whl", hash = "sha256:f7af805c321bfa1ce6714c51f254e0d5bb5e5834039bc17db7ebe3a4cec9492b"},
+    {file = "charset-normalizer-2.0.8.tar.gz", hash = "sha256:735e240d9a8506778cd7a453d97e817e536bb1fc29f4f6961ce297b9c7a917b0"},
+    {file = "charset_normalizer-2.0.8-py3-none-any.whl", hash = "sha256:83fcdeb225499d6344c8f7f34684c2981270beacc32ede2e669e94f7fa544405"},
 ]
 click = [
     {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
@@ -500,8 +493,8 @@ colorama = [
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
 ]
 csgoinvshuffle = [
-    {file = "csgoinvshuffle-1.3.0-py3-none-any.whl", hash = "sha256:7b315d43664c03cf20dfb5e1413865b6dca22ab0d08b7837d8988f238edda59b"},
-    {file = "csgoinvshuffle-1.3.0.tar.gz", hash = "sha256:96334a3b4d645a21fb2cf6a8c41d8f6a08115f030f27800e31a90c59f46ed4d3"},
+    {file = "csgoinvshuffle-1.3.1-py3-none-any.whl", hash = "sha256:9419cd5b76c1bb792c6b125ffac49548871b19a37dd064f9cce9358732b55a92"},
+    {file = "csgoinvshuffle-1.3.1.tar.gz", hash = "sha256:479c45219a788fae65bd66a6650a142666554f2771aa92cb187ca411e587f4c1"},
 ]
 deprecated = [
     {file = "Deprecated-1.2.13-py2.py3-none-any.whl", hash = "sha256:64756e3e14c8c5eea9795d93c524551432a0be75629f8f29e67ab8caf076c76d"},
@@ -515,7 +508,10 @@ flask = [
     {file = "Flask-2.0.2-py3-none-any.whl", hash = "sha256:cb90f62f1d8e4dc4621f52106613488b5ba826b2e1e10a33eac92f723093ab6a"},
     {file = "Flask-2.0.2.tar.gz", hash = "sha256:7b2fb8e934ddd50731893bdcdb00fc8c0315916f9fcd50d22c7cc1a95ab634e2"},
 ]
-flask-buzz = []
+flask-buzz = [
+    {file = "flask-buzz-2.0.1.tar.gz", hash = "sha256:7cbaf33ce2ae2744d40bd13f8450a4b09c8b1118e8852f734307574b7168416e"},
+    {file = "flask_buzz-2.0.1-py3-none-any.whl", hash = "sha256:e00cfab12e279867a392346cdaf4c7ea884223c4c9f44a771743e2f1a301bd2b"},
+]
 flask-caching = [
     {file = "Flask-Caching-1.10.1.tar.gz", hash = "sha256:cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00"},
     {file = "Flask_Caching-1.10.1-py3-none-any.whl", hash = "sha256:bcda8acbc7508e31e50f63e9b1ab83185b446f6b6318bd9dd1d45626fba2e903"},

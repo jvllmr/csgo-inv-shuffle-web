@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import {
@@ -8,15 +9,17 @@ import {
   MdOutlineFileUpload,
   MdShuffle,
 } from "react-icons/md";
+import { POST } from "../utils/api_requests";
 import { getUserID, is_authenticated } from "../utils/auth";
 import {
+  appendOneBackward,
+  deleteForward,
   getMap,
   haveBackwardMaps,
   haveForwardMaps,
   moveBackward,
   moveForward,
   setMap,
-  slotMapUpdateEvent,
 } from "../utils/slotmap";
 
 import User from "./user";
@@ -29,47 +32,48 @@ const divMarginSyle: React.CSSProperties = {
   marginRight: 20,
 };
 
-function downloadExport() {
+function downloadFile(name: string, content: string) {
   const element = document.createElement("a");
-  const file = new Blob([JSON.stringify(getMap())], {
+  const file = new Blob([content], {
     type: "application/json",
   });
   element.href = URL.createObjectURL(file);
-  element.download = `csgoinvshuffle_export_${getUserID()}.json`;
+  element.download = name;
   document.body.appendChild(element);
   element.click();
-};
+  document.body.removeChild(element);
+}
 
 function UploadButton() {
   const inputFile = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
     // @ts-ignore
     if (inputFile) inputFile.current.click();
-    
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length) {
-      const content = await files[0].text()
+      const content = await files[0].text();
       localStorage.setItem("map", content);
-      window.location.reload()
+      window.location.reload();
     }
   };
 
-
-  return <div style={divMarginSyle}>
-                <input
+  return (
+    <div style={divMarginSyle}>
+      <input
         style={{ display: "none" }}
         accept=".json"
         ref={inputFile}
         onChange={handleFileUpload}
         type="file"
       />
-                <Button variant="dark" onClick={onButtonClick}>
-                <MdOutlineFileUpload size={25}/> Import JSON 
-                </Button>
-              </div>
+      <Button variant="dark" onClick={onButtonClick}>
+        <MdOutlineFileUpload size={25} /> Import JSON
+      </Button>
+    </div>
+  );
 }
 
 function Header(props: HeaderProps) {
@@ -90,7 +94,7 @@ function Header(props: HeaderProps) {
       <Navbar.Brand href="/">
         <img
           style={{ maxHeight: 48, maxWidth: 48, marginLeft: 20 }}
-          src="/img/brand.png"
+          src=""
           alt="CSGOINVSHUFFLE"
         />
       </Navbar.Brand>
@@ -104,20 +108,54 @@ function Header(props: HeaderProps) {
 
         <Nav>
           {is_authenticated() && (
-            <div style={{ marginRight: 50, display: "flex"}}>
+            <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
-                <Button variant="dark">
-                <MdShuffle size={25}/  > Shuffle
-                </Button>
-                </div>
-              <div style={divMarginSyle}>
-                <Button variant="dark">
-                <MdOutlineFileDownloadDone size={25}/> Create Config 
+                <Button
+                  variant="dark"
+                  onClick={() => {
+                    POST("/random", JSON.stringify(getMap())).then(
+                      async (resp: Response) => {
+                        if (resp.status === 200) {
+                          const json = await resp.json();
+                          appendOneBackward(getMap());
+                          deleteForward();
+                          setMap(json);
+                        }
+                      }
+                    );
+                  }}
+                >
+                  <MdShuffle size={25} /> Shuffle
                 </Button>
               </div>
               <div style={divMarginSyle}>
-                <Button variant="dark" onClick={() => downloadExport()}>
-                <MdOutlineFileDownload size={25}/> Save JSON 
+                <Button
+                  variant="dark"
+                  onClick={() => {
+                    POST("/generate", JSON.stringify(getMap())).then(
+                      async (resp: Response) => {
+                        if (resp.status === 200) {
+                          const text = await resp.text();
+                          downloadFile("csgo_saved_item_shuffles.txt", text);
+                        }
+                      }
+                    );
+                  }}
+                >
+                  <MdOutlineFileDownloadDone size={25} /> Create Config
+                </Button>
+              </div>
+              <div style={divMarginSyle}>
+                <Button
+                  variant="dark"
+                  onClick={() =>
+                    downloadFile(
+                      `csgoinvshuffle_export_${getUserID()}.json`,
+                      JSON.stringify(getMap())
+                    )
+                  }
+                >
+                  <MdOutlineFileDownload size={25} /> Save JSON
                 </Button>
               </div>
               <UploadButton />
@@ -130,7 +168,7 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   disabled={!backward}
                 >
-                  <MdKeyboardArrowLeft size={25}/>
+                  <MdKeyboardArrowLeft size={25} />
                 </Button>
               </div>
               <div style={divMarginSyle}>
@@ -142,7 +180,7 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   disabled={!forward}
                 >
-                  <MdKeyboardArrowRight size={25}/>{" "}
+                  <MdKeyboardArrowRight size={25} />{" "}
                 </Button>
               </div>
             </div>

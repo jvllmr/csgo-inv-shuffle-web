@@ -100,9 +100,9 @@ export default function Content() {
       map[+index - 1] = slot;
     }
     if (!destination) {
-      appendOneBackward(getMap())
+      appendOneBackward(getMap());
       setSlotMap(map);
-      
+
       deleteForward();
       return;
     }
@@ -208,6 +208,10 @@ export default function Content() {
           changeColor(red);
           isRed = true;
           continue;
+        } else if (hasIntersectingSlots(item, section)) {
+          changeColor(red);
+          isRed = true;
+          continue;
         } else if (
           item.shuffle_slots_ct.length &&
           item.shuffle_slots_t.length &&
@@ -227,12 +231,9 @@ export default function Content() {
         ) {
           changeTColor(green);
           continue;
-        } else if (hasIntersectingSlots(item, section)) {
-          changeColor(red);
-          isRed = true;
-          continue;
         } else if (!isRed) {
           changeColor(green);
+          continue;
         }
       }
 

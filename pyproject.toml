@@ -10,7 +10,7 @@ python = "^3.9"
 Flask = "^2.0.1"
 csgoinvshuffle = "^1.3.0"
 requests = "^2.26.0"
-flask-praetorian = {branch="custom_ver", git = "https://github.com/kreyoo/flask-praetorian.git" }
+flask-praetorian = {git = "https://github.com/dusktreader/flask-praetorian.git" }
 Flask-Cors = "^3.0.10"
 Flask-Caching = "^1.10.1"
 redis = "^4.0.1"

@@ -6,7 +6,6 @@ interface MapSlot {
   general: Item[];
 }
 
-export const slotMapUpdateEvent = new Event("SlotMapEvent");
 const forwardMapsUpdateEvent = new Event("ForwardMapsEvent");
 const backwardMapsUpdateEvent = new Event("BackwardMapsEvent");
 
@@ -20,6 +19,7 @@ export function getMap(): Map {
 
 export function setMap(map: Map): void {
   localStorage.setItem("map", JSON.stringify(map));
+  const slotMapUpdateEvent = new Event("SlotMapEvent");
   document.dispatchEvent(slotMapUpdateEvent);
 }
 
@@ -35,7 +35,10 @@ function getForwardMaps(): Map[] {
 }
 
 function setBackwardMaps(maps: Map[]) {
-  localStorage.setItem("backward_maps", JSON.stringify(maps));
+  try {
+    localStorage.setItem("backward_maps", JSON.stringify(maps));
+  } catch (error) {}
+
   document.dispatchEvent(backwardMapsUpdateEvent);
 }
 

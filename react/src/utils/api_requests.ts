@@ -13,11 +13,15 @@ async function basic_request(
     credentials: "include",
   };
 
-  if (body) args.body = body;
+  if (body) {
+    args.body = body;
+    args.headers = {
+      "Content-Type": "application/json",
+    };
+  }
   if (!path.includes(api_url)) {
     path = api_url + path;
   }
-
   return await fetch(path, args).then(async (resp: Response) => {
     if (resp.status === 401 && try_ === 1) {
       await fetch(`${api_url}/refresh_token`, args).then((resp: Response) => {
@@ -38,4 +42,8 @@ async function basic_request(
 
 export async function GET(path: string): Promise<Response> {
   return await basic_request("GET", path);
+}
+
+export async function POST(path: string, body: string): Promise<Response> {
+  return await basic_request("POST", path, body);
 }
