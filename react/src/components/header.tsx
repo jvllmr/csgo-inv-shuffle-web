@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import {
   MdKeyboardArrowLeft,
@@ -6,16 +6,17 @@ import {
   MdOutlineFileDownload,
   MdOutlineFileDownloadDone,
   MdOutlineFileUpload,
+  MdShuffle,
 } from "react-icons/md";
 import { getUserID, is_authenticated } from "../utils/auth";
 import {
-  backwardMapsUpdateEvent,
-  forwardMapsUpdateEvent,
   getMap,
   haveBackwardMaps,
   haveForwardMaps,
   moveBackward,
   moveForward,
+  setMap,
+  slotMapUpdateEvent,
 } from "../utils/slotmap";
 
 import User from "./user";
@@ -28,7 +29,7 @@ const divMarginSyle: React.CSSProperties = {
   marginRight: 20,
 };
 
-const downloadExport = () => {
+function downloadExport() {
   const element = document.createElement("a");
   const file = new Blob([JSON.stringify(getMap())], {
     type: "application/json",
@@ -39,6 +40,38 @@ const downloadExport = () => {
   element.click();
 };
 
+function UploadButton() {
+  const inputFile = useRef<HTMLInputElement>(null);
+  const onButtonClick = () => {
+    // @ts-ignore
+    if (inputFile) inputFile.current.click();
+    
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files && files.length) {
+      const content = await files[0].text()
+      localStorage.setItem("map", content);
+      window.location.reload()
+    }
+  };
+
+
+  return <div style={divMarginSyle}>
+                <input
+        style={{ display: "none" }}
+        accept=".json"
+        ref={inputFile}
+        onChange={handleFileUpload}
+        type="file"
+      />
+                <Button variant="dark" onClick={onButtonClick}>
+                <MdOutlineFileUpload size={25}/> Import JSON 
+                </Button>
+              </div>
+}
+
 function Header(props: HeaderProps) {
   const [forward, setForward] = useState(haveForwardMaps());
   const [backward, setBackward] = useState(haveBackwardMaps());
@@ -48,7 +81,6 @@ function Header(props: HeaderProps) {
       setForward(haveForwardMaps());
     });
     document.addEventListener("BackwardMapsEvent", () => {
-      console.log(haveBackwardMaps());
       setBackward(haveBackwardMaps());
     });
   });
@@ -66,28 +98,29 @@ function Header(props: HeaderProps) {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
           <Container>
-            <Nav.Link href="/howto">How it works</Nav.Link>
+            <Nav.Link href="/privacy">Privacy</Nav.Link>
           </Container>
         </Nav>
 
         <Nav>
           {is_authenticated() && (
-            <div style={{ marginRight: 50, display: "flex" }}>
+            <div style={{ marginRight: 50, display: "flex"}}>
               <div style={divMarginSyle}>
                 <Button variant="dark">
-                  Download <MdOutlineFileDownloadDone />
+                <MdShuffle size={25}/  > Shuffle
+                </Button>
+                </div>
+              <div style={divMarginSyle}>
+                <Button variant="dark">
+                <MdOutlineFileDownloadDone size={25}/> Create Config 
                 </Button>
               </div>
               <div style={divMarginSyle}>
                 <Button variant="dark" onClick={() => downloadExport()}>
-                  Export <MdOutlineFileDownload />
+                <MdOutlineFileDownload size={25}/> Save JSON 
                 </Button>
               </div>
-              <div style={divMarginSyle}>
-                <Button variant="dark">
-                  Import <MdOutlineFileUpload />
-                </Button>
-              </div>
+              <UploadButton />
               <div style={divMarginSyle}>
                 <Button
                   onClick={() => {
@@ -97,7 +130,7 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   disabled={!backward}
                 >
-                  <MdKeyboardArrowLeft />
+                  <MdKeyboardArrowLeft size={25}/>
                 </Button>
               </div>
               <div style={divMarginSyle}>
@@ -109,7 +142,7 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   disabled={!forward}
                 >
-                  <MdKeyboardArrowRight />{" "}
+                  <MdKeyboardArrowRight size={25}/>{" "}
                 </Button>
               </div>
             </div>

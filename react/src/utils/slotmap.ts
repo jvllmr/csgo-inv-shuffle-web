@@ -7,8 +7,8 @@ interface MapSlot {
 }
 
 export const slotMapUpdateEvent = new Event("SlotMapEvent");
-export const forwardMapsUpdateEvent = new Event("ForwardMapsEvent");
-export const backwardMapsUpdateEvent = new Event("BackwardMapsEvent");
+const forwardMapsUpdateEvent = new Event("ForwardMapsEvent");
+const backwardMapsUpdateEvent = new Event("BackwardMapsEvent");
 
 export type Map = MapSlot[];
 

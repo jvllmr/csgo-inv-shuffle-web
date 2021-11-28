@@ -142,6 +142,7 @@ export default function SlotMap(props: SlotMapProps) {
     document.addEventListener("SlotMapEvent", () => {
       setCount(getMap().length);
     });
+    
   }, [count, map, setSlotMapCallback]);
 
   return (
@@ -239,7 +240,7 @@ export default function SlotMap(props: SlotMapProps) {
                 variant="light"
                 onClick={() => {
                   setCount(count + 1);
-                  appendOneBackward(getMap());
+                  
                   scrollToFooter();
                 }}
               >
