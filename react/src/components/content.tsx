@@ -42,8 +42,8 @@ export default function Content() {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
-
-    for (let i = 0; i < getMap().length; i++) {
+    const map = getMap();
+    for (let i = 0; i < map.length; i++) {
       const divElementT = document.getElementById(`T_${i + 1}`);
       const divElementCT = document.getElementById(`CT_${i + 1}`);
       if (divElementT) divElementT.style.backgroundColor = "#232329";
@@ -59,7 +59,7 @@ export default function Content() {
     }
 
     const [item_id] = draggableId.split("_", 1);
-    const map = getMap();
+
     let rollback = false;
 
     if (
@@ -185,9 +185,11 @@ export default function Content() {
       const divCT = document.getElementById(`CT_${index}`);
       if (!divT || !divCT) continue;
       const changeTColor = (color: string) => {
+        //console.log(`T_${index} ${color === "rgba(255, 49,57,0.3)"? "red": "green"}`)
         divT.style.backgroundColor = color;
       };
       const changeCTColor = (color: string) => {
+        //console.log(`CT_${index} ${color === "rgba(255, 49,57,0.3)"? "red": "green"}`)
         divCT.style.backgroundColor = color;
       };
       const changeBothColors = (color: string) => {
@@ -198,51 +200,35 @@ export default function Content() {
       let isRed = false;
       for (const section of sections) {
         let changeColor: Function = changeBothColors;
+
         if (section === CT) {
+          //console.log(`${source.droppableId} CT`)
           changeColor = changeCTColor;
         } else if (section === T) {
+          //console.log(`${source.droppableId} T`)
           changeColor = changeTColor;
         }
 
         if (hasItem(item, section)) {
           changeColor(red);
           isRed = true;
-          continue;
         } else if (hasIntersectingSlots(item, section)) {
           changeColor(red);
           isRed = true;
-          continue;
         } else if (
-          item.shuffle_slots_ct.length &&
-          item.shuffle_slots_t.length &&
-          source.droppableId.includes(String(index))
+          (item.shuffle_slots_ct.length && section === CT) ||
+          (item.shuffle_slots_t.length && section === T)
         ) {
-          changeBothColors(green);
-          continue;
-        } else if (
-          item.shuffle_slots_ct.length &&
-          source.droppableId.includes(String(index))
-        ) {
-          changeCTColor(green);
-          continue;
-        } else if (
-          item.shuffle_slots_t.length &&
-          source.droppableId.includes(String(index))
-        ) {
-          changeTColor(green);
-          continue;
+          changeColor(green);
         } else if (!isRed) {
           changeColor(green);
-          continue;
         }
       }
 
       if (!item.shuffle_slots_ct.length && !item.shuffle_slots.length) {
         changeCTColor(red);
-        continue;
       } else if (!item.shuffle_slots_t.length && !item.shuffle_slots.length) {
         changeTColor(red);
-        continue;
       }
     }
 

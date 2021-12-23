@@ -137,6 +137,7 @@ export default function SlotMap(props: SlotMapProps) {
       setSlotMapCallback([{ CT: [], T: [], general: [] }]);
     } else if (map.length < count) {
       while (map.length < count) map.push({ CT: [], T: [], general: [] });
+
       setSlotMapCallback(map);
     }
     document.addEventListener("SlotMapEvent", () => {
