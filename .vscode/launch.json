@@ -17,7 +17,7 @@
       "jinja": false
     },
     {
-      "command": "npm start",
+      "command": "yarn start",
       "name": "React",
       "request": "launch",
       "type": "node-terminal",
