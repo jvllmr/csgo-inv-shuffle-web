@@ -123,8 +123,8 @@ function Header(props: HeaderProps) {
                           appendOneBackward(map);
                           deleteForward();
                           while(map.length < 100) map.push({CT:[], T:[], general:[]})
-                          //setMap(map);
-                          setMap(json);
+                          setMap(map);
+                          setTimeout(() => setMap(json), 500)
                         }
                       }
                     );

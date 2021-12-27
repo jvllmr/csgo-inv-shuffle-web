@@ -24,7 +24,7 @@ async function basic_request(
   }
   return await fetch(path, args).then(async (resp: Response) => {
     if (resp.status === 401 && try_ === 1) {
-      await fetch(`${api_url}/refresh_token`, args).then((resp: Response) => {
+      await fetch(`${api_url}/refresh_token`, {...args, method: "GET"}).then((resp: Response) => {
         if (resp.status !== 200) {
           localStorage.removeItem("inv");
           deleteUserID();
