@@ -35,6 +35,7 @@ function instanceOfDraggingStyle(data: any): data is DraggingStyle {
 }
 
 export default function ItemBox(props: ItemBoxProps) {
+  let x = 0;
   return (
     <Draggable
       draggableId={`${props.item.id}_${props.place}`}
@@ -81,9 +82,10 @@ export default function ItemBox(props: ItemBoxProps) {
               <Card.ImgOverlay>
                 <Card.Title>
                   {props.item.stickers.map((sticker: Sticker) => {
+                    x++
                     return (
                       <img
-                        key={sticker.name}
+                        key={`${sticker.name}_${x}`}
                         draggable={false}
                         className="no-select"
                         width={32}

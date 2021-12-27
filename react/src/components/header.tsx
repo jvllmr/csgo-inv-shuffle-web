@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { FaTrash } from "react-icons/fa";
 import {
   MdKeyboardArrowLeft,
   MdKeyboardArrowRight,
@@ -8,6 +9,7 @@ import {
   MdOutlineFileDownloadDone,
   MdOutlineFileUpload,
   MdShuffle,
+  MdTapAndPlay,
 } from "react-icons/md";
 import { POST } from "../utils/api_requests";
 import { getUserID, is_authenticated } from "../utils/auth";
@@ -117,8 +119,11 @@ function Header(props: HeaderProps) {
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const json = await resp.json();
-                          appendOneBackward(getMap());
+                          const map = getMap();
+                          appendOneBackward(map);
                           deleteForward();
+                          while(map.length < 100) map.push({CT:[], T:[], general:[]})
+                          //setMap(map);
                           setMap(json);
                         }
                       }
@@ -183,8 +188,21 @@ function Header(props: HeaderProps) {
                   <MdKeyboardArrowRight size={25} />{" "}
                 </Button>
               </div>
+              <div style={divMarginSyle}>
+            <Button variant="dark" onClick={()=>{
+              deleteForward();
+              setMap([]);
+            }}>
+              <FaTrash style={{
+                height: 25,
+                width: 30,
+                color: "rgba(255, 49,57,0.7)",
+              }} />
+            </Button>
+          </div>
             </div>
           )}
+          
           <div style={divMarginSyle}>
             <User />
           </div>
