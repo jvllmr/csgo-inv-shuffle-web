@@ -17,33 +17,21 @@ import {
   hasItem,
   hasIntersectingSlots,
 } from "../utils/inventory";
-import {
-  appendOneBackward,
-  deleteForward,
-  getMap,
-  Map,
-  setMap,
-} from "../utils/slotmap";
+
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectMap, setMap } from "../slices/map";
 
 export default function Content() {
   const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
-  const [slotmap, _setSlotMap] = useState<Map>(getMap());
-  const setSlotMap = (_map: Map, no_backup: boolean = false) => {
-    setMap(_map);
-  };
-
-  useEffect(() => {
-    document.addEventListener("SlotMapEvent", () => {
-      _setSlotMap(getMap());
-    });
-  });
+  const map = useAppSelector(selectMap);
+  const dispatch = useAppDispatch();
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
-    const map = getMap();
-    for (let i = 0; i < map.length; i++) {
+    const map_cpy = [ ...map ];
+    for (let i = 0; i < map_cpy.length; i++) {
       const divElementT = document.getElementById(`T_${i + 1}`);
       const divElementCT = document.getElementById(`CT_${i + 1}`);
       if (divElementT) divElementT.style.backgroundColor = "#232329";
@@ -69,19 +57,19 @@ export default function Content() {
     ) {
       const [team, index] = source.droppableId.split("-", 2);
 
-      const slot = map[+index - 1];
+      const slot = {...map_cpy[+index - 1]};
       // @ts-ignore
       if (
         destination &&
         destination.droppableId !== "trash" &&
         (hasItem(
           item_id,
-          map[+destination.droppableId.split("-", 2)[1] - 1]["general"]
+          map_cpy[+destination.droppableId.split("-", 2)[1] - 1]["general"]
         ) ||
           (hasItem(
             item_id,
             // @ts-ignore
-            map[+destination.droppableId.split("-", 2)[1] - 1][team]
+            map_cpy[+destination.droppableId.split("-", 2)[1] - 1][team]
           ) &&
             destination.droppableId.split("-", 2)[1] !== index))
       )
@@ -97,17 +85,15 @@ export default function Content() {
         return val.id !== item_id;
       });
 
-      map[+index - 1] = slot;
+      map_cpy[+index - 1] = slot;
     }
     if (!destination) {
-      appendOneBackward(getMap());
-      setSlotMap(map);
+      dispatch(setMap(map_cpy));
 
-      deleteForward();
       return;
     }
     const [team, index] = destination.droppableId.split("-", 2);
-    const slot = map[+index - 1];
+    const slot = {...map_cpy[+index - 1]};
     let item: Item | null = null;
     for (const it of getInv()) {
       if (item_id === it.id) {
@@ -120,7 +106,7 @@ export default function Content() {
       // @ts-ignore
       if (slotList.length) {
         // @ts-ignore
-        const items: Item[] = slot[place];
+        const items: Item[] = [...slot[place]];
         for (const it of items) {
           if (it.id === _item.id) return;
           for (const ldtslot of slotList) {
@@ -162,22 +148,20 @@ export default function Content() {
       addToCT();
     }
 
-    map[+index - 1] = slot;
+    map_cpy[+index - 1] = slot;
     if (rollback) return;
-    appendOneBackward(getMap());
-    setSlotMap(map);
-    deleteForward();
+    dispatch(setMap(map_cpy));
   };
   const onDragStart = (start: DragStart) => {
     const { source, draggableId } = start;
     const item = getItem(draggableId.split("_", 1)[0]);
     if (!item) return;
-    const map = getMap();
+    const map_cpy = map;
     const red = "rgba(255, 49,57,0.3)";
     const green = "rgba(35, 255,41,0.2)";
 
-    for (let i = 0; i < map.length; i++) {
-      const cycle_slot = map[i];
+    for (let i = 0; i < map_cpy.length; i++) {
+      const cycle_slot = map_cpy[i];
       const index = i + 1;
       const { CT, T, general } = cycle_slot;
       const sections = [CT, T, general];
@@ -250,10 +234,7 @@ export default function Content() {
           >
             <Row xs={2}>
               <Col>
-                <SlotMap
-                  map={slotmap}
-                  setSlotMapCallback={(map: Map) => setSlotMap(map)}
-                />
+                <SlotMap />
               </Col>
               <Col>
                 <Inventory

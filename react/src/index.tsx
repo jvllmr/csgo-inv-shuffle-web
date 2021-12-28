@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Auth from "./components/auth";
 import Logout from "./components/logout";
 import HowTo from "./components/howto";
+import { Provider } from "react-redux";
+import store from "./redux";
 class Page extends React.Component {
   render() {
     return (
@@ -34,4 +36,9 @@ class Page extends React.Component {
   }
 }
 
-ReactDOM.render(<Page />, document.getElementById("root"));
+ReactDOM.render(
+  <Provider store={store}>
+    <Page />
+  </Provider>,
+  document.getElementById("root")
+);

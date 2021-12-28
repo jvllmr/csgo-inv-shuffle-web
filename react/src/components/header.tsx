@@ -11,18 +11,17 @@ import {
   MdShuffle,
   MdTapAndPlay,
 } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import {
+  goBack,
+  goForth,
+  selectBackwardMaps,
+  selectForwardMaps,
+  selectMap,
+  setMap,
+} from "../slices/map";
 import { POST } from "../utils/api_requests";
 import { getUserID, is_authenticated } from "../utils/auth";
-import {
-  appendOneBackward,
-  deleteForward,
-  getMap,
-  haveBackwardMaps,
-  haveForwardMaps,
-  moveBackward,
-  moveForward,
-  setMap,
-} from "../utils/slotmap";
 
 import User from "./user";
 
@@ -79,17 +78,17 @@ function UploadButton() {
 }
 
 function Header(props: HeaderProps) {
-  const [forward, setForward] = useState(haveForwardMaps());
-  const [backward, setBackward] = useState(haveBackwardMaps());
+  const forward_maps = useAppSelector(selectForwardMaps);
+  const backward_maps = useAppSelector(selectBackwardMaps);
+  const map = useAppSelector(selectMap);
+  const dispatch = useAppDispatch();
+  const [forward, setForward] = useState(!!forward_maps.length);
+  const [backward, setBackward] = useState(!!backward_maps.length);
 
   useEffect(() => {
-    document.addEventListener("ForwardMapsEvent", () => {
-      setForward(haveForwardMaps());
-    });
-    document.addEventListener("BackwardMapsEvent", () => {
-      setBackward(haveBackwardMaps());
-    });
-  });
+    setForward(!!forward_maps.length);
+    setBackward(!!backward_maps.length);
+  }, [forward_maps, backward_maps]);
 
   return (
     <Navbar className="header" fixed="top" variant="dark">
@@ -115,16 +114,15 @@ function Header(props: HeaderProps) {
                 <Button
                   variant="dark"
                   onClick={() => {
-                    POST("/random", JSON.stringify(getMap())).then(
+                    POST("/random", JSON.stringify(map)).then(
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const json = await resp.json();
-                          const map = getMap();
-                          appendOneBackward(map);
-                          deleteForward();
-                          while(map.length < 100) map.push({CT:[], T:[], general:[]})
-                          setMap(map);
-                          setTimeout(() => setMap(json), 500)
+                          
+                          const map_cpy = [...map];
+                          while (map_cpy.length< 100) map_cpy.push({T:[], CT:[], general:[]}) 
+                          dispatch(setMap(map_cpy))
+                           dispatch(setMap(json))
                         }
                       }
                     );
@@ -137,7 +135,7 @@ function Header(props: HeaderProps) {
                 <Button
                   variant="dark"
                   onClick={() => {
-                    POST("/generate", JSON.stringify(getMap())).then(
+                    POST("/generate", JSON.stringify(map)).then(
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const text = await resp.text();
@@ -156,7 +154,7 @@ function Header(props: HeaderProps) {
                   onClick={() =>
                     downloadFile(
                       `csgoinvshuffle_export_${getUserID()}.json`,
-                      JSON.stringify(getMap())
+                      JSON.stringify(map)
                     )
                   }
                 >
@@ -167,8 +165,7 @@ function Header(props: HeaderProps) {
               <div style={divMarginSyle}>
                 <Button
                   onClick={() => {
-                    moveBackward();
-                    setBackward(haveBackwardMaps());
+                    dispatch(goBack());
                   }}
                   variant="dark"
                   disabled={!backward}
@@ -179,8 +176,7 @@ function Header(props: HeaderProps) {
               <div style={divMarginSyle}>
                 <Button
                   onClick={() => {
-                    moveForward();
-                    setForward(haveForwardMaps());
+                    dispatch(goForth());
                   }}
                   variant="dark"
                   disabled={!forward}
@@ -189,20 +185,24 @@ function Header(props: HeaderProps) {
                 </Button>
               </div>
               <div style={divMarginSyle}>
-            <Button variant="dark" onClick={()=>{
-              deleteForward();
-              setMap([]);
-            }}>
-              <FaTrash style={{
-                height: 25,
-                width: 30,
-                color: "rgba(255, 49,57,0.7)",
-              }} />
-            </Button>
-          </div>
+                <Button
+                  variant="dark"
+                  onClick={() => {
+                    dispatch(setMap([]));
+                  }}
+                >
+                  <FaTrash
+                    style={{
+                      height: 25,
+                      width: 30,
+                      color: "rgba(255, 49,57,0.7)",
+                    }}
+                  />
+                </Button>
+              </div>
             </div>
           )}
-          
+
           <div style={divMarginSyle}>
             <User />
           </div>

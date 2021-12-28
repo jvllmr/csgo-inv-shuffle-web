@@ -7,10 +7,12 @@ import {
 import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
 import { TiPlus, TiMinus } from "react-icons/ti";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-import { appendOneBackward, getMap, Map, setMap } from "../utils/slotmap";
+
 import ItemBox, { Item } from "./item";
 import { FaTrash } from "react-icons/fa";
 import SimpleBar from "simplebar";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectMap, setMap } from "../slices/map";
 export enum TeamSide {
   T = "T",
   CT = "CT",
@@ -18,7 +20,6 @@ export enum TeamSide {
 interface SlotProps {
   index: number;
   side: TeamSide;
-  map: Map;
 }
 
 function Slot(props: SlotProps) {
@@ -41,7 +42,7 @@ function Slot(props: SlotProps) {
   };
 
   const items: Item[] = [];
-  const { map } = props;
+  const map = useAppSelector(selectMap);
 
   if (map.length + 1 > props.index) {
     const slot = map[props.index - 1];
@@ -109,13 +110,11 @@ function Slot(props: SlotProps) {
   );
 }
 
-interface SlotMapProps {
-  map: Map;
-  setSlotMapCallback: Function;
-}
+interface SlotMapProps {}
 
 export default function SlotMap(props: SlotMapProps) {
-  const [count, setCount] = useState(getMap().length ? getMap().length : 1);
+  const map = useAppSelector(selectMap);
+  const [count, setCount] = useState(map.length ? map.length : 1);
   const countArray = [...Array(count).keys()].map((index: number) => {
     return index + 1;
   });
@@ -130,20 +129,22 @@ export default function SlotMap(props: SlotMapProps) {
         .scrollTo(0, space.offsetTop);
   };
 
-  const { map, setSlotMapCallback } = props;
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
+    
+    
     if (!map || !map.length) {
-      setSlotMapCallback([{ CT: [], T: [], general: [] }]);
+      dispatch(setMap([{ CT: [], T: [], general: [] }]));
     } else if (map.length < count) {
-      while (map.length < count) map.push({ CT: [], T: [], general: [] });
+      const map_cpy = [...map];
+      while (map_cpy.length < count)
+        map_cpy.push({ CT: [], T: [], general: [] });
 
-      setSlotMapCallback(map);
+      dispatch(setMap(map_cpy));
+    } else if (map.length !== count) {
+      setCount(map.length)
     }
-    document.addEventListener("SlotMapEvent", () => {
-      setCount(getMap().length);
-    });
-  }, [count, map, setSlotMapCallback]);
+  }, [count, map, dispatch]);
 
   return (
     <>
@@ -198,7 +199,7 @@ export default function SlotMap(props: SlotMapProps) {
                   marginTop: 0,
                 }}
               >
-                <Slot map={props.map} index={index} side={TeamSide.T} />
+                <Slot index={index} side={TeamSide.T} />
 
                 <div
                   style={{
@@ -212,7 +213,7 @@ export default function SlotMap(props: SlotMapProps) {
                   <p style={{ fontSize: 30, color: "whitesmoke" }}>{index}</p>
                 </div>
 
-                <Slot map={props.map} index={index} side={TeamSide.CT} />
+                <Slot index={index} side={TeamSide.CT} />
               </div>
             );
           })}
@@ -224,12 +225,11 @@ export default function SlotMap(props: SlotMapProps) {
                 variant="light"
                 onClick={() => {
                   setCount(count - 1);
-                  const map = getMap();
-                  while (map.length !== count - 1) {
-                    map.pop();
+                  const map_cpy = [...map];
+                  while (map_cpy.length !== count - 1) {
+                    map_cpy.pop();
                   }
-                  appendOneBackward(getMap());
-                  setSlotMapCallback(map);
+                  dispatch(setMap(map_cpy));
                 }}
               >
                 <TiMinus />

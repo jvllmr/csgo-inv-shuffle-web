@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button, Image } from "react-bootstrap";
 import { authLink } from "../config";
+import { useAppDispatch } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
 import { is_authenticated } from "../utils/auth";
-import { deleteBackward, deleteForward, setMap } from "../utils/slotmap";
+import { setMap, deleteBackward, deleteForward } from "../slices/map";
 
 export default function User() {
   const [image, setImage] = useState("");
   const authstate = is_authenticated();
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (authstate) {
       GET(`/profile_picture`).then(async (resp: Response) => {
@@ -18,11 +21,11 @@ export default function User() {
       });
     }
     if (!is_authenticated()) {
-      setMap([]);
-      deleteForward();
-      deleteBackward();
+      dispatch(setMap([]));
+      dispatch(deleteForward());
+      dispatch(deleteBackward());
     }
-  }, [authstate]);
+  }, [authstate, dispatch]);
 
   return (
     <div className="userdiv">

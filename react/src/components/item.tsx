@@ -82,7 +82,7 @@ export default function ItemBox(props: ItemBoxProps) {
               <Card.ImgOverlay>
                 <Card.Title>
                   {props.item.stickers.map((sticker: Sticker) => {
-                    x++
+                    x++;
                     return (
                       <img
                         key={`${sticker.name}_${x}`}
