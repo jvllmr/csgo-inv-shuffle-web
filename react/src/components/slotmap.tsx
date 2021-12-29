@@ -12,7 +12,7 @@ import ItemBox, { Item } from "./item";
 import { FaTrash } from "react-icons/fa";
 import SimpleBar from "simplebar";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectMap, setMap } from "../slices/map";
+import { selectMap, selectMapDBReady, setMap } from "../slices/map";
 export enum TeamSide {
   T = "T",
   CT = "CT",
@@ -130,9 +130,10 @@ export default function SlotMap(props: SlotMapProps) {
   };
 
   const dispatch = useAppDispatch();
+  const mapDBReady = useAppSelector(selectMapDBReady)
   useEffect(() => {
     
-    
+    if (mapDBReady){
     if (!map || !map.length) {
       dispatch(setMap([{ CT: [], T: [], general: [] }]));
     } else if (map.length < count) {
@@ -143,8 +144,8 @@ export default function SlotMap(props: SlotMapProps) {
       dispatch(setMap(map_cpy));
     } else if (map.length !== count) {
       setCount(map.length)
-    }
-  }, [count, map, dispatch]);
+    }}
+  }, [count, map, dispatch, mapDBReady]);
 
   return (
     <>
