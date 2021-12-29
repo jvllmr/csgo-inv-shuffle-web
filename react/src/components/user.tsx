@@ -7,16 +7,16 @@ import { is_authenticated } from "../utils/auth";
 import { setMap, deleteBackward, deleteForward } from "../slices/map";
 
 interface UserProps {
-  noImage?: boolean
+  noImage?: boolean;
 }
 
 export default function User(props: UserProps) {
   const [image, setImage] = useState("");
   const authstate = is_authenticated();
   const dispatch = useAppDispatch();
-  const {noImage} = props;
+  const { noImage } = props;
   useEffect(() => {
-    if (authstate && noImage) {
+    if (authstate && !noImage) {
       GET(`/profile_picture`).then(async (resp: Response) => {
         if (resp.status === 200) {
           const json = await resp.json();

@@ -1,6 +1,5 @@
 import { Item } from "../components/item";
-import store from "../redux"
-
+import store from "../redux";
 
 export function getItem(id: string | number): Item | undefined {
   id = String(id);

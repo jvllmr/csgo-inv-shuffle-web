@@ -25,18 +25,20 @@ async function basic_request(
   }
   return await fetch(path, args).then(async (resp: Response) => {
     if (resp.status === 401 && try_ === 1) {
-      await fetch(`${api_url}/refresh_token`, { ...args,body:null, method: "GET" }).then(
-        (resp: Response) => {
-          if (resp.status !== 200) {
-            localStorage.removeItem("inv");
-            deleteUserID();
-            store.dispatch(setMap([]));
-            store.dispatch(deleteForward());
-            store.dispatch(deleteBackward());
-            window.location.reload();
-          }
+      await fetch(`${api_url}/refresh_token`, {
+        ...args,
+        body: null,
+        method: "GET",
+      }).then((resp: Response) => {
+        if (resp.status !== 200) {
+          localStorage.removeItem("inv");
+          deleteUserID();
+          store.dispatch(setMap([]));
+          store.dispatch(deleteForward());
+          store.dispatch(deleteBackward());
+          window.location.reload();
         }
-      );
+      });
       return basic_request(method, path, body, try_ + 1);
     }
     return resp;

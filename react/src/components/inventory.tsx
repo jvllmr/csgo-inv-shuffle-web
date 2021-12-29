@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Card,
-  Col,
   Container,
   Row,
   Spinner,
@@ -44,10 +43,7 @@ function Timeout(props: TimeoutProps) {
   );
 }
 
-interface InventoryProps {
-  
-  
-}
+interface InventoryProps {}
 
 export default function Inventory(props: InventoryProps) {
   const [refreshing, setRefreshing] = useState(false);
@@ -55,53 +51,54 @@ export default function Inventory(props: InventoryProps) {
   const [error, setError] = useState("");
   const [refresh_success, setRefreshSuccess] = useState(false);
   const [timeout, setTimeoutState] = useState(0);
-  
 
-  const inventory = useAppSelector(selectInv)
-  const dispatch = useAppDispatch()
-  const invDBReady = useAppSelector(selectInvDBReady)
-  const fetchInv = useCallback((no_cache: boolean = false): Item[] => {
-    if (getUserID()) {
-      setRefreshing(true);
-      GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
-        async (resp: Response) => {
-          const json = await resp.json();
+  const inventory = useAppSelector(selectInv);
+  const dispatch = useAppDispatch();
+  const invDBReady = useAppSelector(selectInvDBReady);
+  const fetchInv = useCallback(
+    (no_cache: boolean = false): Item[] => {
+      if (getUserID()) {
+        setRefreshing(true);
+        GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
+          async (resp: Response) => {
+            const json = await resp.json();
 
-          if (resp.status === 200) {
-            
-            dispatch(setInv(json));
-            setRefreshing(false);
-            setRefreshSuccess(true);
-            setError("");
+            if (resp.status === 200) {
+              dispatch(setInv(json));
+              setRefreshing(false);
+              setRefreshSuccess(true);
+              setError("");
 
-            setTimeout(() => {
-              if (no_cache) setTimeoutState(600);
-              setRefreshSuccess(false);
-            }, 3000);
+              setTimeout(() => {
+                if (no_cache) setTimeoutState(600);
+                setRefreshSuccess(false);
+              }, 3000);
 
-            return json;
-          } else if (resp.status === 403) {
-            setError("Your Inventory has to be public.");
-          } else if (resp.status === 401) {
-            setError("You have to login to view your inventory.");
-          } else if (resp.status === 429) {
-            setTimeoutState(+json);
-          } else {
-            setError(
-              `Your Inventory could not be loaded. Status code ${resp.status}`
-            );
+              return json;
+            } else if (resp.status === 403) {
+              setError("Your Inventory has to be public.");
+            } else if (resp.status === 401) {
+              setError("You have to login to view your inventory.");
+            } else if (resp.status === 429) {
+              setTimeoutState(+json);
+            } else {
+              setError(
+                `Your Inventory could not be loaded. Status code ${resp.status}`
+              );
+            }
           }
-        }
-      );
-    }
+        );
+      }
 
-    if (refreshing) setRefreshing(false);
-    return [];
-  }, []);
+      if (refreshing) setRefreshing(false);
+      return [];
+    },
+    [dispatch, refreshing]
+  );
 
   useEffect(() => {
     if (!inventory.length && invDBReady) {
-      fetchInv()
+      fetchInv();
     }
     if (timeout) {
       const timer = setTimeout(() => {
@@ -196,7 +193,7 @@ export default function Inventory(props: InventoryProps) {
               }}
             >
               <Row xs={1}>
-                <User noImage/>
+                <User noImage />
               </Row>
             </Container>
           )}

@@ -9,7 +9,6 @@ import {
   MdOutlineFileDownloadDone,
   MdOutlineFileUpload,
   MdShuffle,
-  MdTapAndPlay,
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import {
@@ -119,9 +118,8 @@ function Header(props: HeaderProps) {
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const json = await resp.json();
-                          
-                          
-                           dispatch(setMap(json))
+
+                          dispatch(setMap(json));
                         }
                       }
                     );

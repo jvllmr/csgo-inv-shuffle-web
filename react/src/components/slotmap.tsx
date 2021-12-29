@@ -130,16 +130,15 @@ export default function SlotMap(props: SlotMapProps) {
   };
 
   const dispatch = useAppDispatch();
-  const mapDBReady = useAppSelector(selectMapDBReady)
+  const mapDBReady = useAppSelector(selectMapDBReady);
   useEffect(() => {
-    
-    if (mapDBReady){
-    if (!map || !map.length) {
-      dispatch(setMap([{ CT: [], T: [], general: [] }]));
-      
-    } else if (map.length !== count) {
-      setCount(map.length)
-    }}
+    if (mapDBReady) {
+      if (!map || !map.length) {
+        dispatch(setMap([{ CT: [], T: [], general: [] }]));
+      } else if (map.length !== count) {
+        setCount(map.length);
+      }
+    }
   }, [count, map, dispatch, mapDBReady]);
 
   return (
@@ -235,10 +234,9 @@ export default function SlotMap(props: SlotMapProps) {
               <Button
                 variant="light"
                 onClick={() => {
-                  
                   const map_cpy = [...map];
-                  
-                  while (map_cpy.length < count+ 1)
+
+                  while (map_cpy.length < count + 1)
                     map_cpy.push({ CT: [], T: [], general: [] });
 
                   dispatch(setMap(map_cpy));

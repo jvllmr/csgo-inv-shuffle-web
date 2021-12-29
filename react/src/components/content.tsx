@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Inventory from "./inventory";
 import SlotMap, { TeamSide } from "./slotmap";
 import Footer from "./footer";
-import ItemBox, { Item } from "./item";
-import {
-  DragDropContext,
-  DragStart,
-  DragUpdate,
-  DropResult,
-} from "react-beautiful-dnd";
-import { Alert, Col, Modal, Row } from "react-bootstrap";
-import {
-  getItem,
-  hasItem,
-  hasIntersectingSlots,
-} from "../utils/inventory";
+import { Item } from "./item";
+import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
+import { Col, Row } from "react-bootstrap";
+import { getItem, hasItem, hasIntersectingSlots } from "../utils/inventory";
 
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
@@ -25,12 +16,13 @@ import { selectInv } from "../slices/inv";
 
 export default function Content() {
   const map = useAppSelector(selectMap);
-  const inventory = useAppSelector(selectInv)
+  const inventory = useAppSelector(selectInv);
   const dispatch = useAppDispatch();
 
   const onDragEnd = (result: DropResult) => {
+    let rollback = false;
     const { destination, source, draggableId } = result;
-    const map_cpy = [ ...map ];
+    const map_cpy = [...map];
     for (let i = 0; i < map_cpy.length; i++) {
       const divElementT = document.getElementById(`T_${i + 1}`);
       const divElementCT = document.getElementById(`CT_${i + 1}`);
@@ -41,14 +33,13 @@ export default function Content() {
     if (
       destination &&
       ((source.droppableId === destination.droppableId &&
-      source.droppableId === "inventory") || source.droppableId === destination.droppableId)
+        source.droppableId === "inventory") ||
+        source.droppableId === destination.droppableId)
     ) {
       return;
     }
 
     const [item_id] = draggableId.split("_", 1);
-
-    let rollback = false;
 
     if (
       source.droppableId !== "inventory" &&
@@ -57,7 +48,7 @@ export default function Content() {
     ) {
       const [team, index] = source.droppableId.split("-", 2);
 
-      const slot = {...map_cpy[+index - 1]};
+      const slot = { ...map_cpy[+index - 1] };
       // @ts-ignore
       if (
         destination &&
@@ -88,13 +79,12 @@ export default function Content() {
       map_cpy[+index - 1] = slot;
     }
     if (!destination) {
-      if (map_cpy !== [...map])
-      dispatch(setMap(map_cpy));
+      if (source.droppableId !== "inventory") dispatch(setMap(map_cpy));
 
       return;
     }
     const [team, index] = destination.droppableId.split("-", 2);
-    const slot = {...map_cpy[+index - 1]};
+    const slot = { ...map_cpy[+index - 1] };
     let item: Item | null = null;
     for (const it of inventory) {
       if (item_id === it.id) {
@@ -103,26 +93,35 @@ export default function Content() {
       }
     }
     if (!item) return;
-    const addToSlot = (place: string, _item: Item, slotList: number[]) => {
-      // @ts-ignore
+    const addToSlot = (
+      place: "general" | "CT" | "T",
+      _item: Item,
+      slotList: number[]
+    ) => {
       if (slotList.length) {
-        // @ts-ignore
         const items: Item[] = [...slot[place]];
         for (const it of items) {
-          if (it.id === _item.id) return;
+          if (it.id === _item.id) {
+            rollback = true;
+            return;
+          }
           for (const ldtslot of slotList) {
             if (
               it.shuffle_slots.includes(ldtslot) ||
               it.shuffle_slots_ct.includes(ldtslot) ||
               it.shuffle_slots_t.includes(ldtslot)
-            )
+            ) {
+              rollback = true;
               return;
+            }
           }
         }
 
         items.push(_item);
-        // @ts-ignore
+
         slot[place] = items;
+      } else {
+        rollback = true;
       }
     };
 
@@ -150,9 +149,9 @@ export default function Content() {
     }
 
     map_cpy[+index - 1] = slot;
+
     if (rollback) return;
-    if (map_cpy !== [...map])
-    dispatch(setMap(map_cpy));
+    if (map_cpy !== [...map]) dispatch(setMap(map_cpy));
   };
   const onDragStart = (start: DragStart) => {
     const { source, draggableId } = start;
@@ -239,9 +238,7 @@ export default function Content() {
                 <SlotMap />
               </Col>
               <Col>
-                <Inventory
-                  
-                />
+                <Inventory />
               </Col>
             </Row>
           </DragDropContext>
