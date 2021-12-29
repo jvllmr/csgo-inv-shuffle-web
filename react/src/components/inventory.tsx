@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -12,7 +12,7 @@ import {
   ProgressBar,
 } from "react-bootstrap";
 import { GET } from "../utils/api_requests";
-import { getInv, setInv } from "../utils/inventory";
+
 import { getUserID, is_authenticated } from "../utils/auth";
 import ItemBox, { Item, Sticker } from "./item";
 import User from "./user";
@@ -20,6 +20,8 @@ import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 import { MdCheck, MdRefresh, MdSearch } from "react-icons/md";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectInv, selectInvDBReady, setInv } from "../slices/inv";
 
 interface TimeoutProps {
   timeout: number;
@@ -43,8 +45,8 @@ function Timeout(props: TimeoutProps) {
 }
 
 interface InventoryProps {
-  inventory: Item[];
-  setInventoryCallback: Function;
+  
+  
 }
 
 export default function Inventory(props: InventoryProps) {
@@ -53,15 +55,12 @@ export default function Inventory(props: InventoryProps) {
   const [error, setError] = useState("");
   const [refresh_success, setRefreshSuccess] = useState(false);
   const [timeout, setTimeoutState] = useState(0);
-  const { setInventoryCallback } = props;
+  
 
-  const inventory = getInv()
-    ? props.inventory.length !== getInv().length
-      ? getInv()
-      : props.inventory
-    : props.inventory;
-
-  const fetchInv = (no_cache: boolean = false) => {
+  const inventory = useAppSelector(selectInv)
+  const dispatch = useAppDispatch()
+  const invDBReady = useAppSelector(selectInvDBReady)
+  const fetchInv = useCallback((no_cache: boolean = false): Item[] => {
     if (getUserID()) {
       setRefreshing(true);
       GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
@@ -69,7 +68,8 @@ export default function Inventory(props: InventoryProps) {
           const json = await resp.json();
 
           if (resp.status === 200) {
-            setInv(json);
+            
+            dispatch(setInv(json));
             setRefreshing(false);
             setRefreshSuccess(true);
             setError("");
@@ -97,11 +97,11 @@ export default function Inventory(props: InventoryProps) {
 
     if (refreshing) setRefreshing(false);
     return [];
-  };
+  }, []);
 
   useEffect(() => {
-    if (!inventory.length) {
-      setInventoryCallback(fetchInv());
+    if (!inventory.length && invDBReady) {
+      fetchInv()
     }
     if (timeout) {
       const timer = setTimeout(() => {
@@ -113,7 +113,7 @@ export default function Inventory(props: InventoryProps) {
     } else {
       setRefreshing(false);
     }
-  }, [inventory.length, timeout]);
+  }, [inventory, timeout, dispatch, invDBReady, fetchInv]);
 
   return (
     <>
@@ -196,7 +196,7 @@ export default function Inventory(props: InventoryProps) {
               }}
             >
               <Row xs={1}>
-                <User />
+                <User noImage/>
               </Row>
             </Container>
           )}

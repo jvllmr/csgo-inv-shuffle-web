@@ -12,7 +12,6 @@ import {
 } from "react-beautiful-dnd";
 import { Alert, Col, Modal, Row } from "react-bootstrap";
 import {
-  getInv,
   getItem,
   hasItem,
   hasIntersectingSlots,
@@ -22,10 +21,11 @@ import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { selectMap, setMap } from "../slices/map";
+import { selectInv } from "../slices/inv";
 
 export default function Content() {
-  const [inventory, setInventory] = useState<Item[]>(getInv() ? getInv() : []);
   const map = useAppSelector(selectMap);
+  const inventory = useAppSelector(selectInv)
   const dispatch = useAppDispatch();
 
   const onDragEnd = (result: DropResult) => {
@@ -40,8 +40,8 @@ export default function Content() {
 
     if (
       destination &&
-      source.droppableId === destination.droppableId &&
-      source.droppableId === "inventory"
+      ((source.droppableId === destination.droppableId &&
+      source.droppableId === "inventory") || source.droppableId === destination.droppableId)
     ) {
       return;
     }
@@ -88,6 +88,7 @@ export default function Content() {
       map_cpy[+index - 1] = slot;
     }
     if (!destination) {
+      if (map_cpy !== [...map])
       dispatch(setMap(map_cpy));
 
       return;
@@ -95,7 +96,7 @@ export default function Content() {
     const [team, index] = destination.droppableId.split("-", 2);
     const slot = {...map_cpy[+index - 1]};
     let item: Item | null = null;
-    for (const it of getInv()) {
+    for (const it of inventory) {
       if (item_id === it.id) {
         item = it;
         break;
@@ -150,6 +151,7 @@ export default function Content() {
 
     map_cpy[+index - 1] = slot;
     if (rollback) return;
+    if (map_cpy !== [...map])
     dispatch(setMap(map_cpy));
   };
   const onDragStart = (start: DragStart) => {
@@ -238,8 +240,7 @@ export default function Content() {
               </Col>
               <Col>
                 <Inventory
-                  inventory={inventory}
-                  setInventoryCallback={(inv: Item[]) => setInventory(inv)}
+                  
                 />
               </Col>
             </Row>

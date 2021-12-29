@@ -6,13 +6,17 @@ import { GET } from "../utils/api_requests";
 import { is_authenticated } from "../utils/auth";
 import { setMap, deleteBackward, deleteForward } from "../slices/map";
 
-export default function User() {
+interface UserProps {
+  noImage?: boolean
+}
+
+export default function User(props: UserProps) {
   const [image, setImage] = useState("");
   const authstate = is_authenticated();
   const dispatch = useAppDispatch();
-
+  const {noImage} = props;
   useEffect(() => {
-    if (authstate) {
+    if (authstate && noImage) {
       GET(`/profile_picture`).then(async (resp: Response) => {
         if (resp.status === 200) {
           const json = await resp.json();
@@ -25,7 +29,7 @@ export default function User() {
       dispatch(deleteForward());
       dispatch(deleteBackward());
     }
-  }, [authstate, dispatch]);
+  }, [authstate, dispatch, noImage]);
 
   return (
     <div className="userdiv">
