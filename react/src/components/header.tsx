@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import {
+  deleteMap,
   goBack,
   goForth,
   selectBackwardMaps,
@@ -119,9 +120,7 @@ function Header(props: HeaderProps) {
                         if (resp.status === 200) {
                           const json = await resp.json();
                           
-                          const map_cpy = [...map];
-                          while (map_cpy.length< 100) map_cpy.push({T:[], CT:[], general:[]}) 
-                          dispatch(setMap(map_cpy))
+                          
                            dispatch(setMap(json))
                         }
                       }
@@ -188,7 +187,7 @@ function Header(props: HeaderProps) {
                 <Button
                   variant="dark"
                   onClick={() => {
-                    dispatch(setMap([]));
+                    dispatch(deleteMap());
                   }}
                 >
                   <FaTrash

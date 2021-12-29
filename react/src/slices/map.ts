@@ -88,7 +88,7 @@ function saveAllToDB(state: InitialState) {
 }
 
 const initialState: InitialState = {
-  map: [],
+  map: [{CT:[], T:[],general:[]}],
   forward_maps: [],
   backward_maps: [],
   DBready: false
@@ -104,8 +104,9 @@ export const mapSlice = createSlice({
       state.map = [...action.payload];
       state.forward_maps = [];
       saveAllToDB(state)
-      console.log(action.payload)
     },
+    
+    
     deleteBackward: (state) => {
       state.backward_maps = [];
       saveToDB("backward_maps", [])
@@ -122,8 +123,9 @@ export const mapSlice = createSlice({
 
         state.map = backward_maps.pop()!;
         state.backward_maps = [...backward_maps];
+        saveAllToDB(state)
       }
-      saveAllToDB(state)
+      
     },
     goForth: (state) => {
       const { forward_maps } = {...state};
@@ -132,12 +134,15 @@ export const mapSlice = createSlice({
 
         state.map = forward_maps.pop()!;
         state.forward_maps = [...forward_maps];
+        saveAllToDB(state)
       }
-      saveAllToDB(state)
+      
     },
     deleteMap: (state) => {
-      state.map = [];
-      saveToDB("map", [])
+      state.backward_maps = [...state.backward_maps, state.map]
+      state.map = [{CT:[], T:[],general:[]}];
+      state.forward_maps = [];
+      saveAllToDB(state)
     },
     setAll: (state, action: PayloadAction<InitialState>) => {
       const {forward_maps, map, backward_maps, DBready} = action.payload

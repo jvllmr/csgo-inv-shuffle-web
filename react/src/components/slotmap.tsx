@@ -136,12 +136,7 @@ export default function SlotMap(props: SlotMapProps) {
     if (mapDBReady){
     if (!map || !map.length) {
       dispatch(setMap([{ CT: [], T: [], general: [] }]));
-    } else if (map.length < count) {
-      const map_cpy = [...map];
-      while (map_cpy.length < count)
-        map_cpy.push({ CT: [], T: [], general: [] });
-
-      dispatch(setMap(map_cpy));
+      
     } else if (map.length !== count) {
       setCount(map.length)
     }}
@@ -240,8 +235,13 @@ export default function SlotMap(props: SlotMapProps) {
               <Button
                 variant="light"
                 onClick={() => {
-                  setCount(count + 1);
+                  
+                  const map_cpy = [...map];
+                  
+                  while (map_cpy.length < count+ 1)
+                    map_cpy.push({ CT: [], T: [], general: [] });
 
+                  dispatch(setMap(map_cpy));
                   scrollToFooter();
                 }}
               >
