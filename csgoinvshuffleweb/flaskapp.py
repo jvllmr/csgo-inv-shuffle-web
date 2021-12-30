@@ -161,7 +161,7 @@ def get_inv():
             return item.equippable
 
         resp = jsonify(list(filter(filter_equippable, get_inventory(steam_id))))
-        cache.set(f"inventory_{steam_id}", resp, timeout=3600)
+        cache.set(f"inventory_{steam_id}", resp, timeout=86_400)
         cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
         return resp
     except InventoryIsPrivateException:

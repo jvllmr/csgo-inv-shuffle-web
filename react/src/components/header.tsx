@@ -93,22 +93,23 @@ function Header(props: HeaderProps) {
   return (
     <Navbar className="header" fixed="top" variant="dark">
       <Navbar.Brand href="/">
-        <img
+        {/*<img
           style={{ maxHeight: 48, maxWidth: 48, marginLeft: 20 }}
           src=""
           alt="CSGOINVSHUFFLE"
-        />
+        />*/}
+        <p style={{ margin: 20 }}>CSGOINVSHUFFLE</p>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
-          <Container>
-            <Nav.Link href="/privacy">Privacy</Nav.Link>
-          </Container>
+          <Nav.Link href="/privacy">Privacy Policy</Nav.Link>
+
+          <Nav.Link href="/howto">How To</Nav.Link>
         </Nav>
 
         <Nav>
-          {is_authenticated() && (
+          {is_authenticated() && props.mainPage && (
             <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
                 <Button

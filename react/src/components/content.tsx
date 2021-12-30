@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Inventory from "./inventory";
 import SlotMap, { TeamSide } from "./slotmap";
-import Footer from "./footer";
+
 import { Item } from "./item";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 import { Col, Row } from "react-bootstrap";
@@ -243,7 +243,6 @@ export default function Content() {
             </Row>
           </DragDropContext>
         </Container>
-        <Footer />
       </div>
     </SimpleBar>
   );

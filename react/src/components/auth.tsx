@@ -19,7 +19,7 @@ export default function Auth() {
           setAuthenticated(true);
         }
       });
-  }, []);
+  }, [query, steam_id]);
 
   if (authenticated) return <Navigate to="/" />;
   return <>Authenticating...</>;

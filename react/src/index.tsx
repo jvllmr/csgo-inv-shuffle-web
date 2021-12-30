@@ -9,7 +9,9 @@ import Auth from "./components/auth";
 import Logout from "./components/logout";
 import HowTo from "./components/howto";
 import { Provider } from "react-redux";
+import Privacy from "./components/privacy";
 import store from "./redux";
+import Footer from "./components/footer";
 class Page extends React.Component {
   render() {
     return (
@@ -20,7 +22,7 @@ class Page extends React.Component {
           <Route path="/logout" element={<Logout />} />
 
           <Route path="/auth" element={<Auth />} />
-
+          <Route path="/privacy" element={<Privacy />} />
           <Route
             path="*"
             element={
@@ -31,6 +33,7 @@ class Page extends React.Component {
             }
           />
         </Routes>
+        <Footer />
       </Router>
     );
   }

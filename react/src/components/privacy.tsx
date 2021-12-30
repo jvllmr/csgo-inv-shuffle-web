@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import ReactMarkdown from "react-markdown";
 import SimpleBar from "simplebar-react";
-
 import Header from "./header";
+import ReactMarkdown from "react-markdown";
 
-export default function HowTo() {
+export default function Privacy() {
   const [text, setText] = useState("");
   useEffect(() => {
-    fetch("/markdown/howto.md").then(async (resp: Response) => {
+    fetch("/markdown/privacy.md").then(async (resp: Response) => {
       setText(await resp.text());
     });
   });
+
   return (
     <>
       <Header />
@@ -23,3 +23,5 @@ export default function HowTo() {
     </>
   );
 }
+
+export {};

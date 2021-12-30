@@ -4,7 +4,7 @@ import {
   DraggableProvided,
   DraggingStyle,
 } from "react-beautiful-dnd";
-import { Col, Card, Row, Container } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 export interface Sticker {
   link: string;
