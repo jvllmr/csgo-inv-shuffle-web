@@ -194,6 +194,7 @@ export default function Inventory(props: InventoryProps) {
             >
               <Row xs={1}>
                 <User noImage />
+                <div style={{marginBottom: 20}}/>
               </Row>
             </Container>
           )}

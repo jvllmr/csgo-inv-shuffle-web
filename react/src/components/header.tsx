@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Button,  Nav, Navbar } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import {
   MdKeyboardArrowLeft,

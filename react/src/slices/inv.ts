@@ -29,6 +29,7 @@ export async function DBgetInv(): Promise<Item[]> {
 }
 
 function saveToDB(objStore: string, new_val: Item[]) {
+  if (!db) return;
   const transaction = db.transaction(objStore, "readwrite");
   new_val = JSON.parse(JSON.stringify(new_val));
   const mapStore = transaction.objectStore(objStore);
