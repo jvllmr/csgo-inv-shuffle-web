@@ -12,14 +12,14 @@ export default function Auth() {
   const steam_id = query.get("openid.identity");
   const [authenticated, setAuthenticated] = useState(false);
   useEffect(() => {
-    if (steam_id)
+    if (steam_id && !authenticated)
       GET(`/auth?${query}`).then((resp: Response) => {
         if (resp.status === 200) {
           setUserID(steam_id.split("/")[steam_id.split("/").length - 1]);
           setAuthenticated(true);
         }
       });
-  }, [query, steam_id]);
+  });
 
   if (authenticated) return <Navigate to="/" />;
   return <>Authenticating...</>;

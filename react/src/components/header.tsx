@@ -49,7 +49,7 @@ function UploadButton() {
   const inputFile = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
     // @ts-ignore
-    if (inputFile) inputFile.current.click();
+    if (inputFile !== null) inputFile!.current.click();
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,11 +83,11 @@ function Header(props: HeaderProps) {
   const map = useAppSelector(selectMap);
   const dispatch = useAppDispatch();
   const [forward, setForward] = useState(!!forward_maps.length);
-  const [backward, setBackward] = useState(!!backward_maps.length);
+  const [backward, setBackward] = useState(!!(backward_maps.length -1));
 
   useEffect(() => {
-    setForward(!!forward_maps.length);
-    setBackward(!!backward_maps.length);
+    setForward(!!forward_maps.length );
+    setBackward(!!(backward_maps.length -1));
   }, [forward_maps, backward_maps]);
 
   return (

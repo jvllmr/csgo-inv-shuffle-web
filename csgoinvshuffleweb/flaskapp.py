@@ -74,7 +74,6 @@ def auth():
         params = dict(request.args)
         del params["openid.mode"]
         params["openid.mode"] = "check_authentication"
-        # print(f"https://steamcommunity.com/openid/login?{urlencode(params)}")
 
         r = requests.get(f"https://steamcommunity.com/openid/login?{urlencode(params)}")
         print(r.text)
@@ -115,25 +114,6 @@ def logout():
     resp = Response()
     resp.set_cookie("access_token", "", samesite="lax", httponly=True)
     return resp
-
-
-"""
-@app.get("/item_icon/<item_id>")
-@flask_praetorian.auth_required
-def get_item_icon(item_id):
-    r = requests.get(
-        f"https://community.cloudflare.steamstatic.com/economy/image/{item_id}"
-    )
-
-    bytes_ = BytesIO(r.content)
-    bytes_.seek(0)
-    img = Image.open(bytes_)
-    img = img.resize((128, 96))
-    ret_bytes = BytesIO()
-    img.save(ret_bytes, format="PNG")
-    ret_bytes.seek(0)
-    return send_file(ret_bytes, mimetype="image/png")
-"""
 
 
 @app.get("/inventory")
@@ -273,14 +253,6 @@ def generate():
     sc = ShuffleConfig()
     sc._slotmap = convert_to_slotmap(request.json)
     return sc.generate()
-
-
-@app.errorhandler(Exception)
-def handle_500(e: Exception):
-    current_app.logger.error(
-        str(e) + "\n" + "".join(traceback.TracebackException.from_exception(e).format())
-    )
-    return "Bad request", 400
 
 
 if __name__ == "__main__":

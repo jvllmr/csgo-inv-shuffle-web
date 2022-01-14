@@ -10,6 +10,8 @@ export interface Sticker {
   link: string;
   name: string;
 }
+
+export type rarity = "uncommon" | "common" | "rare" | "mythical" | "legendary" | "contraband" | "ancient"
 export interface Item {
   icon_url: string;
   icon_url_large: string;
@@ -18,7 +20,7 @@ export interface Item {
   name_color: string;
   market_hash_name: string;
   custom_name: string;
-  rarity: string;
+  rarity: rarity
   shuffle_slots_t: number[];
   shuffle_slots: number[];
   shuffle_slots_ct: number[];

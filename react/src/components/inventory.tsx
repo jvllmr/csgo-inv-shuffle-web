@@ -13,7 +13,7 @@ import {
 import { GET } from "../utils/api_requests";
 
 import { getUserID, is_authenticated } from "../utils/auth";
-import ItemBox, { Item, Sticker } from "./item";
+import ItemBox, { Item,  Sticker } from "./item";
 import User from "./user";
 import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 import { MdCheck, MdRefresh, MdSearch } from "react-icons/md";
@@ -255,7 +255,8 @@ export default function Inventory(props: InventoryProps) {
                             );
                           })
                           .sort((x: Item, y: Item) => {
-                            const rarity_to_number = {
+
+                            const rarity_to_number: {[key: string]: number} = {
                               common: 0,
                               uncommon: 1,
                               rare: 2,
@@ -270,17 +271,17 @@ export default function Inventory(props: InventoryProps) {
                             if (!y.rarity) return 1;
 
                             if (
-                              // @ts-ignore
+                              
                               rarity_to_number[x.rarity.toLowerCase()] <
-                              // @ts-ignore
+                              
                               rarity_to_number[y.rarity.toLowerCase()]
                             )
                               return 1;
 
                             if (
-                              // @ts-ignore
+                              
                               rarity_to_number[y.rarity.toLowerCase()] >
-                              // @ts-ignore
+                              
                               rarity_to_number[x.rarity.toLowerCase()]
                             )
                               return -1;

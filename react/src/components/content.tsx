@@ -47,9 +47,9 @@ export default function Content() {
         (destination && source.droppableId !== destination.droppableId))
     ) {
       const [team, index] = source.droppableId.split("-", 2);
-
-      const slot = { ...map_cpy[+index - 1] };
-      // @ts-ignore
+     
+      const slot: {[key: string]: Item[]} = { ...map_cpy[+index - 1] };
+      
       if (
         destination &&
         destination.droppableId !== "trash" &&
@@ -66,16 +66,16 @@ export default function Content() {
       )
         return;
 
-      // @ts-ignore
+      
       slot[team] = slot[team].filter((val: Item) => {
         return val.id !== item_id;
       });
 
-      // @ts-ignore
+      
       slot["general"] = slot["general"].filter((val: Item) => {
         return val.id !== item_id;
       });
-
+      // @ts-ignore
       map_cpy[+index - 1] = slot;
     }
     if (!destination) {
@@ -170,11 +170,11 @@ export default function Content() {
       const divCT = document.getElementById(`CT_${index}`);
       if (!divT || !divCT) continue;
       const changeTColor = (color: string) => {
-        //console.log(`T_${index} ${color === "rgba(255, 49,57,0.3)"? "red": "green"}`)
+        
         divT.style.backgroundColor = color;
       };
       const changeCTColor = (color: string) => {
-        //console.log(`CT_${index} ${color === "rgba(255, 49,57,0.3)"? "red": "green"}`)
+        
         divCT.style.backgroundColor = color;
       };
       const changeBothColors = (color: string) => {
@@ -187,10 +187,10 @@ export default function Content() {
         let changeColor: Function = changeBothColors;
 
         if (section === CT) {
-          //console.log(`${source.droppableId} CT`)
+          
           changeColor = changeCTColor;
         } else if (section === T) {
-          //console.log(`${source.droppableId} T`)
+          
           changeColor = changeTColor;
         }
 
