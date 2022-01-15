@@ -12,6 +12,8 @@ import {
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import {
+  deleteBackward,
+  deleteForward,
   deleteMap,
   goBack,
   goForth,
@@ -82,16 +84,21 @@ function Header(props: HeaderProps) {
   const backward_maps = useAppSelector(selectBackwardMaps);
   const map = useAppSelector(selectMap);
   const dispatch = useAppDispatch();
-  const [forward, setForward] = useState(!!forward_maps.length);
-  const [backward, setBackward] = useState(!!(backward_maps.length -1));
+  const [forward, setForward] = useState(false);
+  const [backward, setBackward] = useState(false);
 
   useEffect(() => {
     setForward(!!forward_maps.length );
-    setBackward(!!(backward_maps.length -1));
+    if (backward_maps.length === 1 && !backward_maps[0].length) {
+      setBackward(false)
+    } else {
+      setBackward(!!backward_maps.length);
+    }
+    
   }, [forward_maps, backward_maps]);
 
   return (
-    <Navbar className="header" fixed="top" variant="dark">
+    <Navbar className="header" fixed="top" variant="dark" expand="xxl">
       <Navbar.Brand href="/">
         {/*<img
           style={{ maxHeight: 48, maxWidth: 48, marginLeft: 20 }}
@@ -108,7 +115,7 @@ function Header(props: HeaderProps) {
           <Nav.Link href="/howto">How To</Nav.Link>
         </Nav>
 
-        <Nav>
+        <Nav className="me-auto" >
           {is_authenticated() && props.mainPage && (
             <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
@@ -187,6 +194,8 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   onClick={() => {
                     dispatch(deleteMap());
+                    dispatch(deleteForward())
+                    dispatch(deleteBackward())
                   }}
                 >
                   <FaTrash

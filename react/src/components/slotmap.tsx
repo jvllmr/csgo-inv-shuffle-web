@@ -147,7 +147,7 @@ export default function SlotMap(props: SlotMapProps) {
         <Card.Header
           style={{
             position: "sticky",
-            top: 0,
+            top: 40,
             display: "flex",
             justifyContent: "space-evenly",
             zIndex: 1000,

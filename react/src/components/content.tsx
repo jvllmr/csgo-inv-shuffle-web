@@ -78,7 +78,7 @@ export default function Content() {
       // @ts-ignore
       map_cpy[+index - 1] = slot;
     }
-    if (!destination) {
+    if (!destination || destination.droppableId === "trash") {
       if (source.droppableId !== "inventory") dispatch(setMap(map_cpy));
 
       return;
