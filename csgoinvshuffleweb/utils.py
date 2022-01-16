@@ -1,8 +1,10 @@
-import xml.etree.ElementTree as xml_et
-import flask_praetorian, requests
-from csgoinvshuffle.shuffle import SlotMap
 import typing as t
+import xml.etree.ElementTree as xml_et
+
+import flask_praetorian
+import requests
 from csgoinvshuffle.item import _slot_tag_map, _slot_tag_map_ct, _slot_tag_map_t
+from csgoinvshuffle.shuffle import SlotMap
 
 
 def get_profile_data() -> xml_et.Element:
@@ -13,10 +15,15 @@ def get_profile_data() -> xml_et.Element:
     )
 
 
-json_type = list[dict[str, list[dict[str, t.Any]]]]
+item_dict = dict[str, t.Any]
+mapslot_json_type = dict[
+    t.Literal["CT"] | t.Literal["T"] | t.Literal["general"], list[item_dict]
+]
+map_json_type = list[mapslot_json_type]
 
 
-def convert_to_slotmap(json: json_type) -> SlotMap:
+def convert_to_slotmap(json: map_json_type) -> SlotMap:
+    """Converts a JSON SlotMap to a SlotMap object"""
     ret = SlotMap()
     for slot in json:
         for side, item_list in slot.items():
@@ -35,7 +42,8 @@ def convert_to_slotmap(json: json_type) -> SlotMap:
     return ret
 
 
-def flatten_json(json: json_type) -> list[dict[str, t.Any]]:
+def flatten_json(json: map_json_type) -> list[item_dict]:
+    """Converts a JSON SlotMap to a list of item dicts"""
     ret = list()
 
     for slot in json:
@@ -45,7 +53,10 @@ def flatten_json(json: json_type) -> list[dict[str, t.Any]]:
     return ret
 
 
-def convert_to_json(slotmap: SlotMap, item_list: list[dict[str, t.Any]]) -> json_type:
+def convert_to_json(
+    slotmap: SlotMap, item_list: list[dict[str, t.Any]]
+) -> map_json_type:
+    """Converts a SlotMap object to a JSON SlotMap"""
     ret = list()
     for _ in range(max(map(lambda x: len(x[1]), slotmap))):
         ret.append({"CT": [], "T": [], "general": []})

@@ -1,17 +1,31 @@
-import flask_praetorian, datetime, requests
-from csgoinvshuffleweb.extensions.cache import cache
-from flask import jsonify, request, abort, Blueprint
+import datetime
+
+import flask_praetorian
+import requests
 from csgoinvshuffle.inventory import InventoryIsPrivateException, get_inventory
 from csgoinvshuffle.item import Item
-from csgoinvshuffleweb.utils import get_profile_data
+from flask import Blueprint, abort, jsonify, request
+from pydantic import BaseModel
+from spectree import Response
 
+from csgoinvshuffleweb.extensions.cache import cache
+from csgoinvshuffleweb.extensions.validation import api_validator
+from csgoinvshuffleweb.utils import get_profile_data
 
 profile_data = Blueprint("profile_data", __name__)
 
 
+class ProfilePicAnswer(BaseModel):
+    link: str
+
+
 @profile_data.get("/profile_picture")
 @flask_praetorian.auth_required
+@api_validator.validate(
+    resp=Response(HTTP_200=ProfilePicAnswer), tags=("Profile Data",)
+)
 def get_pp_link():
+    """Get the link to the authenticated user's steam profile picture"""
     steam_id = flask_praetorian.current_user_id()
     if (cached := cache.get(f"pp_{steam_id}")) and not request.args.get("no_cache", 0):
 
@@ -29,8 +43,9 @@ def get_pp_link():
 
 @profile_data.get("/inventory")
 @flask_praetorian.auth_required
+@api_validator.validate(tags=("Profile Data",))
 def get_inv():
-
+    """Get the CS:GO of the authenticated user"""
     steam_id = flask_praetorian.current_user_id()
     if (cached := cache.get(f"inventory_{steam_id}")) and not request.args.get(
         "no_cache", 0

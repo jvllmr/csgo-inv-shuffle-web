@@ -4,7 +4,7 @@ import { authLink } from "../config";
 import { useAppDispatch } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
 import { is_authenticated } from "../utils/auth";
-import { setMap, deleteBackward, deleteForward } from "../slices/map";
+import { deleteBackward, deleteForward, deleteMap } from "../slices/map";
 
 interface UserProps {
   noImage?: boolean;
@@ -25,7 +25,7 @@ export default function User(props: UserProps) {
       });
     }
     if (!is_authenticated()) {
-      dispatch(setMap([]));
+      dispatch(deleteMap());
       dispatch(deleteForward());
       dispatch(deleteBackward());
     }

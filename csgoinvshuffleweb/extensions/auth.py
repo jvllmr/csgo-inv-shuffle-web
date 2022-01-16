@@ -1,6 +1,7 @@
-from flask import Flask
-import flask_praetorian
 from typing import NamedTuple
+
+import flask_praetorian
+from flask import Flask
 
 
 class DummyUserClass(NamedTuple):
@@ -21,5 +22,5 @@ guard = CustomGuard(user_class=DummyUserClass)
 
 
 def create_guard(app: Flask) -> CustomGuard:
-    guard.init_app(app)
+    guard.init_app(app, user_class=DummyUserClass)
     return guard

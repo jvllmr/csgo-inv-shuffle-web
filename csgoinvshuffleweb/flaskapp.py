@@ -1,15 +1,11 @@
+from config import DevConfig, ProdConfig
+from csgoinvshuffle.item import Item
 from flask import Flask
 from flask.json import JSONEncoder
-
-
-from csgoinvshuffle.item import Item
-
 from flask_cors import CORS
 
-
-from config import ProdConfig, DevConfig
+from csgoinvshuffleweb.extensions import create_cache, create_guard, create_validator
 from csgoinvshuffleweb.routes import blueprints
-from csgoinvshuffleweb.extensions import create_cache, create_guard
 
 
 class CustomJSONEncoder(JSONEncoder):
@@ -39,6 +35,7 @@ def create_app() -> Flask:
 app = create_app()
 guard = create_guard(app)
 cache = create_cache(app)
+api_validator = create_validator(app)
 
 
 if __name__ == "__main__":

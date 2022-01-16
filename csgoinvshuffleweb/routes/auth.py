@@ -1,21 +1,36 @@
-import flask_praetorian, requests
-from flask import abort, Response, Blueprint, request
-from csgoinvshuffleweb.extensions.auth import DummyUserClass, guard
 from urllib.parse import urlencode
+
+import flask_praetorian
+import requests
+from flask import Blueprint, Response, abort, request
+from pydantic import BaseModel, Field
+
+from csgoinvshuffleweb.extensions.auth import DummyUserClass, guard
+from csgoinvshuffleweb.extensions.validation import api_validator
 
 auth = Blueprint("auth", __name__)
 
 
+class Auth(BaseModel):
+    ns: str = Field(alias="openid.ns")
+    identity: str = Field(alias="openid.identity")
+    claimed_id: str = Field(alias="openid.claimed_id")
+    mode: str = Field(alias="openid.mode")
+    return_to: str = Field(alias="openid.return_to")
+
+
 @auth.get("/auth")
-def auth_method():
+@api_validator.validate(tags=("Auth",))
+def auth_method(query: Auth):
+    """Authenticate the user"""
     try:
         params = dict(request.args)
         del params["openid.mode"]
         params["openid.mode"] = "check_authentication"
 
         r = requests.get(f"https://steamcommunity.com/openid/login?{urlencode(params)}")
-        print(r.text)
-        if not "true" in r.text.split("is_valid:")[1]:
+
+        if "true" not in r.text.split("is_valid:")[1]:
             abort(400)
 
         token = guard.encode_jwt_token(
@@ -34,8 +49,14 @@ def auth_method():
         abort(400)
 
 
+class RefreshTokenModel(BaseModel):
+    access_token: str
+
+
 @auth.get("/refresh_token")
-def refresh_token():
+@api_validator.validate(tags=("Auth",))
+def refresh_token(cookies: RefreshTokenModel):
+    """Refresh the auth token of a user"""
     token = guard.read_token()
     token = guard.refresh_jwt_token(token)
     resp = Response("Valid")
@@ -47,8 +68,9 @@ def refresh_token():
 
 @auth.get("/logout")
 @flask_praetorian.auth_required
+@api_validator.validate(tags=("Auth",))
 def logout():
-    steam_id = flask_praetorian.current_user_id()
+    """Logout the user"""
     resp = Response()
     resp.set_cookie("access_token", "", samesite="lax", httponly=True)
     return resp

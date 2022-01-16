@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useEffect, useRef, useState } from "react";
-import { Button,  Nav, Navbar } from "react-bootstrap";
+import { Button, Nav, Navbar } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import {
   MdKeyboardArrowLeft,
@@ -33,6 +33,7 @@ interface HeaderProps {
 
 const divMarginSyle: React.CSSProperties = {
   marginRight: 20,
+  paddingTop: 5,
 };
 
 function downloadFile(name: string, content: string) {
@@ -88,13 +89,12 @@ function Header(props: HeaderProps) {
   const [backward, setBackward] = useState(false);
 
   useEffect(() => {
-    setForward(!!forward_maps.length );
+    setForward(!!forward_maps.length);
     if (backward_maps.length === 1 && !backward_maps[0].length) {
-      setBackward(false)
+      setBackward(false);
     } else {
       setBackward(!!backward_maps.length);
     }
-    
   }, [forward_maps, backward_maps]);
 
   return (
@@ -115,14 +115,14 @@ function Header(props: HeaderProps) {
           <Nav.Link href="/howto">How To</Nav.Link>
         </Nav>
 
-        <Nav className="me-auto" >
+        <Nav className="me-auto">
           {is_authenticated() && props.mainPage && (
             <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
                 <Button
                   variant="dark"
                   onClick={() => {
-                    POST("/random", JSON.stringify(map)).then(
+                    POST("/random", JSON.stringify({ map: map })).then(
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const json = await resp.json();
@@ -140,7 +140,7 @@ function Header(props: HeaderProps) {
                 <Button
                   variant="dark"
                   onClick={() => {
-                    POST("/generate", JSON.stringify(map)).then(
+                    POST("/generate", JSON.stringify({ map: map })).then(
                       async (resp: Response) => {
                         if (resp.status === 200) {
                           const text = await resp.text();
@@ -194,8 +194,8 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   onClick={() => {
                     dispatch(deleteMap());
-                    dispatch(deleteForward())
-                    dispatch(deleteBackward())
+                    dispatch(deleteForward());
+                    dispatch(deleteBackward());
                   }}
                 >
                   <FaTrash
