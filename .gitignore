@@ -8,3 +8,4 @@ react-template
 __pycache__
 test.py
 .venv
+.coverage

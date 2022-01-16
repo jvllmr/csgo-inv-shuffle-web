@@ -1,10 +1,11 @@
 import datetime
+import typing as t
 
 import flask_praetorian
 import requests
 from csgoinvshuffle.inventory import InventoryIsPrivateException, get_inventory
 from csgoinvshuffle.item import Item
-from flask import Blueprint, abort, jsonify, request
+from flask import Blueprint, abort, jsonify
 from pydantic import BaseModel
 from spectree import Response
 
@@ -19,15 +20,19 @@ class ProfilePicAnswer(BaseModel):
     link: str
 
 
+class NoCacheQuery(BaseModel):
+    no_cache: t.Optional[int] = None
+
+
 @profile_data.get("/profile_picture")
 @flask_praetorian.auth_required
 @api_validator.validate(
     resp=Response(HTTP_200=ProfilePicAnswer), tags=("Profile Data",)
 )
-def get_pp_link():
+def get_pp_link(query: NoCacheQuery):
     """Get the link to the authenticated user's steam profile picture"""
     steam_id = flask_praetorian.current_user_id()
-    if (cached := cache.get(f"pp_{steam_id}")) and not request.args.get("no_cache", 0):
+    if (cached := cache.get(f"pp_{steam_id}")) and not query.no_cache:
 
         return cached
     for child in get_profile_data():
@@ -44,12 +49,10 @@ def get_pp_link():
 @profile_data.get("/inventory")
 @flask_praetorian.auth_required
 @api_validator.validate(tags=("Profile Data",))
-def get_inv():
+def get_inv(query: NoCacheQuery):
     """Get the CS:GO of the authenticated user"""
     steam_id = flask_praetorian.current_user_id()
-    if (cached := cache.get(f"inventory_{steam_id}")) and not request.args.get(
-        "no_cache", 0
-    ):
+    if (cached := cache.get(f"inventory_{steam_id}")) and not query.no_cache:
         return cached
     try:
         if datetime.timedelta(minutes=10) > (

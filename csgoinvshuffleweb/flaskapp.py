@@ -1,9 +1,9 @@
-from config import DevConfig, ProdConfig
 from csgoinvshuffle.item import Item
 from flask import Flask
 from flask.json import JSONEncoder
 from flask_cors import CORS
 
+from csgoinvshuffleweb.config import DevConfig, ProdConfig
 from csgoinvshuffleweb.extensions import create_cache, create_guard, create_validator
 from csgoinvshuffleweb.routes import blueprints
 
@@ -15,7 +15,7 @@ class CustomJSONEncoder(JSONEncoder):
         return super().default(o)
 
 
-def create_app() -> Flask:
+def create_app(**config_vars) -> Flask:
     app = Flask(__name__)
 
     app.json_encoder = CustomJSONEncoder
@@ -25,18 +25,21 @@ def create_app() -> Flask:
     else:
         app.config.from_object(ProdConfig())
 
+    for k, v in config_vars.items():
+        app.config[k] = v
+
     for bp in blueprints:
         app.register_blueprint(bp)
+
+    create_guard(app)
+    create_cache(app)
+    create_validator(app)
 
     CORS(app)
     return app
 
 
-app = create_app()
-guard = create_guard(app)
-cache = create_cache(app)
-api_validator = create_validator(app)
-
-
 if __name__ == "__main__":
+    app = create_app()
+
     app.run()

@@ -5,6 +5,7 @@ import flask_praetorian
 import requests
 from csgoinvshuffle.item import _slot_tag_map, _slot_tag_map_ct, _slot_tag_map_t
 from csgoinvshuffle.shuffle import SlotMap
+from csgoinvshuffle.utils import get_depending_item_slots
 
 
 def get_profile_data() -> xml_et.Element:
@@ -22,7 +23,7 @@ mapslot_json_type = dict[
 map_json_type = list[mapslot_json_type]
 
 
-def convert_to_slotmap(json: map_json_type) -> SlotMap:
+def convert_json_to_slotmap(json: map_json_type) -> SlotMap:
     """Converts a JSON SlotMap to a SlotMap object"""
     ret = SlotMap()
     for slot in json:
@@ -36,15 +37,16 @@ def convert_to_slotmap(json: map_json_type) -> SlotMap:
                 keyname = "shuffle_slots"
 
             for item in item_list:
-                for loadout_slot in item[keyname]:
-                    ret.append(loadout_slot, item["id"])
+                for loadout_slot in item.get(keyname, []):
+                    for dep_slots in get_depending_item_slots(loadout_slot):
+                        ret.append(dep_slots, item["id"])
 
     return ret
 
 
-def flatten_json(json: map_json_type) -> list[item_dict]:
+def get_items_from_json(json: map_json_type) -> set[item_dict]:
     """Converts a JSON SlotMap to a list of item dicts"""
-    ret = list()
+    ret = []
 
     for slot in json:
         for item_list in slot.values():
@@ -53,7 +55,7 @@ def flatten_json(json: map_json_type) -> list[item_dict]:
     return ret
 
 
-def convert_to_json(
+def convert_slotmap_to_json(
     slotmap: SlotMap, item_list: list[dict[str, t.Any]]
 ) -> map_json_type:
     """Converts a SlotMap object to a JSON SlotMap"""
@@ -62,10 +64,11 @@ def convert_to_json(
         ret.append({"CT": [], "T": [], "general": []})
 
     def add_item(key: str, cycle: int, item: dict[str, t.Any]):
-        for sussy_item in ret[cycle][key]:
+        # We first check if the cycle slot is blocked by another item already
+        for sussy_item in ret[cycle][key]:  # Don't ask why it's sussy item
             for k in ("shuffle_slots", "shuffle_slots_t", "shuffle_slots_ct"):
-                for slot in sussy_item[k]:
-                    if slot in item[k]:
+                for slot in sussy_item.get(k, []):
+                    if slot in item.get(k, []):
                         return
         ret[cycle][key].append(item)
 

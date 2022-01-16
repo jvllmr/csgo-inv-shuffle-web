@@ -30,3 +30,21 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        pass_filenames: false
+        always_run: true
+        language: script
+        stages: [commit, merge-commit]
+        types: [python]
+        entry: .venv/bin/pytest
+      - id: pytest-cov
+        name: pytest-cov
+        pass_filenames: false
+        always_run: true
+        language: script
+        stages: [push]
+        types: [python]
+        entry: .venv/bin/pytest --cov csgoinvshuffleweb --cov-report html:coverage
