@@ -1,5 +1,6 @@
-from flask import Response, json
-from flask.testing import FlaskClient
+import os
+
+from flask import Flask, Response, json
 from pytest import fixture
 
 from csgoinvshuffleweb.extensions.auth import CustomGuard, DummyUserClass
@@ -20,6 +21,11 @@ def steam_user_id():
 
 
 @fixture
+def user(steam_user_id: int):
+    return DummyUserClass(steam_user_id)
+
+
+@fixture
 def app():
     app = create_app(testapp=True, SECRET_KEY="top_secret")
     app.response_class = TestingResponse
@@ -27,24 +33,31 @@ def app():
 
 
 @fixture
-def authed_client(client: FlaskClient, guard: CustomGuard, steam_user_id: int):
-    client.set_cookie(
-        "localhost.localdomain",
-        "access_token",
-        guard.encode_eternal_jwt_token(
-            DummyUserClass(steam_user_id),
-            bypass_user_check=True,
-        ),
-    )
-    yield client
-    client.delete_cookie("localhost.localdomain", "access_token")
+def json_slotmap(app: Flask):
+    with open(f"{os.path.dirname(__file__)}/data/map.json", "r") as f:
+        return json.loads(f.read(), app)
 
 
 @fixture
-def cache(app):
+def authed_client(app: Flask, guard: CustomGuard, user: DummyUserClass):
+    with app.test_client() as client:
+        client.set_cookie(
+            "localhost.localdomain",
+            "access_token",
+            guard.encode_eternal_jwt_token(
+                user,
+                bypass_user_check=True,
+            ),
+        )
+        yield client
+        client.delete_cookie("localhost.localdomain", "access_token")
+
+
+@fixture
+def cache(app: Flask):
     return cache_object
 
 
 @fixture
-def guard(app):
+def guard(app: Flask):
     return guard_object

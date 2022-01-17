@@ -1,8 +1,21 @@
+import datetime
+import time
+
 from flask.testing import FlaskClient
 
+from csgoinvshuffleweb.extensions.auth import CustomGuard, DummyUserClass
 
-def test_refresh_token(client: FlaskClient):
-    pass
+
+def test_refresh_token(client: FlaskClient, guard: CustomGuard, user: DummyUserClass):
+    token = guard.encode_jwt_token(
+        user, override_access_lifespan=datetime.timedelta(seconds=1)
+    )
+    time.sleep(2)
+    client.set_cookie("localhost.localdomain", "access_token", token)
+    assert client.get("/profile_picture").status_code == 401
+    assert client.get("/refresh_token").status_code == 200
+    assert client.get("/profile_picture").status_code == 200
+    client.delete_cookie("localhost.localdomain", "access_token")
 
 
 def test_logout(authed_client: FlaskClient):
@@ -11,4 +24,5 @@ def test_logout(authed_client: FlaskClient):
 
 
 def test_auth(client: FlaskClient, authed_client: FlaskClient):
-    pass
+    assert client.get("/profile_picture").status_code == 401
+    assert authed_client.get("/profile_picture").status_code == 200
