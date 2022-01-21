@@ -1,5 +1,0 @@
-User-Agent: *
-Disallow : /img/
-Disallow: /csgo_saved_item_shuffles.txt
-Disallow: /markdown/
-Host: csgoinvshuffle.kreyoo.dev

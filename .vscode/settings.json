@@ -1,5 +1,0 @@
-{
-  "python.languageServer": "Pylance",
-  "python.formatting.provider": "black",
-  "python.pythonPath": ".venv/bin/python",
-}
