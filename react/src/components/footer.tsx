@@ -14,9 +14,17 @@ export default class Footer extends React.Component {
               kreyoo
             </a>
           }
-          . MIT License. Powered by Steam. Valve, Steam and Counter-Strike are
-          registered trademarks of Valve Corporation. csgoinvshuffle.kreyoo.dev
-          is not affiliated with Valve in any way.
+          .
+          <a
+            style={{ color: "whitesmoke", textDecoration: "none" }}
+            href="https://github.com/kreyoo/csgo-inv-shuffle-web/blob/master/LICENSE"
+          >
+            {" "}
+            AGPLv3
+          </a>
+          . Powered by Steam. Valve, Steam and Counter-Strike are registered
+          trademarks of Valve Corporation. csgoinvshuffle.kreyoo.dev is not
+          affiliated with Valve in any way.
         </p>
       </div>
     );

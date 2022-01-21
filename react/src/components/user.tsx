@@ -35,14 +35,28 @@ export default function User(props: UserProps) {
     <div className="userdiv">
       {!authstate ? (
         <a href={authLink()}>
-          <img src="/img/steam_login_wide.png" alt="Steam Login" />
+          <img
+            className="no-select"
+            src="/img/steam_login_wide.png"
+            alt="Steam Login"
+          />
         </a>
       ) : (
         <>
-          {image && <Image src={image} alt="PP" roundedCircle />}
-          {"  "}
+          {image && (
+            <Image
+              style={{ marginRight: 5 }}
+              className="no-select"
+              src={image}
+              alt="PP"
+              roundedCircle
+            />
+          )}
+
           <a href="/logout">
-            <Button variant="dark">Log out</Button>
+            <Button className="no-select" variant="dark">
+              Log out
+            </Button>
           </a>
         </>
       )}

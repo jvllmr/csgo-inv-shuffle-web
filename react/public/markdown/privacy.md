@@ -13,4 +13,4 @@
 - Your Steam ID
 - Your Authentication token
 
-  \*Please note that your authentication token expires after 3 days with no refresh. It's strongly adviced to save your progress by using the `Save JSON` & `Import JSON` buttons. The local data is inaccessible to other web-services.
+  \*Please note that your authentication token expires after not being refreshed for 3 days. It's strongly advised to save your progress by using the `Save JSON` & `Import JSON` buttons. The local data is inaccessible to other web-services.
