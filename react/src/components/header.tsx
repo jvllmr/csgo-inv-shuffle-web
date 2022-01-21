@@ -33,6 +33,7 @@ interface HeaderProps {
 
 const divMarginSyle: React.CSSProperties = {
   marginRight: 20,
+  marginLeft: 20,
   paddingTop: 5,
 };
 
@@ -110,12 +111,14 @@ function Header(props: HeaderProps) {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="/privacy">Privacy Policy</Nav.Link>
+          <div style={divMarginSyle}>
+            <Nav.Link href="/privacy">Privacy Policy</Nav.Link>
 
-          <Nav.Link href="/howto">How To</Nav.Link>
+            <Nav.Link href="/howto">How To</Nav.Link>
+          </div>
         </Nav>
 
-        <Nav className="me-auto">
+        <Nav className="me-auto" style={divMarginSyle}>
           {is_authenticated() && props.mainPage && (
             <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
@@ -209,7 +212,9 @@ function Header(props: HeaderProps) {
               </div>
             </div>
           )}
+        </Nav>
 
+        <Nav>
           <div style={divMarginSyle}>
             <User />
           </div>

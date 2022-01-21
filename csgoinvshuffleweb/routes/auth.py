@@ -39,7 +39,7 @@ def auth_method(query: Auth):
         )
         resp = Response("Valid")
         resp.set_cookie(
-            "access_token", token, samesite="lax", httponly=True, max_age=86_400
+            "access_token", token, samesite="strict", httponly=True, max_age=86_400
         )
 
         return resp
@@ -61,7 +61,7 @@ def refresh_token(cookies: RefreshTokenModel):
     token = guard.refresh_jwt_token(token)
     resp = Response("Valid")
     resp.set_cookie(
-        "access_token", token, samesite="lax", httponly=True, max_age=86_400
+        "access_token", token, samesite="strict", httponly=True, max_age=86_400
     )
     return resp
 
@@ -72,5 +72,5 @@ def refresh_token(cookies: RefreshTokenModel):
 def logout():
     """Logout the user"""
     resp = Response()
-    resp.set_cookie("access_token", "", samesite="lax", httponly=True)
+    resp.set_cookie("access_token", "", samesite="strict", httponly=True)
     return resp

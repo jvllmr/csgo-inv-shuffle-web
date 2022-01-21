@@ -15,7 +15,7 @@ export default function HowTo() {
   return (
     <>
       <Header />
-      <SimpleBar>
+      <SimpleBar className="scrollDiv" id="scrollDiv" autoHide={false}>
         <Container style={{ marginTop: 100, color: "whitesmoke" }}>
           <ReactMarkdown>{text}</ReactMarkdown>
         </Container>
