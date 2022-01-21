@@ -16,7 +16,9 @@ class DevConfig(BaseConfig):
 class ProdConfig(BaseConfig):
     @property
     def SECRET_KEY(self):
-        return os.environ.get("SECRET_KEY")
+        if key := os.environ.get("SECRET_KEY"):
+            return key
+        return "9465988C5E63ED1444BA12EE1B591"
 
     @property
     def CACHE_REDIS_URL(self):

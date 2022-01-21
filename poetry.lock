@@ -282,6 +282,20 @@ pendulum = ">=2.1,<3.0"
 pyjwt = ">=2.0,<3.0"
 
 [[package]]
+name = "gunicorn"
+version = "20.1.0"
+description = "WSGI HTTP Server for UNIX"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.extras]
+eventlet = ["eventlet (>=0.24.1)"]
+gevent = ["gevent (>=1.4.0)"]
+setproctitle = ["setproctitle"]
+tornado = ["tornado (>=0.2)"]
+
+[[package]]
 name = "identify"
 version = "2.4.4"
 description = "File identification library for Python"
@@ -747,7 +761,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d473c492c6a1d3e3dd505e9ba597c16a45da58c9de423dad837be93b3c64088f"
+content-hash = "8ed35b28c4e31f6290d6d65c0170010c00c55bb3c88c775a9672aac975834e23"
 
 [metadata.files]
 atomicwrites = [
@@ -884,6 +898,10 @@ flask-mail = [
 flask-praetorian = [
     {file = "flask-praetorian-1.3.0.tar.gz", hash = "sha256:66e276478b6ab6ea4cefe8c2526f706315c888c4fb9347e87aae4ead48a16ae9"},
     {file = "flask_praetorian-1.3.0-py3-none-any.whl", hash = "sha256:c53f09e6cd48265f829cbc53000715e53713afb6b3b0415bc40a7dd8b468db57"},
+]
+gunicorn = [
+    {file = "gunicorn-20.1.0-py3-none-any.whl", hash = "sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e"},
+    {file = "gunicorn-20.1.0.tar.gz", hash = "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"},
 ]
 identify = [
     {file = "identify-2.4.4-py2.py3-none-any.whl", hash = "sha256:aa68609c7454dbcaae60a01ff6b8df1de9b39fe6e50b1f6107ec81dcda624aa6"},
