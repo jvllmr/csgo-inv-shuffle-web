@@ -4,7 +4,7 @@ import Header from "./components/header";
 
 import Content from "./components/content";
 import "./index.scss";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Auth from "./components/auth";
 import Logout from "./components/logout";
 import HowTo from "./components/howto";
