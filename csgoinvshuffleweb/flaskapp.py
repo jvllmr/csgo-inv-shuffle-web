@@ -15,11 +15,11 @@ class CustomJSONEncoder(JSONEncoder):
         return super().default(o)
 
 
-def create_app(**config_vars) -> Flask:
+def create_app(testapp=False, **config_vars) -> Flask:
     app = Flask(__name__)
 
     app.json_encoder = CustomJSONEncoder
-    if app.debug:
+    if app.debug or testapp:
         app.config.from_object(DevConfig())
 
     else:
@@ -39,8 +39,6 @@ def create_app(**config_vars) -> Flask:
     return app
 
 
-app = create_app()
-
 if __name__ == "__main__":
-
+    app = create_app()
     app.run()

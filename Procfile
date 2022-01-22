@@ -1,1 +1,1 @@
-web: gunicorn csgoinvshuffleweb.flaskapp:app --log-file=-
+web: gunicorn csgoinvshuffleweb.wsgi:app --log-file=-
