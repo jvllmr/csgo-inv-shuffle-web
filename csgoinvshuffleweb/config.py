@@ -2,7 +2,8 @@ import os
 
 
 class BaseConfig:
-    CACHE_TYPE = "csgoinvshuffleweb.extensions.cache.CustomRedisCache"
+    CACHE_TYPE = "RedisCache"
+    CACHE_OPTIONS = {"ssl_cert_reqs": None}
     SECRET_KEY = "9465988C5E63ED1444BA12EE1B591"
     JWT_ACCESS_LIFESPAN = {"minutes": 15}
     JWT_REFRESH_LIFESPAN = {"days": 3}
