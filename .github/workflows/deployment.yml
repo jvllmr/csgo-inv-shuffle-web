@@ -9,7 +9,7 @@ on:
 
 jobs:
   copy:
-    name: Copy
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,49 +21,4 @@ jobs:
         env:
           key: master
           branches: release
-          files: csgoinvshuffleweb pyproject.toml poetry.lock Procfile
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-
-      - name: Build project
-        run: |
-          cd react
-          yarn
-          yarn build
-          cd ..
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
-        with:
-          name: production-files
-          path: ./react/build
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./build
-
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-          cname: csgoinvshuffle.kreyoo.dev
+          files: csgoinvshuffleweb pyproject.toml poetry.lock Procfile react
