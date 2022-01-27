@@ -952,7 +952,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "spectree"
-version = "0.7.1"
+version = "0.7.2"
 description = "generate OpenAPI document and validate request&response with Python annotations."
 category = "main"
 optional = false
@@ -1673,8 +1673,8 @@ six = [
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 spectree = [
-    {file = "spectree-0.7.1-py3-none-any.whl", hash = "sha256:6db9ba36575aca3ba8d4de203691a8b26a02b177d079d35f78f0cac81e0fb0c6"},
-    {file = "spectree-0.7.1.tar.gz", hash = "sha256:a8302a1219e2b977f0c3cbea093f7a56a6be8cb7e356888deaff661ceca1ae2b"},
+    {file = "spectree-0.7.2-py3-none-any.whl", hash = "sha256:fc2190e4c2b8f8f8d02e90983dba4fae73bb92101fa78a5586611efefa23e023"},
+    {file = "spectree-0.7.2.tar.gz", hash = "sha256:e182fd2f62431317eb99c3724d2f38db11607f5dfc37eeae70a9afdd93bb5116"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
