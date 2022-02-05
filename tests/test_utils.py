@@ -38,10 +38,25 @@ def test_convert_slotmap_to_json_and_back():
         {
             "id": "508",
             "shuffle_slots_t": [LoadoutSlot.DEAGLE_T.value],
-            "shuffle_slots_ct": [LoadoutSlot.REVOLVER_CT.value],
+            "shuffle_slots_ct": [
+                LoadoutSlot.REVOLVER_CT.value,
+                LoadoutSlot.DEAGLE_CT.value,
+            ],
         },
-        {"id": "730", "shuffle_slots_t": [LoadoutSlot.DEAGLE_T.value]},
-        {"id": "5443", "shuffle_slots_ct": [LoadoutSlot.REVOLVER_CT.value]},
+        {
+            "id": "730",
+            "shuffle_slots_t": [
+                LoadoutSlot.DEAGLE_T.value,
+                LoadoutSlot.REVOLVER_T.value,
+            ],
+        },
+        {
+            "id": "5443",
+            "shuffle_slots_ct": [
+                LoadoutSlot.REVOLVER_CT.value,
+                LoadoutSlot.DEAGLE_CT.value,
+            ],
+        },
         {"id": "1234", "shuffle_slots": [LoadoutSlot.MUSIC_KIT.value]},
     ]
 
@@ -55,6 +70,9 @@ def test_convert_slotmap_to_json_and_back():
     assert convert_json_to_slotmap([]) == SlotMap()
     assert convert_json_to_slotmap([{"T": [], "CT": [], "general": []}]) == SlotMap()
     converted_slotmap = convert_json_to_slotmap(json)
-    assert (LoadoutSlot.DEAGLE_CT.value, ["508", "5443"]) in converted_slotmap
+    assert (LoadoutSlot.DEAGLE_CT, ["508", "5443"]) == converted_slotmap[
+        LoadoutSlot.DEAGLE_CT
+    ]
+    print(converted_slotmap)
     for _assert in slotmap_init:
         assert _assert in converted_slotmap

@@ -49,18 +49,17 @@ function downloadFile(name: string, content: string) {
 }
 
 function UploadButton() {
+  const dispatch = useAppDispatch();
   const inputFile = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
-    // @ts-ignore
-    if (inputFile !== null) inputFile!.current.click();
+    if (inputFile.current) inputFile.current.click();
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length) {
       const content = await files[0].text();
-      localStorage.setItem("map", content);
-      window.location.reload();
+      dispatch(setMap(JSON.parse(content)));
     }
   };
 

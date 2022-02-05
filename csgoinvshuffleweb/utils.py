@@ -5,7 +5,6 @@ import flask_praetorian
 import requests
 from csgoinvshuffle.item import _slot_tag_map, _slot_tag_map_ct, _slot_tag_map_t
 from csgoinvshuffle.shuffle import SlotMap
-from csgoinvshuffle.utils import get_depending_item_slots
 
 
 def get_profile_data() -> xml_et.Element:
@@ -25,7 +24,7 @@ map_json_type = list[mapslot_json_type]
 
 def convert_json_to_slotmap(json: map_json_type) -> SlotMap:
     """Converts a JSON SlotMap to a SlotMap object"""
-    ret = SlotMap()
+    slotmap = SlotMap()
     for slot in json:
         for side, item_list in slot.items():
             if side == "CT":
@@ -38,10 +37,9 @@ def convert_json_to_slotmap(json: map_json_type) -> SlotMap:
 
             for item in item_list:
                 for loadout_slot in item.get(keyname, []):
-                    for dep_slots in get_depending_item_slots(loadout_slot):
-                        ret.append(dep_slots, item["id"])
+                    slotmap.append(loadout_slot, item["id"])
 
-    return ret
+    return slotmap
 
 
 def get_items_from_json(json: map_json_type) -> set[item_dict]:
