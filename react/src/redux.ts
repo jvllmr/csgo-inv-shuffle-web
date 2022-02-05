@@ -1,18 +1,22 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, createStore } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import authReducer, { authPersistConfig } from "./slices/auth";
+import invReducer, { DBgetInv, setInv, setInvDBReady } from "./slices/inv";
 import mapReducer, {
   getBackwardMaps as DBgetBackwardMaps,
   getForwardMaps as DBgetForwardMaps,
   getMap as DBgetMap,
   setAll,
 } from "./slices/map";
-import invReducer, { DBgetInv, setInv, setInvDBReady } from "./slices/inv";
-const store = configureStore({
-  reducer: {
-    map: mapReducer,
-    inv: invReducer,
-  },
+
+const rootReducer = combineReducers({
+  inv: invReducer,
+  map: mapReducer,
+  auth: persistReducer(authPersistConfig, authReducer),
 });
 
+const store = createStore(rootReducer);
+export const persistor = persistStore(store);
 document.addEventListener("mapDBReady", async () => {
   store.dispatch(
     setAll({

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Image } from "react-bootstrap";
 import { authLink } from "../config";
-import { useAppDispatch } from "../redux_hooks";
-import { GET } from "../utils/api_requests";
-import { is_authenticated } from "../utils/auth";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectAuthenticated } from "../slices/auth";
 import { deleteBackward, deleteForward, deleteMap } from "../slices/map";
+import { GET } from "../utils/api_requests";
 
 interface UserProps {
   noImage?: boolean;
@@ -12,11 +12,11 @@ interface UserProps {
 
 export default function User(props: UserProps) {
   const [image, setImage] = useState("");
-  const authstate = is_authenticated();
+  const authenticated = useAppSelector(selectAuthenticated);
   const dispatch = useAppDispatch();
   const { noImage } = props;
   useEffect(() => {
-    if (authstate && !noImage) {
+    if (authenticated && !noImage) {
       GET(`/profile_picture`).then(async (resp: Response) => {
         if (resp.status === 200) {
           const json = await resp.json();
@@ -24,16 +24,16 @@ export default function User(props: UserProps) {
         }
       });
     }
-    if (!is_authenticated()) {
+    if (!authenticated) {
       dispatch(deleteMap());
       dispatch(deleteForward());
       dispatch(deleteBackward());
     }
-  }, [authstate, dispatch, noImage]);
+  }, [authenticated, dispatch, noImage]);
 
   return (
     <div className="userdiv">
-      {!authstate ? (
+      {!authenticated ? (
         <a href={authLink()}>
           <img
             className="no-select"

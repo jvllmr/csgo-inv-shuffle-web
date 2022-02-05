@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import {
+  selectAuthenticated,
+  setAuthenticated,
+  setAuthID,
+} from "../slices/auth";
 import { GET } from "../utils/api_requests";
-import { setUserID } from "../utils/auth";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -9,17 +14,21 @@ function useQuery() {
 
 export default function Auth() {
   const query = useQuery();
-  const steam_id = query.get("openid.identity");
-  const [authenticated, setAuthenticated] = useState(false);
+
+  const authenticated = useAppSelector(selectAuthenticated);
+  const dispatch = useAppDispatch();
   useEffect(() => {
+    const steam_id = query.get("openid.identity");
     if (steam_id && !authenticated)
       GET(`/auth?${query}`).then((resp: Response) => {
         if (resp.status === 200) {
-          setUserID(steam_id.split("/")[steam_id.split("/").length - 1]);
-          setAuthenticated(true);
+          dispatch(setAuthenticated(true));
+          dispatch(
+            setAuthID(steam_id.split("/")[steam_id.split("/").length - 1])
+          );
         }
       });
-  });
+  }, [query, dispatch, authenticated]);
 
   if (authenticated) return <Navigate to="/" />;
   return <>Authenticating...</>;

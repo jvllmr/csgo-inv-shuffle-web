@@ -1,6 +1,7 @@
 import { api_url } from "../config";
-import { deleteUserID } from "./auth";
 import store from "../redux";
+import { removeAuth } from "../slices/auth";
+import { setInv } from "../slices/inv";
 import { deleteBackward, deleteForward, setMap } from "../slices/map";
 
 async function basic_request(
@@ -31,12 +32,12 @@ async function basic_request(
         method: "GET",
       }).then((resp: Response) => {
         if (resp.status !== 200) {
-          localStorage.removeItem("inv");
-          deleteUserID();
+          store.dispatch(removeAuth());
+
           store.dispatch(setMap([]));
+          store.dispatch(setInv([]));
           store.dispatch(deleteForward());
           store.dispatch(deleteBackward());
-          window.location.reload();
         }
       });
       return basic_request(method, path, body, try_ + 1);

@@ -24,6 +24,10 @@ repos:
     rev: v2.5.1
     hooks:
       - id: prettier
+        additional_dependencies:
+          - "prettier@latest"
+          - "typescript@latest"
+          - "prettier-plugin-organize-imports@latest"
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
@@ -35,7 +39,6 @@ repos:
       - id: pytest
         name: pytest
         pass_filenames: false
-        always_run: true
         language: script
         stages: [commit, merge-commit]
         types: [python]
@@ -43,7 +46,6 @@ repos:
       - id: pytest-cov
         name: pytest-cov
         pass_filenames: false
-        always_run: true
         language: script
         stages: [push]
         types: [python]
