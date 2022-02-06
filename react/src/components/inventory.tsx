@@ -124,7 +124,7 @@ export default function Inventory(props: InventoryProps) {
           style={{
             width: "25vw",
             marginLeft: "11vw",
-            top: 65,
+            top: 100,
             position: "fixed",
             backgroundColor: "#212529",
             borderColor: "darkred",
@@ -142,6 +142,7 @@ export default function Inventory(props: InventoryProps) {
           marginLeft: "11vw",
           position: "fixed",
           marginTop: error ? 20 : 0,
+          top: 115,
         }}
       >
         <Card.Header
