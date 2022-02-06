@@ -11,6 +11,7 @@ import {
   MdShuffle,
 } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectAuthenticated, selectSteamID } from "../slices/auth";
 import {
   deleteBackward,
   deleteForward,
@@ -23,8 +24,6 @@ import {
   setMap,
 } from "../slices/map";
 import { POST } from "../utils/api_requests";
-import { getUserID, is_authenticated } from "../utils/auth";
-
 import User from "./user";
 
 interface HeaderProps {
@@ -50,18 +49,17 @@ function downloadFile(name: string, content: string) {
 }
 
 function UploadButton() {
+  const dispatch = useAppDispatch();
   const inputFile = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
-    // @ts-ignore
-    if (inputFile !== null) inputFile!.current.click();
+    if (inputFile.current) inputFile.current.click();
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files && files.length) {
       const content = await files[0].text();
-      localStorage.setItem("map", content);
-      window.location.reload();
+      dispatch(setMap(JSON.parse(content)));
     }
   };
 
@@ -88,7 +86,8 @@ function Header(props: HeaderProps) {
   const dispatch = useAppDispatch();
   const [forward, setForward] = useState(false);
   const [backward, setBackward] = useState(false);
-
+  const steamID = useAppSelector(selectSteamID);
+  const authenticated = useAppSelector(selectAuthenticated);
   useEffect(() => {
     setForward(!!forward_maps.length);
     if (backward_maps.length === 1 && !backward_maps[0].length) {
@@ -119,7 +118,7 @@ function Header(props: HeaderProps) {
         </Nav>
 
         <Nav className="me-auto" style={divMarginSyle}>
-          {is_authenticated() && props.mainPage && (
+          {authenticated && props.mainPage && (
             <div style={{ marginRight: 50, display: "flex" }}>
               <div style={divMarginSyle}>
                 <Button
@@ -161,7 +160,7 @@ function Header(props: HeaderProps) {
                   variant="dark"
                   onClick={() =>
                     downloadFile(
-                      `csgoinvshuffle_export_${getUserID()}.json`,
+                      `csgoinvshuffle_export_${steamID}.json`,
                       JSON.stringify(map)
                     )
                   }

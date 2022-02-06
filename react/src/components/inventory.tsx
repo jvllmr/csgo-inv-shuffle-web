@@ -1,26 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 import {
+  Alert,
   Button,
   Card,
   Container,
-  Row,
-  Spinner,
   Form,
   InputGroup,
-  Alert,
   ProgressBar,
+  Row,
+  Spinner,
 } from "react-bootstrap";
-import { GET } from "../utils/api_requests";
-
-import { getUserID, is_authenticated } from "../utils/auth";
-import ItemBox, { Item,  Sticker } from "./item";
-import User from "./user";
-import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 import { MdCheck, MdRefresh, MdSearch } from "react-icons/md";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
+import { selectAuthenticated, selectSteamID } from "../slices/auth";
 import { selectInv, selectInvDBReady, setInv } from "../slices/inv";
+import { GET } from "../utils/api_requests";
+import ItemBox, { Item, Sticker } from "./item";
+import User from "./user";
 
 interface TimeoutProps {
   timeout: number;
@@ -31,9 +30,10 @@ function Timeout(props: TimeoutProps) {
   const minutes = Math.floor(props.timeout / 60);
   return (
     <div>
-      <p style={{ color: "red", fontSize: 15, marginBottom: 0 }}>{`${minutes}:${
-        seconds > 9 ? seconds : `0${seconds}`
-      }`}</p>
+      <p
+        className="no-select"
+        style={{ color: "red", fontSize: 15, marginBottom: 0 }}
+      >{`${minutes}:${seconds > 9 ? seconds : `0${seconds}`}`}</p>
       <ProgressBar
         style={{ height: 4, marginTop: 0 }}
         variant="light"
@@ -55,9 +55,11 @@ export default function Inventory(props: InventoryProps) {
   const inventory = useAppSelector(selectInv);
   const dispatch = useAppDispatch();
   const invDBReady = useAppSelector(selectInvDBReady);
+  const steamid64 = useAppSelector(selectSteamID);
+  const authenticated = useAppSelector(selectAuthenticated);
   const fetchInv = useCallback(
     (no_cache: boolean = false): Item[] => {
-      if (getUserID()) {
+      if (steamid64) {
         setRefreshing(true);
         GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
           async (resp: Response) => {
@@ -93,12 +95,14 @@ export default function Inventory(props: InventoryProps) {
       if (refreshing) setRefreshing(false);
       return [];
     },
-    [dispatch, refreshing]
+    [dispatch, refreshing, steamid64]
   );
 
   useEffect(() => {
-    if (!inventory.length && invDBReady) {
+    if (!inventory.length && invDBReady && authenticated) {
       fetchInv();
+    } else if (!authenticated) {
+      dispatch(setInv([]));
     }
     if (timeout) {
       const timer = setTimeout(() => {
@@ -110,7 +114,7 @@ export default function Inventory(props: InventoryProps) {
     } else {
       setRefreshing(false);
     }
-  }, [inventory, timeout, dispatch, invDBReady, fetchInv]);
+  }, [inventory, timeout, dispatch, invDBReady, fetchInv, authenticated]);
 
   return (
     <>
@@ -120,7 +124,7 @@ export default function Inventory(props: InventoryProps) {
           style={{
             width: "25vw",
             marginLeft: "11vw",
-            top: 65,
+            top: 100,
             position: "fixed",
             backgroundColor: "#212529",
             borderColor: "darkred",
@@ -138,6 +142,7 @@ export default function Inventory(props: InventoryProps) {
           marginLeft: "11vw",
           position: "fixed",
           marginTop: error ? 20 : 0,
+          top: 115,
         }}
       >
         <Card.Header
@@ -146,7 +151,7 @@ export default function Inventory(props: InventoryProps) {
             justifyContent: "space-around",
           }}
         >
-          {inventory.length && (
+          {inventory.length && authenticated && (
             <>
               {refresh_success ? (
                 <MdCheck color="green" size={40} />
@@ -166,6 +171,7 @@ export default function Inventory(props: InventoryProps) {
                     <MdSearch color="whitesmoke" />
                   </InputGroup.Text>
                   <Form.Control
+                    className="no-select"
                     placeholder="Filter"
                     size="sm"
                     inputMode="search"
@@ -183,7 +189,7 @@ export default function Inventory(props: InventoryProps) {
             paddingBottom: 0,
           }}
         >
-          {(!inventory.length || !is_authenticated()) && (
+          {(!inventory.length || !authenticated) && (
             <Container
               style={{
                 display: "flex",
@@ -194,11 +200,11 @@ export default function Inventory(props: InventoryProps) {
             >
               <Row xs={1}>
                 <User noImage />
-                <div style={{marginBottom: 20}}/>
+                <div style={{ marginBottom: 20 }} />
               </Row>
             </Container>
           )}
-          {inventory.length && is_authenticated() && (
+          {inventory.length && authenticated && (
             <Droppable
               droppableId="inventory"
               direction="horizontal"
@@ -255,33 +261,29 @@ export default function Inventory(props: InventoryProps) {
                             );
                           })
                           .sort((x: Item, y: Item) => {
-
-                            const rarity_to_number: {[key: string]: number} = {
-                              common: 0,
-                              uncommon: 1,
-                              rare: 2,
-                              mythical: 3,
-                              legendary: 4,
-                              ancient: 5,
-                              contraband: 6,
-                            };
+                            const rarity_to_number: { [key: string]: number } =
+                              {
+                                common: 0,
+                                uncommon: 1,
+                                rare: 2,
+                                mythical: 3,
+                                legendary: 4,
+                                ancient: 5,
+                                contraband: 6,
+                              };
 
                             if (!x.rarity && !y.rarity) return 0;
                             if (!x.rarity) return -1;
                             if (!y.rarity) return 1;
 
                             if (
-                              
                               rarity_to_number[x.rarity.toLowerCase()] <
-                              
                               rarity_to_number[y.rarity.toLowerCase()]
                             )
                               return 1;
 
                             if (
-                              
                               rarity_to_number[y.rarity.toLowerCase()] >
-                              
                               rarity_to_number[x.rarity.toLowerCase()]
                             )
                               return -1;

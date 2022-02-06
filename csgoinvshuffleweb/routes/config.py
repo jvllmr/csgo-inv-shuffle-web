@@ -27,7 +27,7 @@ def randomize(json: DoConfigStuffModel):
     """
     sc = ShuffleConfig()
     sc._slotmap = convert_json_to_slotmap(json.map)
-    sc.randomize(99)
+    sc.randomize(100)
     return jsonify(convert_slotmap_to_json(sc._slotmap, get_items_from_json(json.map)))
 
 

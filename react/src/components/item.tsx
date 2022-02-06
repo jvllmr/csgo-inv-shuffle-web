@@ -11,7 +11,14 @@ export interface Sticker {
   name: string;
 }
 
-export type rarity = "uncommon" | "common" | "rare" | "mythical" | "legendary" | "contraband" | "ancient"
+export type rarity =
+  | "uncommon"
+  | "common"
+  | "rare"
+  | "mythical"
+  | "legendary"
+  | "contraband"
+  | "ancient";
 export interface Item {
   icon_url: string;
   icon_url_large: string;
@@ -20,7 +27,7 @@ export interface Item {
   name_color: string;
   market_hash_name: string;
   custom_name: string;
-  rarity: rarity
+  rarity: rarity;
   shuffle_slots_t: number[];
   shuffle_slots: number[];
   shuffle_slots_ct: number[];
@@ -72,6 +79,7 @@ export default function ItemBox(props: ItemBoxProps) {
               }}
             >
               <Card.Img
+                className="no-select"
                 style={{ height: 75, width: 100 }}
                 src={`https://community.cloudflare.steamstatic.com/economy/image/${
                   props.item.icon_url_large
@@ -106,6 +114,7 @@ export default function ItemBox(props: ItemBoxProps) {
                   fontSize: "10px",
                   minHeight: 60,
                 }}
+                className="no-select"
               >
                 {props.item.custom_name
                   ? `"${props.item.custom_name}"`

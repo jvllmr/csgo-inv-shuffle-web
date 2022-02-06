@@ -5,14 +5,21 @@ import {
   DroppableStateSnapshot,
 } from "react-beautiful-dnd";
 import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
-import { TiPlus, TiMinus } from "react-icons/ti";
-import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-
-import ItemBox, { Item } from "./item";
 import { FaTrash } from "react-icons/fa";
+import { TiMinus, TiPlus } from "react-icons/ti";
 import SimpleBar from "simplebar";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectMap, selectMapDBReady, setMap } from "../slices/map";
+import { selectAuthenticated } from "../slices/auth";
+import {
+  deleteBackward,
+  deleteMap,
+  selectMap,
+  selectMapDBReady,
+  setMap,
+} from "../slices/map";
+import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
+import ItemBox, { Item } from "./item";
+
 export enum TeamSide {
   T = "T",
   CT = "CT",
@@ -118,7 +125,7 @@ export default function SlotMap(props: SlotMapProps) {
   const countArray = [...Array(count).keys()].map((index: number) => {
     return index + 1;
   });
-
+  const authenticated = useAppSelector(selectAuthenticated);
   const scrollToFooter = () => {
     const scrollDiv = document.getElementById("scrollDiv");
     const space = document.getElementById("space");
@@ -133,13 +140,15 @@ export default function SlotMap(props: SlotMapProps) {
   const mapDBReady = useAppSelector(selectMapDBReady);
   useEffect(() => {
     if (mapDBReady) {
+      if (!authenticated) dispatch(deleteMap());
       if (!map || !map.length) {
         dispatch(setMap([{ CT: [], T: [], general: [] }]));
+        dispatch(deleteBackward());
       } else if (map.length !== count) {
         setCount(map.length);
       }
     }
-  }, [count, map, dispatch, mapDBReady]);
+  }, [count, map, dispatch, mapDBReady, authenticated]);
 
   return (
     <>
@@ -147,13 +156,13 @@ export default function SlotMap(props: SlotMapProps) {
         <Card.Header
           style={{
             position: "sticky",
-            top: 40,
+            top: 0,
             display: "flex",
             justifyContent: "space-evenly",
             zIndex: 1000,
           }}
         >
-          <img src="/img/terrorist.png" alt="T SIDE" />
+          <img className="no-select" src="/img/terrorist.png" alt="T SIDE" />
 
           <Droppable droppableId="trash">
             {(
@@ -180,7 +189,7 @@ export default function SlotMap(props: SlotMapProps) {
               );
             }}
           </Droppable>
-          <img src="/img/ct.png" alt="CT SIDE" />
+          <img className="no-select" src="/img/ct.png" alt="CT SIDE" />
         </Card.Header>
         <Card.Body style={{ padding: 0 }}>
           {countArray.map((index: number) => {
@@ -205,7 +214,12 @@ export default function SlotMap(props: SlotMapProps) {
                     width: "8vw",
                   }}
                 >
-                  <p style={{ fontSize: 30, color: "whitesmoke" }}>{index}</p>
+                  <p
+                    className="no-select"
+                    style={{ fontSize: 30, color: "whitesmoke" }}
+                  >
+                    {index}
+                  </p>
                 </div>
 
                 <Slot index={index} side={TeamSide.CT} />
@@ -214,39 +228,41 @@ export default function SlotMap(props: SlotMapProps) {
           })}
         </Card.Body>
         <Card.Footer style={{ display: "flex", justifyContent: "center" }}>
-          <ButtonGroup>
-            {count > 0 && (
-              <Button
-                variant="light"
-                onClick={() => {
-                  setCount(count - 1);
-                  const map_cpy = [...map];
-                  while (map_cpy.length !== count - 1) {
-                    map_cpy.pop();
-                  }
-                  dispatch(setMap(map_cpy));
-                }}
-              >
-                <TiMinus />
-              </Button>
-            )}
-            {count < 100 && (
-              <Button
-                variant="light"
-                onClick={() => {
-                  const map_cpy = [...map];
+          {authenticated && (
+            <ButtonGroup>
+              {count > 1 && (
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    setCount(count - 1);
+                    const map_cpy = [...map];
+                    while (map_cpy.length !== count - 1) {
+                      map_cpy.pop();
+                    }
+                    dispatch(setMap(map_cpy));
+                  }}
+                >
+                  <TiMinus />
+                </Button>
+              )}
+              {count < 100 && (
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    const map_cpy = [...map];
 
-                  while (map_cpy.length < count + 1)
-                    map_cpy.push({ CT: [], T: [], general: [] });
+                    while (map_cpy.length < count + 1)
+                      map_cpy.push({ CT: [], T: [], general: [] });
 
-                  dispatch(setMap(map_cpy));
-                  scrollToFooter();
-                }}
-              >
-                <TiPlus />
-              </Button>
-            )}
-          </ButtonGroup>
+                    dispatch(setMap(map_cpy));
+                    scrollToFooter();
+                  }}
+                >
+                  <TiPlus />
+                </Button>
+              )}
+            </ButtonGroup>
+          )}
         </Card.Footer>
       </Card>
       <div id="space" style={{ height: 166 }}></div>
