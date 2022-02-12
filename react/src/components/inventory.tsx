@@ -101,7 +101,7 @@ export default function Inventory(props: InventoryProps) {
   useEffect(() => {
     if (!inventory.length && invDBReady && authenticated) {
       fetchInv();
-    } else if (!authenticated) {
+    } else if (!authenticated && inventory.length) {
       dispatch(setInv([]));
     }
     if (timeout) {
