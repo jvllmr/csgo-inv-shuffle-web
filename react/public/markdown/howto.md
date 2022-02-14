@@ -1,3 +1,9 @@
+# What is this?
+This is a config file creator for CS:GO's shuffle feature in the in-game inventory.
+While the in-game interface only allows you to add or remove items from the shuffle,
+you have the ability to re-order your shuffles and shuffle betweem weapon types (e.g. M4A4 and M4A1-S) on this website. 
+
+
 ###### _When using a config file from this site the UI for shuffles in the game client becomes useless as it wasn't made to work with configs like these_
 
 # Quickstart
