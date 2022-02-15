@@ -1,5 +1,5 @@
 # What is this?
-This is a config file creator for CS:GO's shuffle feature in the in-game inventory.
+A config file creator for CS:GO's shuffle feature in the in-game inventory.
 While the in-game interface only allows you to add or remove items from the shuffle,
 you have the ability to re-order your shuffles and shuffle betweem weapon types (e.g. M4A4 and M4A1-S) on this website. 
 
