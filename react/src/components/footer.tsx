@@ -3,7 +3,7 @@ import React from "react";
 export default class Footer extends React.Component {
   render() {
     return (
-      <div className="footer data-nosnippet">
+      <div className="footer" data-nosnippet>
         <p style={{ marginLeft: "10vw" }}>
           © {new Date().getFullYear()} Created by{" "}
           {
