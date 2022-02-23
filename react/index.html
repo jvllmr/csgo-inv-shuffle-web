@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, height=device-height"
@@ -40,16 +40,21 @@
   </head>
   <body>
     <noscript>
-      <div style="color:whitesmoke;"> 
-      <span>
-      A config file creator for CS:GO's shuffle feature in the in-game inventory.
-      While the in-game interface only allows you to add or remove items from the shuffle,
-      you have the ability to re-order your shuffles and shuffle betweem weapon types (e.g. M4A4 and M4A1-S) on this website. 
-      </span>
-      <span data-nosnippet>You need to enable JavaScript to run this app.</span>
+      <div style="color: whitesmoke">
+        <span>
+          A config file creator for CS:GO's shuffle feature in the in-game
+          inventory. While the in-game interface only allows you to add or
+          remove items from the shuffle, you have the ability to re-order your
+          shuffles and shuffle betweem weapon types (e.g. M4A4 and M4A1-S) on
+          this website.
+        </span>
+        <span data-nosnippet
+          >You need to enable JavaScript to run this app.</span
+        >
       </div>
-    
     </noscript>
+    <script type="module" src="/src/index.tsx"></script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>
