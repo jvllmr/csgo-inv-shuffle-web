@@ -1,18 +1,16 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Inventory from "./inventory";
-import SlotMap, { TeamSide } from "./slotmap";
-
-import { Item } from "./item";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 import { Col, Row } from "react-bootstrap";
-import { getItem, hasItem, hasIntersectingSlots } from "../utils/inventory";
-
+import Container from "react-bootstrap/Container";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectMap, setMap } from "../slices/map";
 import { selectInv } from "../slices/inv";
+import { selectMap, setMap } from "../slices/map";
+import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
+import Inventory from "./inventory";
+import { Item } from "./item";
+import SlotMap, { TeamSide } from "./slotmap";
 
 export default function Content() {
   const map = useAppSelector(selectMap);
@@ -47,9 +45,9 @@ export default function Content() {
         (destination && source.droppableId !== destination.droppableId))
     ) {
       const [team, index] = source.droppableId.split("-", 2);
-     
-      const slot: {[key: string]: Item[]} = { ...map_cpy[+index - 1] };
-      
+
+      const slot: { [key: string]: Item[] } = { ...map_cpy[+index - 1] };
+
       if (
         destination &&
         destination.droppableId !== "trash" &&
@@ -66,12 +64,10 @@ export default function Content() {
       )
         return;
 
-      
       slot[team] = slot[team].filter((val: Item) => {
         return val.id !== item_id;
       });
 
-      
       slot["general"] = slot["general"].filter((val: Item) => {
         return val.id !== item_id;
       });
@@ -151,7 +147,8 @@ export default function Content() {
     map_cpy[+index - 1] = slot;
 
     if (rollback) return;
-    if (map_cpy !== [...map]) dispatch(setMap(map_cpy));
+
+    if (map_cpy !== [...map]) dispatch(setMap(map_cpy)); // @vite-ignore
   };
   const onDragStart = (start: DragStart) => {
     const { source, draggableId } = start;
@@ -170,11 +167,9 @@ export default function Content() {
       const divCT = document.getElementById(`CT_${index}`);
       if (!divT || !divCT) continue;
       const changeTColor = (color: string) => {
-        
         divT.style.backgroundColor = color;
       };
       const changeCTColor = (color: string) => {
-        
         divCT.style.backgroundColor = color;
       };
       const changeBothColors = (color: string) => {
@@ -187,10 +182,8 @@ export default function Content() {
         let changeColor: Function = changeBothColors;
 
         if (section === CT) {
-          
           changeColor = changeCTColor;
         } else if (section === T) {
-          
           changeColor = changeTColor;
         }
 

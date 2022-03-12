@@ -1,7 +1,11 @@
 export const api_url =
-  process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://api.csgoinvshuffle.kreyoo.dev";
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "https://api.csgoinvshuffle.kreyoo.dev";
 export const site_url =
-  process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://csgoinvshuffle.kreyoo.dev";
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : "https://csgoinvshuffle.kreyoo.dev";
 
 const OpenIDParams = {
   "openid.ns": "http://specs.openid.net/auth/2.0",
