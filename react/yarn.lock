@@ -1970,10 +1970,15 @@ react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-is@^17.0.0, react-is@^17.0.1, react-is@^17.0.2:
+react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-is@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.0.0.tgz#026f6c4a27dbe33bf4a35655b9e1327c4e55e3f5"
+  integrity sha512-yUcBYdBBbo3QiPsgYDcfQcIkGZHfxOaoE6HLSnr1sPzMhdyxusbfKOSUbSd/ocGi32dxcj366PsTj+5oggeKKw==
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -1981,9 +1986,9 @@ react-lifecycles-compat@^3.0.4:
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
 react-markdown@^8.0.0:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-8.0.1.tgz#683b5225fccbdd7eca76aa89b621894a317dd4d6"
-  integrity sha512-g78B0KtUk8oDRt59fX9SWhMikn3/qYcQW+aVMxdIulcjCNeecAZNOmR8uXy5p4bhbuPIS8gZly81bF4pAQWYXw==
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-8.0.2.tgz#43a12f5031abf7df5097d1351db465ceca3a69e0"
+  integrity sha512-WeXeDlCPFZBbN75AiLVEmN4gC6pNWadsZVWWxWpvrYQnUTHsB3l1PH60I1sbxTJr0oWOQc3zhxTrRQMTceNifw==
   dependencies:
     "@types/hast" "^2.0.0"
     "@types/prop-types" "^15.0.0"
@@ -1992,7 +1997,7 @@ react-markdown@^8.0.0:
     hast-util-whitespace "^2.0.0"
     prop-types "^15.0.0"
     property-information "^6.0.0"
-    react-is "^17.0.0"
+    react-is "^18.0.0"
     remark-parse "^10.0.0"
     remark-rehype "^10.0.0"
     space-separated-tokens "^2.0.0"
@@ -2002,9 +2007,9 @@ react-markdown@^8.0.0:
     vfile "^5.0.0"
 
 react-redux@^7.2.0, react-redux@^7.2.6:
-  version "7.2.6"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.6.tgz#49633a24fe552b5f9caf58feb8a138936ddfe9aa"
-  integrity sha512-10RPdsz0UUrRL1NZE0ejTkucnclYSgXp5q+tB5SWx2qeG2ZJQJyymgAhwKy73yiL/13btfB6fPr+rgbMAaZIAQ==
+  version "7.2.7"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.7.tgz#f5edd4e4bc34ec8787451d77d16663abf12f8be9"
+  integrity sha512-kpstUHhXgT5HOLwzoRhDr3AWHO7H5mgTN5pX1H02OuoIMaZiOLYlul8vgan2WE8eEttAEMew8Npgzd3C6Asdow==
   dependencies:
     "@babel/runtime" "^7.15.4"
     "@types/react-redux" "^7.1.20"
@@ -2026,10 +2031,17 @@ react-router-dom@^6.2.1:
     history "^5.2.0"
     react-router "6.2.2"
 
-react-router@6.2.2, react-router@^6.1.1:
+react-router@6.2.2:
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.2.2.tgz#495e683a0c04461eeb3d705fe445d6cf42f0c249"
   integrity sha512-/MbxyLzd7Q7amp4gDOGaYvXwhEojkJD5BtExkuKmj39VEE0m3l/zipf6h2WIB2jyAO0lI6NGETh4RDcktRm4AQ==
+  dependencies:
+    history "^5.2.0"
+
+react-router@^6.1.1:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.3.0.tgz#3970cc64b4cb4eae0c1ea5203a80334fdd175557"
+  integrity sha512-7Wh1DzVQ+tlFjkeo+ujvjSqSJmkt1+8JO+T5xklPlgrh70y7ogx75ODRW0ThWhY7S+6yEDks8TYrtQe/aoboBQ==
   dependencies:
     history "^5.2.0"
 
@@ -2533,9 +2545,9 @@ vite-react-jsx@^1.1.2:
     resolve "^1.20.0"
 
 vite@^2.8.4:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.0.tgz#4417ce84a09d93c9e5a796b296285bc2f75d6c41"
-  integrity sha512-5NAnNqzPmZzJvrswZGeTS2JHrBGIzIWJA2hBTTMYuoBVEMh0xwE0b5yyIXFxf7F07hrK4ugX2LJ7q6t7iIbd4Q==
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.1.tgz#84bce95fae210a7beb566a0af06246748066b48f"
+  integrity sha512-vSlsSdOYGcYEJfkQ/NeLXgnRv5zZfpAsdztkIrs7AZHV8RCMZQkwjo4DS5BnrYTqoWqLoUe1Cah4aVO4oNNqCQ==
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.12"
