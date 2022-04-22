@@ -17,7 +17,7 @@ export default class Footer extends React.Component {
           .
           <a
             style={{ color: "whitesmoke", textDecoration: "none" }}
-            href="https://github.com/kreyoo/csgo-inv-shuffle-web/blob/master/LICENSE"
+            href="https://github.com/jvllmr/csgo-inv-shuffle-web/blob/master/LICENSE"
           >
             {" "}
             AGPLv3
