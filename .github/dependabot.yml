@@ -9,11 +9,10 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 4
     versioning-strategy: "lockfile-only"
- 
+
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 4
     versioning-strategy: "lockfile-only"
-    

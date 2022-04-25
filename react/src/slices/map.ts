@@ -1,6 +1,6 @@
-import { RootState } from "../redux";
-import { Item } from "../components/item";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Item } from "../components/item";
+import { RootState } from "../redux";
 
 const mapDBReadyEvent = new Event("mapDBReady");
 

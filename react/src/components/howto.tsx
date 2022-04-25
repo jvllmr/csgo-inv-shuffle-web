@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import SimpleBar from "simplebar-react";
-
 import Header from "./header";
 
 export default function HowTo() {
