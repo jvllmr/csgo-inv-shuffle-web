@@ -1,4 +1,3 @@
-import React from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 import { Col, Row } from "react-bootstrap";
 import Container from "react-bootstrap/Container";

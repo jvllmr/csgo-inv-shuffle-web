@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Image } from "react-bootstrap";
 import { authLink } from "../config";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
