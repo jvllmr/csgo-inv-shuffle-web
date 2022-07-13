@@ -235,10 +235,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/standalone@^7.17.11":
-  version "7.17.11"
-  resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.17.11.tgz#9cc17674da762332b2e40d469ce37725a6136487"
-  integrity sha512-47wVYBeTktYHwtzlFuK7qqV/H5X6mU4MUNqpQ9iiJOqnP8rWL0eX0GWLKRsv8D8suYzhuS1K/dtwgGr+26U7Gg==
+"@babel/standalone@^7.18.8":
+  version "7.18.8"
+  resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.18.8.tgz#d39a524a8a77a4f9d0798e71be5482187ea2c9f3"
+  integrity sha512-cDayR7x6IAp7k1947fYeo7OxD7QwT9/UZ+BT05Zq2pfsOzkhOJZdY19X0NvL6fYaszwnzO0zVHgp04OspPh3SA==
 
 "@babel/template@^7.16.7":
   version "7.16.7"
@@ -600,14 +600,14 @@
   resolved "https://registry.yarnpkg.com/@types/warning/-/warning-3.0.0.tgz#0d2501268ad8f9962b740d387c4654f5f8e23e52"
   integrity sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI=
 
-"@vitejs/plugin-legacy@^1.7.1":
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-legacy/-/plugin-legacy-1.8.2.tgz#2f315bcb6685b12719813fb9412851445cca636f"
-  integrity sha512-NCOKU+pU+cxLMR9P9RTolEuOK+h+zYBXlknj+zGcKSj/NXBZYgA1GAH1FnO4zijoWRiTaiOm2ha9LQrELE7XHg==
+"@vitejs/plugin-legacy@^1.7.1 || ^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-legacy/-/plugin-legacy-2.0.0.tgz#63e9a919c5b3bd8e43e18cbf497f4c270efdf1b9"
+  integrity sha512-cuc45C4BQo2VlOsHZML4fc3MPfSjOEFeezHxr+WWlOOmi+muy1rz2snnFiePtyjVc1CYGTsnxk13cXpzQvMZaw==
   dependencies:
-    "@babel/standalone" "^7.17.11"
-    core-js "^3.22.3"
-    magic-string "^0.26.1"
+    "@babel/standalone" "^7.18.8"
+    core-js "^3.23.4"
+    magic-string "^0.26.2"
     regenerator-runtime "^0.13.9"
     systemjs "^6.12.1"
 
@@ -926,10 +926,15 @@ convert-source-map@^1.7.0:
   dependencies:
     safe-buffer "~5.1.1"
 
-core-js@^3.0.1, core-js@^3.22.3:
+core-js@^3.0.1:
   version "3.22.4"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.4.tgz#f4b3f108d45736935aa028444a69397e40d8c531"
   integrity sha512-1uLykR+iOfYja+6Jn/57743gc9n73EWiOnSJJ4ba3B4fOEYDBv25MagmEZBxTp5cWq4b/KPx/l77zgsp28ju4w==
+
+core-js@^3.23.4:
+  version "3.23.4"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.23.4.tgz#92d640faa7f48b90bbd5da239986602cfc402aa6"
+  integrity sha512-vjsKqRc1RyAJC3Ye2kYqgfdThb3zYnx9CrqoCcjMOENMtQPC7ZViBvlDxwYU/2z2NI/IPuiXw5mT4hWhddqjzQ==
 
 cross-spawn@^6.0.0:
   version "6.0.5"
@@ -1484,10 +1489,10 @@ lz-string@^1.4.4:
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.4.4.tgz#c0d8eaf36059f705796e1e344811cf4c498d3a26"
   integrity sha1-wNjq82BZ9wV5bh40SBHPTEmNOiY=
 
-magic-string@^0.26.1:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.26.1.tgz#ba9b651354fa9512474199acecf9c6dbe93f97fd"
-  integrity sha512-ndThHmvgtieXe8J/VGPjG+Apu7v7ItcD5mhEIvOscWjPF/ccOiLxHaSuCAS2G+3x4GKsAbT8u7zdyamupui8Tg==
+magic-string@^0.26.2:
+  version "0.26.2"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.26.2.tgz#5331700e4158cd6befda738bb6b0c7b93c0d4432"
+  integrity sha512-NzzlXpclt5zAbmo6h6jNc8zl2gNRGHvmsZW4IvZhTC4W7k4OlLP+S5YLussa/r3ixNT66KOQfNORlXHSOy/X4A==
   dependencies:
     sourcemap-codec "^1.4.8"
 
