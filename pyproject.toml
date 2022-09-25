@@ -29,7 +29,7 @@ pytest-flask="^1.2.0"
 pre-commit="^2.16.0"
 pytest-cov="^3.0"
 coverage = "^6.2"
-setuptools = "^60.5.0 || ^62.0.0 || ^63.0.0"
+setuptools = "^60.5.0 || ^62.0.0, ||, ^63.0.0, ||, ^65.0.0"
 poetry = "^1.1.12"
 
 [build-system]
