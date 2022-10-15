@@ -60,7 +60,7 @@
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "@vitejs/plugin-legacy": "^1.7.1",
-    "@vitejs/plugin-react": "^1.2.0",
+    "@vitejs/plugin-react": "^1.2.0 || ^2.0.0",
     "eslint": "^8.24.0",
     "eslint-config-alloy": "^4.6.2",
     "eslint-plugin-react": "^7.31.8",
