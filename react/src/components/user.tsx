@@ -1,9 +1,10 @@
+import { Avatar, Button, Group, Image } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Button, Image } from "react-bootstrap";
+
 import { authLink } from "../config";
+import { selectAuthenticated } from "../redux/auth";
+import { deleteBackward, deleteForward, deleteMap } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectAuthenticated } from "../slices/auth";
-import { deleteBackward, deleteForward, deleteMap } from "../slices/map";
 import { GET } from "../utils/api_requests";
 
 interface UserProps {
@@ -35,30 +36,32 @@ export default function User(props: UserProps) {
     <div className="userdiv">
       {!authenticated ? (
         <a href={authLink()}>
-          <img
+          <Image
+            m="xs"
+            height={25}
             className="no-select"
             src="/img/steam_login_wide.png"
             alt="Steam Login"
           />
         </a>
       ) : (
-        <>
+        <Group>
           {image && (
-            <Image
-              style={{ marginRight: 5 }}
+            <Avatar
+              radius="xl"
               className="no-select"
               src={image}
               alt="PP"
-              roundedCircle
+              size="md"
             />
           )}
 
           <a href="/logout">
-            <Button className="no-select" variant="dark">
+            <Button variant="light" className="no-select">
               Log out
             </Button>
           </a>
-        </>
+        </Group>
       )}
     </div>
   );

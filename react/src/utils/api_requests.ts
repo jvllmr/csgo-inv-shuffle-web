@@ -1,8 +1,8 @@
 import { api_url } from "../config";
 import store from "../redux";
-import { removeAuth } from "../slices/auth";
-import { setInv } from "../slices/inv";
-import { deleteBackward, deleteForward, setMap } from "../slices/map";
+import { removeAuth } from "../redux/auth";
+import { setInv } from "../redux/inv";
+import { deleteBackward, deleteForward, setMap } from "../redux/map";
 
 async function basic_request(
   method: string,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+
+import { Text } from "@mantine/core";
 import ReactMarkdown from "react-markdown";
-import SimpleBar from "simplebar-react";
-import Header from "./header";
+import Shell from "./shell";
 
 export default function Privacy() {
   const [text, setText] = useState("");
@@ -13,14 +13,11 @@ export default function Privacy() {
   });
 
   return (
-    <>
-      <Header />
-      <SimpleBar className="scrollDiv" id="scrollDiv" autoHide={false}>
-        <Container style={{ marginTop: 100, color: "whitesmoke" }}>
-          <ReactMarkdown>{text}</ReactMarkdown>
-        </Container>
-      </SimpleBar>
-    </>
+    <Shell>
+      <Text>
+        <ReactMarkdown>{text}</ReactMarkdown>
+      </Text>
+    </Shell>
   );
 }
 

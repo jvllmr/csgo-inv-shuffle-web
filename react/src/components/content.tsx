@@ -1,11 +1,9 @@
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
-import { Col, Row } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
-import SimpleBar from "simplebar-react";
-import "simplebar-react/dist/simplebar.min.css";
+
+import { Container } from "@mantine/core";
+import { selectInv } from "../redux/inv";
+import { selectMap, setMap } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectInv } from "../slices/inv";
-import { selectMap, setMap } from "../slices/map";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
 import Inventory from "./inventory";
 import { Item } from "./item";
@@ -16,15 +14,18 @@ export default function Content() {
   const inventory = useAppSelector(selectInv);
   const dispatch = useAppDispatch();
 
-  const onDragEnd = (result: DropResult) => {
+  // eslint-disable-next-line complexity
+  function onDragEnd(result: DropResult) {
     let rollback = false;
     const { destination, source, draggableId } = result;
     const map_cpy = [...map];
     for (let i = 0; i < map_cpy.length; i++) {
       const divElementT = document.getElementById(`T_${i + 1}`);
       const divElementCT = document.getElementById(`CT_${i + 1}`);
-      if (divElementT) divElementT.style.backgroundColor = "#232329";
-      if (divElementCT) divElementCT.style.backgroundColor = "#232329";
+      // @ts-ignore
+      if (divElementT) divElementT.style.backgroundColor = null;
+      // @ts-ignore
+      if (divElementCT) divElementCT.style.backgroundColor = null;
     }
 
     if (
@@ -45,19 +46,21 @@ export default function Content() {
     ) {
       const [team, index] = source.droppableId.split("-", 2);
 
-      const slot: { [key: string]: Item[] } = { ...map_cpy[+index - 1] };
+      const slot: { [key: string]: Item[] } = { ...map_cpy[Number(index) - 1] };
 
       if (
         destination &&
         destination.droppableId !== "trash" &&
         (hasItem(
           item_id,
-          map_cpy[+destination.droppableId.split("-", 2)[1] - 1]["general"]
+          map_cpy[Number(destination.droppableId.split("-", 2)[1]) - 1][
+            "general"
+          ]
         ) ||
           (hasItem(
             item_id,
             // @ts-ignore
-            map_cpy[+destination.droppableId.split("-", 2)[1] - 1][team]
+            map_cpy[Number(destination.droppableId.split("-", 2)[1]) - 1][team]
           ) &&
             destination.droppableId.split("-", 2)[1] !== index))
       )
@@ -71,7 +74,7 @@ export default function Content() {
         return val.id !== item_id;
       });
       // @ts-ignore
-      map_cpy[+index - 1] = slot;
+      map_cpy[Number(index) - 1] = slot;
     }
     if (!destination || destination.droppableId === "trash") {
       if (source.droppableId !== "inventory") dispatch(setMap(map_cpy));
@@ -79,7 +82,7 @@ export default function Content() {
       return;
     }
     const [team, index] = destination.droppableId.split("-", 2);
-    const slot = { ...map_cpy[+index - 1] };
+    const slot = { ...map_cpy[Number(index) - 1] };
     let item: Item | null = null;
     for (const it of inventory) {
       if (item_id === it.id) {
@@ -143,12 +146,12 @@ export default function Content() {
       addToCT();
     }
 
-    map_cpy[+index - 1] = slot;
+    map_cpy[Number(index) - 1] = slot;
 
     if (rollback) return;
 
-    if (map_cpy !== [...map]) dispatch(setMap(map_cpy)); // @vite-ignore
-  };
+    if (map_cpy != [...map]) dispatch(setMap(map_cpy)); // @vite-ignore
+  }
   const onDragStart = (start: DragStart) => {
     const { source, draggableId } = start;
     const item = getItem(draggableId.split("_", 1)[0]);
@@ -212,30 +215,23 @@ export default function Content() {
     const source_element = document.getElementById(
       source.droppableId.replace("-", "_")
     );
-
-    if (source_element) source_element.style.backgroundColor = "#232329";
+    // @ts-ignore
+    if (source_element) source_element.style.backgroundColor = null;
   };
 
   return (
-    <SimpleBar className="scrollDiv" id="scrollDiv" autoHide={false}>
-      <div>
-        <Container className="content">
-          <DragDropContext
-            onDragEnd={onDragEnd}
-            onDragStart={onDragStart}
-            dragHandleUsageInstructions="Instructions."
-          >
-            <Row xs={2}>
-              <Col>
-                <SlotMap />
-              </Col>
-              <Col>
-                <Inventory />
-              </Col>
-            </Row>
-          </DragDropContext>
+    <div>
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
+        dragHandleUsageInstructions="Instructions."
+      >
+        <Container fluid>
+          <SlotMap />
+
+          <Inventory />
         </Container>
-      </div>
-    </SimpleBar>
+      </DragDropContext>
+    </div>
   );
 }

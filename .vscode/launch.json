@@ -11,7 +11,7 @@
       "module": "flask",
       "env": {
         "FLASK_APP": "./csgoinvshuffleweb/flaskapp.py",
-        "FLASK_ENV": "development"
+        "FLASK_DEBUG": "True"
       },
       "args": ["run", "--no-debugger"],
       "jinja": false

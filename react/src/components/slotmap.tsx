@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot,
 } from "react-beautiful-dnd";
-import { Button, ButtonGroup, Card, Row } from "react-bootstrap";
-import { FaTrash } from "react-icons/fa";
-import { TiMinus, TiPlus } from "react-icons/ti";
-import SimpleBar from "simplebar";
-import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectAuthenticated } from "../slices/auth";
+
+import { IconMinus, IconPlus, IconTrash } from "@tabler/icons";
+
+import {
+  Box,
+  Button,
+  Card,
+  Image,
+  Paper,
+  SimpleGrid,
+  Text,
+} from "@mantine/core";
+import { selectAuthenticated } from "../redux/auth";
 import {
   deleteBackward,
   deleteMap,
   selectMap,
   selectMapDBReady,
   setMap,
-} from "../slices/map";
+} from "../redux/map";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
 import ItemBox, { Item } from "./item";
+import { useScrollbarRef } from "./shell";
 
 export enum TeamSide {
   T = "T",
@@ -39,14 +48,6 @@ function Slot(props: SlotProps) {
       team = TeamSide.CT;
       break;
   }
-
-  const slotstyle: React.CSSProperties = {
-    border: "1px solid #1C2023",
-    width: "20vw",
-    minHeight: 150,
-    overflow: "hidden",
-    backgroundColor: "#232329",
-  };
 
   const items: Item[] = [];
   const map = useAppSelector(selectMap);
@@ -86,117 +87,141 @@ function Slot(props: SlotProps) {
         }
 
         return (
-          <div
+          <Paper
+            withBorder
+            radius={0}
             ref={provided.innerRef}
             {...provided.droppableProps}
-            style={slotstyle}
+            sx={{
+              // border: "1px solid #1C2023",
+              width: "20vw",
+              minHeight: 150,
+              overflow: "hidden",
+              // backgroundColor: "#232329",
+            }}
             id={`${props.side}_${props.index}`}
           >
-            <div style={style}>
-              <Row xs={4} style={{ paddingRight: 50 }}>
-                {items.map((item: Item, index: number) => {
-                  return (
-                    <ItemBox
-                      key={item.id}
-                      place={`${props.side}${props.index}`}
-                      item={item}
-                      index={index}
-                    />
-                  );
-                })}
-                {items.length % 4 === 0 && (
-                  <div style={{ height: 135, width: 105 }} />
-                )}
-                {provided.placeholder}
-              </Row>
-            </div>
-          </div>
+            <SimpleGrid
+              cols={3}
+              breakpoints={[
+                { maxWidth: 980, cols: 3, spacing: "md" },
+                { maxWidth: 755, cols: 2, spacing: "sm" },
+                { maxWidth: 600, cols: 1, spacing: "sm" },
+              ]}
+              p="xs"
+            >
+              {items.map((item: Item, index: number) => {
+                return (
+                  <ItemBox
+                    key={item.id}
+                    place={`${props.side}${props.index}`}
+                    item={item}
+                    index={index}
+                  />
+                );
+              })}
+              {items.length % 4 === 0 && (
+                <div style={{ height: 135, width: 105 }} />
+              )}
+              {provided.placeholder}
+            </SimpleGrid>
+          </Paper>
         );
       }}
     </Droppable>
   );
 }
 
-interface SlotMapProps {}
-
-export default function SlotMap(props: SlotMapProps) {
+export default function SlotMap() {
   const map = useAppSelector(selectMap);
   const [count, setCount] = useState(map.length ? map.length : 1);
-  const countArray = [...Array(count).keys()].map((index: number) => {
-    return index + 1;
-  });
+  const countArray = useMemo(
+    () =>
+      [...Array(count).keys()].map((index: number) => {
+        return index + 1;
+      }),
+    [count]
+  );
   const authenticated = useAppSelector(selectAuthenticated);
-  const scrollToFooter = () => {
-    const scrollDiv = document.getElementById("scrollDiv");
-    const space = document.getElementById("space");
-    if (space && scrollDiv)
-      SimpleBar.instances
-        .get(scrollDiv)!
-        .getScrollElement()
-        .scrollTo(0, space.offsetTop);
-  };
 
   const dispatch = useAppDispatch();
   const mapDBReady = useAppSelector(selectMapDBReady);
+  const scrollbarRef = useScrollbarRef();
   useEffect(() => {
     if (mapDBReady) {
-      if (!authenticated) dispatch(deleteMap());
-      if (!map || !map.length) {
+      if (authenticated && (!map || !map.length)) {
         dispatch(setMap([{ CT: [], T: [], general: [] }]));
         dispatch(deleteBackward());
       } else if (map.length !== count) {
         setCount(map.length);
       }
     }
-  }, [count, map, dispatch, mapDBReady, authenticated]);
+  }, [count, map, mapDBReady, authenticated, dispatch]);
+
+  useEffect(() => {
+    if (!authenticated) {
+      dispatch(deleteMap());
+      dispatch(deleteBackward());
+    }
+  }, [mapDBReady, authenticated, dispatch]);
 
   return (
     <>
-      <Card bg="dark" border="light" style={{ minWidth: "48vw" }}>
-        <Card.Header
-          style={{
-            position: "sticky",
+      <Card withBorder mr="50vw">
+        <Card.Section
+          sx={{
             top: 0,
-            display: "flex",
-            justifyContent: "space-evenly",
-            zIndex: 1000,
+            position: "sticky",
           }}
         >
-          <img className="no-select" src="/img/terrorist.png" alt="T SIDE" />
-
-          <Droppable droppableId="trash">
-            {(
-              provided: DroppableProvided,
-              snapshot: DroppableStateSnapshot
-            ) => {
-              provided.placeholder = undefined;
-              const { isDraggingOver } = snapshot;
-              let style: React.CSSProperties = {
-                height: 60,
-                width: 30,
-                color: "rgba(255, 49,57,0.7)",
-              };
-              if (isDraggingOver)
-                style = {
-                  ...style,
-                  color: "rgba(255,255,255, .2)",
-                };
-              return (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  <FaTrash style={style} />
-                  {provided.placeholder}
-                </div>
-              );
+          <Box
+            m="xs"
+            sx={{
+              zIndex: 1000,
+              display: "flex",
+              justifyContent: "space-evenly",
+              width: "98%",
             }}
-          </Droppable>
-          <img className="no-select" src="/img/ct.png" alt="CT SIDE" />
-        </Card.Header>
-        <Card.Body style={{ padding: 0 }}>
+          >
+            <Image
+              width={50}
+              className="no-select"
+              src="/img/terrorist.png"
+              alt="T SIDE"
+            />
+
+            <Droppable droppableId="trash">
+              {(
+                provided: DroppableProvided,
+                snapshot: DroppableStateSnapshot
+              ) => {
+                provided.placeholder = undefined;
+                const { isDraggingOver } = snapshot;
+
+                return (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    <Text color={isDraggingOver ? "dimmed" : "red"}>
+                      <IconTrash size={50} />
+                    </Text>
+                    {provided.placeholder}
+                  </div>
+                );
+              }}
+            </Droppable>
+            <Image
+              width={50}
+              className="no-select"
+              src="/img/ct.png"
+              alt="CT SIDE"
+            />
+          </Box>
+        </Card.Section>
+        <Card.Section style={{ padding: 0 }}>
           {countArray.map((index: number) => {
             return (
-              <div
+              <Paper
                 key={index}
-                style={{
+                sx={{
                   display: "flex",
                   justifyContent: "space-between",
                   width: "48wv",
@@ -205,31 +230,30 @@ export default function SlotMap(props: SlotMapProps) {
               >
                 <Slot index={index} side={TeamSide.T} />
 
-                <div
-                  style={{
+                <Paper
+                  sx={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    border: "1px solid #1C2023",
+                    // border: "1px solid #1C2023",
                     width: "8vw",
                   }}
+                  withBorder
+                  radius={0}
                 >
-                  <p
-                    className="no-select"
-                    style={{ fontSize: 30, color: "whitesmoke" }}
-                  >
+                  <Text className="no-select" size="xl">
                     {index}
-                  </p>
-                </div>
+                  </Text>
+                </Paper>
 
                 <Slot index={index} side={TeamSide.CT} />
-              </div>
+              </Paper>
             );
           })}
-        </Card.Body>
-        <Card.Footer style={{ display: "flex", justifyContent: "center" }}>
+        </Card.Section>
+        <Card.Section p="xs" sx={{ display: "flex", justifyContent: "center" }}>
           {authenticated && (
-            <ButtonGroup>
+            <Button.Group>
               {count > 1 && (
                 <Button
                   variant="light"
@@ -242,7 +266,7 @@ export default function SlotMap(props: SlotMapProps) {
                     dispatch(setMap(map_cpy));
                   }}
                 >
-                  <TiMinus />
+                  <IconMinus />
                 </Button>
               )}
               {count < 100 && (
@@ -255,17 +279,22 @@ export default function SlotMap(props: SlotMapProps) {
                       map_cpy.push({ CT: [], T: [], general: [] });
 
                     dispatch(setMap(map_cpy));
-                    scrollToFooter();
+
+                    const currScrollbarRef = scrollbarRef?.current;
+                    if (currScrollbarRef)
+                      currScrollbarRef.scrollTo({
+                        top: currScrollbarRef.scrollHeight,
+                      });
                   }}
                 >
-                  <TiPlus />
+                  <IconPlus />
                 </Button>
               )}
-            </ButtonGroup>
+            </Button.Group>
           )}
-        </Card.Footer>
+        </Card.Section>
       </Card>
-      <div id="space" style={{ height: 166 }}></div>
+      <div id="space" style={{ height: 166 }} />
     </>
   );
 }
