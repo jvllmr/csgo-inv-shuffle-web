@@ -5648,21 +5648,21 @@ __metadata:
   linkType: hard
 
 "simplebar-react@npm:^2.4.1":
-  version: 2.4.1
-  resolution: "simplebar-react@npm:2.4.1"
+  version: 2.4.3
+  resolution: "simplebar-react@npm:2.4.3"
   dependencies:
     prop-types: ^15.6.1
-    simplebar: ^5.3.8
+    simplebar: ^5.3.9
   peerDependencies:
     react: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
     react-dom: ^0.14.9 || ^15.3.0 || ^16.0.0-rc || ^16.0 || ^17.0 || ^18.0.0
-  checksum: 3fc0b3296cf21cc7f5cd455957fbdf01a90441ebc524de41e9578a5c0c6ddc0d74eb71373dd78bc7f3c01d65d7e8474fa2855b505514abf0fe68a69236ca6f4b
+  checksum: 1891cb499be175978330a49b8ee71127b5f70fb21a5ae8accf3b159077851131b9537401b4fac8d3264e7bd9e33b7ad5d31123cb7b7b7fbb3b89b1158bdb28fa
   languageName: node
   linkType: hard
 
-"simplebar@npm:^5.3.8":
-  version: 5.3.8
-  resolution: "simplebar@npm:5.3.8"
+"simplebar@npm:^5.3.9":
+  version: 5.3.9
+  resolution: "simplebar@npm:5.3.9"
   dependencies:
     "@juggle/resize-observer": ^3.3.1
     can-use-dom: ^0.1.0
@@ -5670,7 +5670,7 @@ __metadata:
     lodash.debounce: ^4.0.8
     lodash.memoize: ^4.1.2
     lodash.throttle: ^4.1.1
-  checksum: bbc1cc1a545181fc8a0b6fe7a3bd65b63daf4f998a29cf1ff5f85ee6561a9eaa87bf76818816c76cbd14d4351abbc7fde0d8e86dafc42cd27593b0be653740eb
+  checksum: 11918d02c946b4925068852b4fb2dcc5008e2fb91b7eeba6c27aed810f23b985de043b12fef674fbffbbfa6201904e09d8fbc29e9959562fa6a5cfb9935751d1
   languageName: node
   linkType: hard
 
