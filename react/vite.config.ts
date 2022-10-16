@@ -8,6 +8,7 @@ export default defineConfig({
   // comment this out if that isn't relevant for your project
   server: {
     open: true,
+    port: 3000,
   },
   build: {
     outDir: "build",
