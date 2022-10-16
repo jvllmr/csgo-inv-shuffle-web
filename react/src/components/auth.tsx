@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import {
   selectAuthenticated,
   setAuthenticated,
   setAuthID,
-} from "../slices/auth";
+} from "../redux/auth";
+import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
 
 function useQuery() {

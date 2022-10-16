@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Droppable, DroppableProvided } from "react-beautiful-dnd";
+
 import {
   Alert,
+  Box,
   Button,
   Card,
-  Container,
-  Form,
-  InputGroup,
-  ProgressBar,
-  Row,
-  Spinner,
-} from "react-bootstrap";
-import { MdCheck, MdRefresh, MdSearch } from "react-icons/md";
-import SimpleBar from "simplebar-react";
-import "simplebar-react/dist/simplebar.min.css";
+  Center,
+  Loader,
+  Progress,
+  ScrollArea,
+  SimpleGrid,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { IconCheck, IconRefresh, IconSearch } from "@tabler/icons";
+import { selectAuthenticated, selectSteamID } from "../redux/auth";
+import { selectInv, selectInvDBReady, setInv } from "../redux/inv";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
-import { selectAuthenticated, selectSteamID } from "../slices/auth";
-import { selectInv, selectInvDBReady, setInv } from "../slices/inv";
 import { GET } from "../utils/api_requests";
 import ItemBox, { Item, Sticker } from "./item";
 import User from "./user";
@@ -29,27 +30,25 @@ function Timeout(props: TimeoutProps) {
   const seconds = props.timeout % 60;
   const minutes = Math.floor(props.timeout / 60);
   return (
-    <div>
-      <p
+    <Box>
+      <Text
         className="no-select"
-        style={{ color: "red", fontSize: 15, marginBottom: 0 }}
-      >{`${minutes}:${seconds > 9 ? seconds : `0${seconds}`}`}</p>
-      <ProgressBar
-        style={{ height: 4, marginTop: 0 }}
-        variant="light"
-        now={((600 - props.timeout) / 600) * 100}
+        color="red"
+        sx={{ fontSize: 15, marginBottom: 0 }}
+      >{`${minutes}:${seconds > 9 ? seconds : `0${seconds}`}`}</Text>
+      <Progress
+        sx={{ height: 4, marginTop: 0 }}
+        value={((600 - props.timeout) / 600) * 100}
       />
-    </div>
+    </Box>
   );
 }
 
-interface InventoryProps {}
-
-export default function Inventory(props: InventoryProps) {
+export default function Inventory() {
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
-  const [refresh_success, setRefreshSuccess] = useState(false);
+  const [refreshSuccess, setRefreshSuccess] = useState(false);
   const [timeout, setTimeoutState] = useState(0);
 
   const inventory = useAppSelector(selectInv);
@@ -58,7 +57,7 @@ export default function Inventory(props: InventoryProps) {
   const steamid64 = useAppSelector(selectSteamID);
   const authenticated = useAppSelector(selectAuthenticated);
   const fetchInv = useCallback(
-    (no_cache: boolean = false): Item[] => {
+    (no_cache = false): Item[] => {
       if (steamid64) {
         setRefreshing(true);
         GET(`/inventory${no_cache ? "?no_cache=1" : ""}`).then(
@@ -82,7 +81,7 @@ export default function Inventory(props: InventoryProps) {
             } else if (resp.status === 401) {
               setError("You have to login to view your inventory.");
             } else if (resp.status === 429) {
-              setTimeoutState(+json);
+              setTimeoutState(Number(json));
             } else {
               setError(
                 `Your Inventory could not be loaded. Status code ${resp.status}`
@@ -120,8 +119,7 @@ export default function Inventory(props: InventoryProps) {
     <>
       {error && (
         <Alert
-          variant="danger"
-          style={{
+          sx={{
             width: "25vw",
             marginLeft: "11vw",
             top: 100,
@@ -135,54 +133,47 @@ export default function Inventory(props: InventoryProps) {
         </Alert>
       )}
       <Card
-        bg="dark"
-        border="light"
-        style={{
+        withBorder
+        sx={{
           width: "25vw",
-          marginLeft: "11vw",
-          position: "fixed",
+          right: "15vw",
+          position: "absolute",
           marginTop: error ? 20 : 0,
-          top: 115,
+          top: 20,
         }}
       >
-        <Card.Header
-          style={{
+        <Card.Section
+          sx={{
             display: "flex",
             justifyContent: "space-around",
           }}
+          p="sm"
+          withBorder
         >
-          {inventory.length && authenticated && (
+          {inventory.length && authenticated ? (
             <>
-              {refresh_success ? (
-                <MdCheck color="green" size={40} />
+              {refreshSuccess ? (
+                <IconCheck color="green" size={40} />
               ) : timeout ? (
                 <Timeout timeout={timeout} />
               ) : (
                 (!refreshing && (
                   <Button variant="light" onClick={() => fetchInv(true)}>
-                    <MdRefresh />
+                    <IconRefresh />
                   </Button>
                 )) ||
-                (refreshing && <Spinner animation="border" variant="light" />)
+                (refreshing && <Loader />)
               )}
-              <Form.Group>
-                <InputGroup>
-                  <InputGroup.Text>
-                    <MdSearch color="whitesmoke" />
-                  </InputGroup.Text>
-                  <Form.Control
-                    className="no-select"
-                    placeholder="Filter"
-                    size="sm"
-                    inputMode="search"
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </InputGroup>
-              </Form.Group>
+
+              <TextInput
+                icon={<IconSearch />}
+                placeholder="Filter"
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </>
-          )}
-        </Card.Header>
-        <Card.Body
+          ) : null}
+        </Card.Section>
+        <Card.Section
           style={{
             padding: 0,
             paddingTop: 0,
@@ -190,21 +181,11 @@ export default function Inventory(props: InventoryProps) {
           }}
         >
           {(!inventory.length || !authenticated) && (
-            <Container
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: 30,
-              }}
-            >
-              <Row xs={1}>
-                <User noImage />
-                <div style={{ marginBottom: 20 }} />
-              </Row>
-            </Container>
+            <Center p="lg">
+              <User noImage />
+            </Center>
           )}
-          {inventory.length && authenticated && (
+          {inventory.length && authenticated ? (
             <Droppable
               droppableId="inventory"
               direction="horizontal"
@@ -212,13 +193,7 @@ export default function Inventory(props: InventoryProps) {
             >
               {(provided: DroppableProvided) => {
                 return (
-                  <SimpleBar
-                    style={{
-                      overflowX: "hidden",
-                      height: "75vh",
-                    }}
-                    autoHide={false}
-                  >
+                  <ScrollArea.Autosize maxHeight="75vh" type="always">
                     <div
                       style={{
                         height: "100%",
@@ -227,18 +202,19 @@ export default function Inventory(props: InventoryProps) {
                         paddingRight: 28,
                         paddingLeft: 12,
                       }}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
                     >
-                      <Row
-                        xs={1}
-                        sm={1}
-                        md={1}
-                        lg={2}
-                        xl={4}
-                        style={{
+                      <SimpleGrid
+                        sx={{
                           height: "100%",
                         }}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
+                        cols={4}
+                        breakpoints={[
+                          { maxWidth: 980, cols: 3, spacing: "md" },
+                          { maxWidth: 755, cols: 2, spacing: "sm" },
+                          { maxWidth: 600, cols: 1, spacing: "sm" },
+                        ]}
                       >
                         {inventory
                           .filter((item: Item) => {
@@ -301,14 +277,14 @@ export default function Inventory(props: InventoryProps) {
                             );
                           })}
                         {provided.placeholder}
-                      </Row>
+                      </SimpleGrid>
                     </div>
-                  </SimpleBar>
+                  </ScrollArea.Autosize>
                 );
               }}
             </Droppable>
-          )}
-        </Card.Body>
+          ) : null}
+        </Card.Section>
       </Card>
     </>
   );

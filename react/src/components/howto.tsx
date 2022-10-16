@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { useEffect, useState } from "react";
+
+import { Text } from "@mantine/core";
 import ReactMarkdown from "react-markdown";
-import SimpleBar from "simplebar-react";
-
-import Header from "./header";
-
+import Shell from "./shell";
 export default function HowTo() {
   const [text, setText] = useState("");
   useEffect(() => {
@@ -14,12 +12,11 @@ export default function HowTo() {
   });
   return (
     <>
-      <Header />
-      <SimpleBar className="scrollDiv" id="scrollDiv" autoHide={false}>
-        <Container style={{ marginTop: 100, color: "whitesmoke" }}>
+      <Shell>
+        <Text>
           <ReactMarkdown>{text}</ReactMarkdown>
-        </Container>
-      </SimpleBar>
+        </Text>
+      </Shell>
     </>
   );
 }

@@ -1,10 +1,9 @@
-import React from "react";
+import { Card, Center, Image, Text } from "@mantine/core";
 import {
   Draggable,
   DraggableProvided,
   DraggingStyle,
 } from "react-beautiful-dnd";
-import { Card } from "react-bootstrap";
 
 export interface Sticker {
   link: string;
@@ -68,33 +67,28 @@ export default function ItemBox(props: ItemBoxProps) {
             ref={provided.innerRef}
             key={props.item.id}
           >
-            <Card
-              style={{
-                margin: 2,
-                backgroundColor: "#303440",
-                width: 105,
-                height: 135,
-                //border: "2px solid rgb(61, 61, 87)",
-                //borderRadius: "6px",
-              }}
-            >
-              <Card.Img
+            <Card withBorder p="xs">
+              <Card.Section
                 className="no-select"
-                style={{ height: 75, width: 100 }}
-                src={`https://community.cloudflare.steamstatic.com/economy/image/${
-                  props.item.icon_url_large
-                    ? props.item.icon_url_large
-                    : props.item.icon_url
-                }`}
-                alt={props.item.id}
-              />
+                sx={{ height: 75, width: 100 }}
+                withBorder
+              >
+                <Image
+                  src={`https://community.cloudflare.steamstatic.com/economy/image/${
+                    props.item.icon_url_large
+                      ? props.item.icon_url_large
+                      : props.item.icon_url
+                  }`}
+                  alt={props.item.id}
+                />
+              </Card.Section>
 
-              <Card.ImgOverlay>
-                <Card.Title>
+              {props.item.stickers.length ? (
+                <Card.Section p={1} sx={{ display: "flex" }}>
                   {props.item.stickers.map((sticker: Sticker) => {
                     x++;
                     return (
-                      <img
+                      <Image
                         key={`${sticker.name}_${x}`}
                         draggable={false}
                         className="no-select"
@@ -105,24 +99,27 @@ export default function ItemBox(props: ItemBoxProps) {
                       />
                     );
                   })}
-                </Card.Title>
-              </Card.ImgOverlay>
+                </Card.Section>
+              ) : null}
 
-              <Card.Footer
-                style={{
+              <Card.Section
+                withBorder={!!props.item.stickers.length}
+                sx={{
                   color: `#${props.item.name_color}`,
-                  fontSize: "10px",
-                  minHeight: 60,
                 }}
                 className="no-select"
               >
-                {props.item.custom_name
-                  ? `"${props.item.custom_name}"`
-                  : props.item.shuffle_slots_t.includes(2149974016) ||
-                    props.item.shuffle_slots_ct.includes(3223715840)
-                  ? props.item.market_hash_name.split("|")[0]
-                  : props.item.market_hash_name.split("|")[1]}
-              </Card.Footer>
+                <Center>
+                  <Text size="xs" m="xs">
+                    {props.item.custom_name
+                      ? `"${props.item.custom_name}"`
+                      : props.item.shuffle_slots_t.includes(2149974016) ||
+                        props.item.shuffle_slots_ct.includes(3223715840)
+                      ? props.item.market_hash_name.split("|")[0]
+                      : props.item.market_hash_name.split("|")[1]}
+                  </Text>
+                </Center>
+              </Card.Section>
             </Card>
           </div>
         );

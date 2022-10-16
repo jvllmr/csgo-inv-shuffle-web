@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { removeAuth } from "../redux/auth";
+import { setInv } from "../redux/inv";
+import { deleteMap } from "../redux/map";
 import { useAppDispatch } from "../redux_hooks";
-import { removeAuth } from "../slices/auth";
-import { setInv } from "../slices/inv";
-import { deleteMap } from "../slices/map";
 import { GET } from "../utils/api_requests";
 
 export default function Logout() {

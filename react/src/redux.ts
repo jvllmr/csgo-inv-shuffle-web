@@ -1,13 +1,13 @@
 import { combineReducers, createStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
-import authReducer, { authPersistConfig } from "./slices/auth";
-import invReducer, { DBgetInv, setInv, setInvDBReady } from "./slices/inv";
+import authReducer, { authPersistConfig } from "./redux/auth";
+import invReducer, { DBgetInv, setInv, setInvDBReady } from "./redux/inv";
 import mapReducer, {
   getBackwardMaps as DBgetBackwardMaps,
   getForwardMaps as DBgetForwardMaps,
   getMap as DBgetMap,
   setAll,
-} from "./slices/map";
+} from "./redux/map";
 
 const rootReducer = combineReducers({
   inv: invReducer,
