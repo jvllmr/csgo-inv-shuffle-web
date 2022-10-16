@@ -27,7 +27,7 @@ flake8 = "^4.0"
 pytest="^6.2.5 || ^7.0.0"
 pytest-flask="^1.2.0"
 pre-commit="^2.16.0"
-pytest-cov="^3.0"
+pytest-cov="^3.0 || ^4.0.0"
 coverage = "^6.2"
 poetry = "^1.2"
 
