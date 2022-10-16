@@ -9,4 +9,4 @@ __pycache__
 test.py
 .venv
 .coverage
-.yarn
+.pnp*
