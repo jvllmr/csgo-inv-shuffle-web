@@ -34,7 +34,7 @@ def app():
 
 @fixture
 def json_slotmap(app: Flask):
-    with open(f"{os.path.dirname(__file__)}/data/map.json", "r") as f:
+    with open(f"{os.path.dirname(__file__)}/data/map.json") as f:
         return json.loads(f.read(), app)
 
 
