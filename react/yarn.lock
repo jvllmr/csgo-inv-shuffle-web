@@ -1048,8 +1048,8 @@ __metadata:
   linkType: hard
 
 "@tabler/icons@npm:^1.104.0":
-  version: 1.104.0
-  resolution: "@tabler/icons@npm:1.104.0"
+  version: 1.110.0
+  resolution: "@tabler/icons@npm:1.110.0"
   peerDependencies:
     react: ^16.x || 17.x || 18.x
     react-dom: ^16.x || 17.x || 18.x
@@ -1058,7 +1058,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 6e303660b237e1915d837609dadf0cde9bf32a9140334f81c7d1ca83a4dd59c6db8ce36e598efd3587591c6a4868a43dde6c6129a9fcbc0b110d7535419b0f6f
+  checksum: a2a68c6367cdfd278b01fd0d595a292d53413e0c0d24543057e60f04bc39ca1b2769e18a9c0ef0e116ab6a504f616b78aa48c1ba0c4f02c845b0ab250fa315a0
   languageName: node
   linkType: hard
 
