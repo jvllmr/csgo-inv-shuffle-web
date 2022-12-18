@@ -32,7 +32,6 @@ def create_app(testapp=False, **config_vars) -> Flask:
         app.register_blueprint(bp)
 
     create_guard(app)
-    create_cache(app)
     create_validator(app)
 
     CORS(app)
