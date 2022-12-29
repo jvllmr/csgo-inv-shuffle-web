@@ -1,3 +1,5 @@
+import time
+
 from flask.testing import FlaskClient
 
 
@@ -24,6 +26,7 @@ def test_get_inv(authed_client: FlaskClient):
     cached_resp = authed_client.get("/inventory")
     assert cached_resp.status_code == 200
     assert "˓ฅ₍˄ุ.͡ ̫.˄ุ₎ฅ˒rawr!" in map(lambda x: x["custom_name"], cached_resp.json)
+    time.sleep(20)
     cannot_request_uncached = authed_client.get("/inventory?no_cache=1")
     assert cannot_request_uncached.status_code == 429
     assert 500 < int(cannot_request_uncached.get_data(True))

@@ -32,9 +32,9 @@ class NoCacheQuery(BaseModel):
 def get_pp_link(query: NoCacheQuery):
     """Get the link to the authenticated user's steam profile picture"""
     steam_id = flask_praetorian.current_user_id()
-    # if (cached := cache.get(f"pp_{steam_id}")) and not query.no_cache:
+    if (cached := cache.get(f"pp_{steam_id}")) and not query.no_cache:
 
-        # return cached
+        return cached
     for child in get_profile_data():
         if child.tag == "avatarIcon":
             ret = child.text
@@ -42,7 +42,7 @@ def get_pp_link(query: NoCacheQuery):
         jsonify(link=ret),
         200,
     )
-    # cache.set(f"pp_{steam_id}", resp, timeout=1800)
+    cache.set(f"pp_{steam_id}", resp, timeout=1800)
     return resp
 
 
@@ -52,10 +52,10 @@ def get_pp_link(query: NoCacheQuery):
 def get_inv(query: NoCacheQuery):
     """Get the CS:GO of the authenticated user"""
     steam_id = flask_praetorian.current_user_id()
-    # if (cached := cache.get(f"inventory_{steam_id}")) and not query.no_cache:
-        # return cached
+    if (cached := cache.get(f"inventory_{steam_id}")) and not query.no_cache:
+        return cached
     try:
-        """
+
         if datetime.timedelta(minutes=10) > (
             re_timeout := (
                 datetime.datetime.now()
@@ -66,16 +66,16 @@ def get_inv(query: NoCacheQuery):
             )
         ):
             return f"{600 - re_timeout.seconds}", 429
-        """
+
         def filter_equippable(item: Item):
             return item.equippable
 
         resp = jsonify(list(filter(filter_equippable, get_inventory(steam_id))))
-        # cache.set(f"inventory_{steam_id}", resp, timeout=86_400)
-        # cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
+        cache.set(f"inventory_{steam_id}", resp, timeout=86_400)
+        cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
         return resp
     except InventoryIsPrivateException:
         abort(403)
     except requests.HTTPError:
-        # cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
+        cache.set(f"timeout_{steam_id}", datetime.datetime.now(), timeout=1200)
         return "600", 429
