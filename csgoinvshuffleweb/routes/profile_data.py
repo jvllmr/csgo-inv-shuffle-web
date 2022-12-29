@@ -1,4 +1,3 @@
-import datetime
 import typing as t
 
 import flask_praetorian
@@ -34,7 +33,7 @@ def get_pp_link(query: NoCacheQuery):
     steam_id = flask_praetorian.current_user_id()
     # if (cached := cache.get(f"pp_{steam_id}")) and not query.no_cache:
 
-        # return cached
+    # return cached
     for child in get_profile_data():
         if child.tag == "avatarIcon":
             ret = child.text
@@ -53,7 +52,7 @@ def get_inv(query: NoCacheQuery):
     """Get the CS:GO of the authenticated user"""
     steam_id = flask_praetorian.current_user_id()
     # if (cached := cache.get(f"inventory_{steam_id}")) and not query.no_cache:
-        # return cached
+    # return cached
     try:
         """
         if datetime.timedelta(minutes=10) > (
@@ -67,6 +66,7 @@ def get_inv(query: NoCacheQuery):
         ):
             return f"{600 - re_timeout.seconds}", 429
         """
+
         def filter_equippable(item: Item):
             return item.equippable
 
