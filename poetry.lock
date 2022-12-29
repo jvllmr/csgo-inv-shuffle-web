@@ -1859,24 +1859,25 @@ files = [
 
 [[package]]
 name = "spectree"
-version = "0.10.6"
+version = "1.0.3"
 description = "generate OpenAPI document and validate request&response with Python annotations."
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "spectree-0.10.6-py3-none-any.whl", hash = "sha256:dd8ed50e06e40d1c6691027c83446921633fa292b6536a43a23168a0f2060e49"},
-    {file = "spectree-0.10.6.tar.gz", hash = "sha256:68f9d4da7928b85988f67d9d7fe80f05047a5f08747a3328ea6330f9d41dfb4f"},
+    {file = "spectree-1.0.3-py3-none-any.whl", hash = "sha256:f5aadb0b5a2fa3e421883bac852c4adea17983e7f329fdc2f9500e81c33ae91e"},
+    {file = "spectree-1.0.3.tar.gz", hash = "sha256:1013b0fb3258c736bd76e00454cc249898d7248c83e6e2c8d889412177de917b"},
 ]
 
 [package.dependencies]
 pydantic = ">=1.2"
 
 [package.extras]
-dev = ["autoflake (>=1.4,<2.0)", "black (>=22.3,<23.0)", "flake8 (>=4.0,<5.0)", "isort (>=5.10,<6.0)", "mypy (>=0.942)", "pytest (>=7.1,<8.0)"]
+dev = ["autoflake (>=1.4,<3.0)", "black (>=22.3,<23.0)", "flake8 (>=4,<7)", "isort (>=5.10,<6.0)", "mypy (>=0.971)", "pytest (>=7.1,<8.0)"]
 email = ["pydantic[email] (>=1.2)"]
 falcon = ["falcon (>=3.0.0)"]
 flask = ["flask"]
+quart = ["quart"]
 starlette = ["starlette[full]"]
 
 [[package]]
@@ -2173,4 +2174,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2889347f7dab8805cb0ac7f46746059df4a109236d48e2c60620e89719865551"
+content-hash = "6ea27533555aac5bea22fe91ea655f4c2fa5c9e5a0b3eadc5f6420ccbdb7431a"
