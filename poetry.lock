@@ -1859,14 +1859,14 @@ files = [
 
 [[package]]
 name = "spectree"
-version = "0.10.6"
+version = "0.12.1"
 description = "generate OpenAPI document and validate request&response with Python annotations."
 category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "spectree-0.10.6-py3-none-any.whl", hash = "sha256:dd8ed50e06e40d1c6691027c83446921633fa292b6536a43a23168a0f2060e49"},
-    {file = "spectree-0.10.6.tar.gz", hash = "sha256:68f9d4da7928b85988f67d9d7fe80f05047a5f08747a3328ea6330f9d41dfb4f"},
+    {file = "spectree-0.12.1-py3-none-any.whl", hash = "sha256:d49027504e52ad3eac6f754d23b72e3a30e076e70dd067308ed0eb0ba8ec2dce"},
+    {file = "spectree-0.12.1.tar.gz", hash = "sha256:35aefd97cc8c32c7ffecb92b996b10f28d34aa92145e90412f3f826262669605"},
 ]
 
 [package.dependencies]
@@ -1877,6 +1877,7 @@ dev = ["autoflake (>=1.4,<2.0)", "black (>=22.3,<23.0)", "flake8 (>=4.0,<5.0)", 
 email = ["pydantic[email] (>=1.2)"]
 falcon = ["falcon (>=3.0.0)"]
 flask = ["flask"]
+quart = ["quart"]
 starlette = ["starlette[full]"]
 
 [[package]]
@@ -2173,4 +2174,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2889347f7dab8805cb0ac7f46746059df4a109236d48e2c60620e89719865551"
+content-hash = "fd233cd305a64e16d476fffd8cee2f6939da966cd50ca2f4c82a16240934a4fa"
