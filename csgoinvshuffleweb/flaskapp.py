@@ -31,9 +31,10 @@ def create_app(testapp=False, **config_vars) -> Flask:
     for bp in blueprints:
         app.register_blueprint(bp)
 
+    # register extensions
     create_guard(app)
     create_validator(app)
-
+    create_cache(app)
     CORS(app)
     return app
 
