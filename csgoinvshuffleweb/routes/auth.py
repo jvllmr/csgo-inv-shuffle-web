@@ -44,8 +44,7 @@ def auth_method(query: Auth):
 
         return resp
 
-    except Exception as exc:
-        print(exc)
+    except Exception:
         abort(400)
 
 

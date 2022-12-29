@@ -73,6 +73,6 @@ def test_convert_slotmap_to_json_and_back():
     assert (LoadoutSlot.DEAGLE_CT, ["508", "5443"]) == converted_slotmap[
         LoadoutSlot.DEAGLE_CT
     ]
-    print(converted_slotmap)
+
     for _assert in slotmap_init:
         assert _assert in converted_slotmap
