@@ -1170,18 +1170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tabler/icons@npm:^1.118.0":
-  version: 1.118.0
-  resolution: "@tabler/icons@npm:1.118.0"
-  peerDependencies:
-    react: ^16.x || 17.x || 18.x
-    react-dom: ^16.x || 17.x || 18.x
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 6342d7bd65fd18185c9a80f23be3ab39504284390c2fd2c64e84cd0f51bae8812e595d12dabc69fc3da6f06ab216300f7c4eabcc8fe69892c6598c6a2c37118f
+"@tabler/icons@npm:^1.118.0 || ^2.0.0":
+  version: 2.0.0
+  resolution: "@tabler/icons@npm:2.0.0"
+  checksum: 227bbea8b3bdf105ad0c78aebfc32598bc41552955b1335779c974ce8742bdc8628aa4babdc31f27ecde5fca4a80b79850a1db70c18906a6e6a814069c6aa788
   languageName: node
   linkType: hard
 
@@ -2413,7 +2405,7 @@ __metadata:
     "@mantine/core": ^5.9.5
     "@mantine/hooks": ^5.9.5
     "@reduxjs/toolkit": ^1.9.1
-    "@tabler/icons": ^1.118.0
+    "@tabler/icons": ^1.118.0 || ^2.0.0
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^13.4.0
     "@testing-library/user-event": ^14.4.3
