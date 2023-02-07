@@ -4,7 +4,6 @@ from csgoinvshuffleweb.utils import map_json_type
 
 
 def test_generate(authed_client: FlaskClient, json_slotmap: map_json_type):
-
     resp = authed_client.post("/generate", json={"map": json_slotmap})
     assert resp.status_code == 200
     assert resp.get_data(True).startswith('"SavedItemShuffles"\n{')
