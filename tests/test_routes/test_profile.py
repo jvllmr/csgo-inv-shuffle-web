@@ -4,7 +4,6 @@ from flask.testing import FlaskClient
 
 
 def test_get_profile_picture(authed_client: FlaskClient):
-
     resp = authed_client.get("/profile_picture")
     assert resp.status_code == 200
     link = resp.get_json()["link"]
