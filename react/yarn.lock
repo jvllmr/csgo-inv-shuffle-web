@@ -1786,44 +1786,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@floating-ui/core@npm:1.0.1"
-  checksum: c8a5f1a491788e5bebfe747e9372df2c7cbee0d8790ddf95e25149ac91ccf1a2cca8f768029826cfd3d687617c1d0f3241b97f1648bdf2a28d421f39e79c2eee
+"@floating-ui/core@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@floating-ui/core@npm:1.2.2"
+  checksum: 0728efcb3f57c0bbeaf940e3ca8dfbecb659afec8943dff79169b8191b8c4aa14b54a33dc66599e624dfa791920010ebd9f860cfa7f47df94ad75b32c1e44883
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "@floating-ui/dom@npm:1.0.2"
+"@floating-ui/dom@npm:^1.2.1":
+  version: 1.2.3
+  resolution: "@floating-ui/dom@npm:1.2.3"
   dependencies:
-    "@floating-ui/core": ^1.0.1
-  checksum: 4494db572d953f1f0544b91e6c16c63eae890c96befc5a60528e01b8e93182458ac4aec08873d6544c18353fb90d46b1ff4e19407bc48ea8f27a1bce372e48e5
+    "@floating-ui/core": ^1.2.2
+  checksum: b2428e1fda01d5cba59960bb8c04d7a5f2400200855f206267589533a67303a62fbdf85dc7747fe83c21bb15f4eda67feaaf51ef4a41bb132fd2b785612f1bb4
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom-interactions@npm:^0.10.1":
-  version: 0.10.1
-  resolution: "@floating-ui/react-dom-interactions@npm:0.10.1"
+"@floating-ui/react-dom@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@floating-ui/react-dom@npm:1.3.0"
   dependencies:
-    "@floating-ui/react-dom": ^1.0.0
+    "@floating-ui/dom": ^1.2.1
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: ce0ad3e3bbe43cfd15a6a0d5cccede02175c845862bfab52027995ab99c6b29630180dc7d146f76ebb34730f90a6ab9bf193c8984fe8d7f56062308e4ca98f77
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:^0.19.1":
+  version: 0.19.2
+  resolution: "@floating-ui/react@npm:0.19.2"
+  dependencies:
+    "@floating-ui/react-dom": ^1.3.0
     aria-hidden: ^1.1.3
+    tabbable: ^6.0.1
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 6dad13e7d288b0ef72c2ea489570c05309829a00acf4b56a37329aafec6835ceedf61a4e9e97257d74677a7251196e6bd12990f0b491af445e6eb0a34724bda2
-  languageName: node
-  linkType: hard
-
-"@floating-ui/react-dom@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@floating-ui/react-dom@npm:1.0.0"
-  dependencies:
-    "@floating-ui/dom": ^1.0.0
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: d79e3c8570b0eaef5e968cd9c69de2c6bb372a5316e4e69a1cd12dae81771863ef430e81b74a0c21cefba663a2f971d8540c7294d7fb3b9807e32ba2a00c1e76
+  checksum: 00fd827c2dcf879fec221d89ef5b90836bbecacc236ce2acc787db32ae7311d490cd136b13a8d0b6ab12842554a2ee1110605aa832af71a45c0a7297e342072c
   languageName: node
   linkType: hard
 
@@ -1953,35 +1954,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^5.9.5":
-  version: 5.9.5
-  resolution: "@mantine/core@npm:5.9.5"
+"@mantine/core@npm:^5.9.5 || ^6.0.0":
+  version: 6.0.0
+  resolution: "@mantine/core@npm:6.0.0"
   dependencies:
-    "@floating-ui/react-dom-interactions": ^0.10.1
-    "@mantine/styles": 5.9.5
-    "@mantine/utils": 5.9.5
+    "@floating-ui/react": ^0.19.1
+    "@mantine/styles": 6.0.0
+    "@mantine/utils": 6.0.0
     "@radix-ui/react-scroll-area": 1.0.2
+    react-remove-scroll: ^2.5.5
     react-textarea-autosize: 8.3.4
   peerDependencies:
-    "@mantine/hooks": 5.9.5
+    "@mantine/hooks": 6.0.0
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 207214e9eed4715ae2618586f27fa24fae621c2a71359fa6ec94768e57a571301dade98c4b16d08d54ea19fbfe283e80f12090a21e8f048dffe1897655193711
+  checksum: 7a93ea2879b46dbead97599639d7ef922869ce9b2721d88874a2d625bbe702479618e7ab54ddeb30cdd576bfe5897e204c2af017f8e84d21617e976f016dff74
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^5.9.5":
-  version: 5.9.5
-  resolution: "@mantine/hooks@npm:5.9.5"
+"@mantine/hooks@npm:^5.9.5 || ^6.0.0":
+  version: 6.0.0
+  resolution: "@mantine/hooks@npm:6.0.0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 250775bf440afcc8000585fa98c54b1f6d125b1d3bc4e5f118c539f6a6bf674264acd1cb72221f5786a32c5207340990463a82a66365e810e2517858770d5302
+  checksum: becb583cd29ca90871195ea6fb21d118f17ae05f63aa91e932c93621dc879d0c8851f9a3102cb56deb77bc2a8aac2409a9e2685d5b4b8e1a9a7ecc3c5e601da1
   languageName: node
   linkType: hard
 
-"@mantine/styles@npm:5.9.5":
-  version: 5.9.5
-  resolution: "@mantine/styles@npm:5.9.5"
+"@mantine/styles@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@mantine/styles@npm:6.0.0"
   dependencies:
     clsx: 1.1.1
     csstype: 3.0.9
@@ -1989,16 +1991,16 @@ __metadata:
     "@emotion/react": ">=11.9.0"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 97ff1de2fa908910f335e54c28b442a6a5dc10a70199934e583c992ed7f11803ee9f3c455bf2f9ee5237d7960574bc403a5af604c2e48e25bad7024fcd9c8f91
+  checksum: c369d10719bab36b03cdfa6b46a495b767dcf76ea4f1f5d5f9e5596b52ef0f1b0c295c8cc854d12e9bb7778c9ff80f810a44a929dd9646638da783589fedbf73
   languageName: node
   linkType: hard
 
-"@mantine/utils@npm:5.9.5":
-  version: 5.9.5
-  resolution: "@mantine/utils@npm:5.9.5"
+"@mantine/utils@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@mantine/utils@npm:6.0.0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 12a4874b2319f418a5bf0287e2af33e7bcd0f8a3e8afce4f48d387f60bc0e1431423e402c821bfbf14462d7d7dd7f631c4ea70be1ca0737fbd85b98640b49288
+  checksum: a0f876ebb910ccebc6bbeedb093c14fe22c319d08d8504be6e6085f2e935f3aad8fc9cb1e0ede182c762a03a35e02618cf304ba3ba556a4ba3951945cf8cfc56
   languageName: node
   linkType: hard
 
@@ -3533,8 +3535,8 @@ __metadata:
     "@babel/eslint-parser": ^7.19.1
     "@babel/preset-react": ^7.18.6
     "@emotion/react": ^11.10.5
-    "@mantine/core": ^5.9.5
-    "@mantine/hooks": ^5.9.5
+    "@mantine/core": ^5.9.5 || ^6.0.0
+    "@mantine/hooks": ^5.9.5 || ^6.0.0
     "@reduxjs/toolkit": ^1.9.1
     "@tabler/icons": ^1.118.0
     "@testing-library/jest-dom": ^5.16.5
@@ -3675,6 +3677,13 @@ __metadata:
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
+  languageName: node
+  linkType: hard
+
+"detect-node-es@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "detect-node-es@npm:1.1.0"
+  checksum: e46307d7264644975b71c104b9f028ed1d3d34b83a15b8a22373640ce5ea630e5640b1078b8ea15f202b54641da71e4aa7597093bd4b91f113db520a26a37449
   languageName: node
   linkType: hard
 
@@ -4422,6 +4431,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-nonce@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "get-nonce@npm:1.0.1"
+  checksum: e2614e43b4694c78277bb61b0f04583d45786881289285c73770b07ded246a98be7e1f78b940c80cbe6f2b07f55f0b724e6db6fd6f1bcbd1e8bdac16521074ed
+  languageName: node
+  linkType: hard
+
 "get-stream@npm:^6.0.0":
   version: 6.0.1
   resolution: "get-stream@npm:6.0.1"
@@ -4759,6 +4775,15 @@ __metadata:
     has: ^1.0.3
     side-channel: ^1.0.4
   checksum: 1944f92e981e47aebc98a88ff0db579fd90543d937806104d0b96557b10c1f170c51fb777b97740a8b6ddeec585fca8c39ae99fd08a8e058dfc8ab70937238bf
+  languageName: node
+  linkType: hard
+
+"invariant@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "invariant@npm:2.2.4"
+  dependencies:
+    loose-envify: ^1.0.0
+  checksum: cc3182d793aad82a8d1f0af697b462939cb46066ec48bbf1707c150ad5fad6406137e91a262022c269702e01621f35ef60269f6c0d7fd178487959809acdfb14
   languageName: node
   linkType: hard
 
@@ -5203,7 +5228,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -6381,6 +6406,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-remove-scroll-bar@npm:^2.3.3":
+  version: 2.3.4
+  resolution: "react-remove-scroll-bar@npm:2.3.4"
+  dependencies:
+    react-style-singleton: ^2.2.1
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: b5ce5f2f98d65c97a3e975823ae4043a4ba2a3b63b5ba284b887e7853f051b5cd6afb74abde6d57b421931c52f2e1fdbb625dc858b1cb5a32c27c14ab85649d4
+  languageName: node
+  linkType: hard
+
+"react-remove-scroll@npm:^2.5.5":
+  version: 2.5.5
+  resolution: "react-remove-scroll@npm:2.5.5"
+  dependencies:
+    react-remove-scroll-bar: ^2.3.3
+    react-style-singleton: ^2.2.1
+    tslib: ^2.1.0
+    use-callback-ref: ^1.3.0
+    use-sidecar: ^1.1.2
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 2c7fe9cbd766f5e54beb4bec2e2efb2de3583037b23fef8fa511ab426ed7f1ae992382db5acd8ab5bfb030a4b93a06a2ebca41377d6eeaf0e6791bb0a59616a4
+  languageName: node
+  linkType: hard
+
 "react-router-dom@npm:^6.6.1":
   version: 6.6.1
   resolution: "react-router-dom@npm:6.6.1"
@@ -6402,6 +6462,23 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 58f0ad29123e2854d547915a1ae1cc2687504e396d71db50fe8f36ad733d7940a2914d45868a8478b6138536e119fa5e3303212b7c7b1d81d80cd5b0bbefdfa2
+  languageName: node
+  linkType: hard
+
+"react-style-singleton@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "react-style-singleton@npm:2.2.1"
+  dependencies:
+    get-nonce: ^1.0.0
+    invariant: ^2.2.4
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 7ee8ef3aab74c7ae1d70ff34a27643d11ba1a8d62d072c767827d9ff9a520905223e567002e0bf6c772929d8ea1c781a3ba0cc4a563e92b1e3dc2eaa817ecbe8
   languageName: node
   linkType: hard
 
@@ -7175,6 +7252,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tabbable@npm:^6.0.1":
+  version: 6.1.1
+  resolution: "tabbable@npm:6.1.1"
+  checksum: 348639497262241ce8e0ccb0664ea582a386183107299ee8f27cf7b56bc84f36e09eaf667d3cb4201e789634012a91f7129bcbd49760abe874fbace35b4cf429
+  languageName: node
+  linkType: hard
+
 "tar@npm:^6.1.11, tar@npm:^6.1.2":
   version: 6.1.11
   resolution: "tar@npm:6.1.11"
@@ -7258,6 +7342,13 @@ __metadata:
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.1.0":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
   languageName: node
   linkType: hard
 
@@ -7486,6 +7577,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-callback-ref@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "use-callback-ref@npm:1.3.0"
+  dependencies:
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 7913df383a5a6fcb399212eedefaac2e0c6f843555202d4e3010bac3848afe38ecaa3d0d6500ad1d936fbeffd637e6c517e68edb024af5e6beca7f27f3ce7b21
+  languageName: node
+  linkType: hard
+
 "use-composed-ref@npm:^1.3.0":
   version: 1.3.0
   resolution: "use-composed-ref@npm:1.3.0"
@@ -7527,6 +7633,22 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 8f08eba26d69406b61bb4b8dacdd5a92bd6aef5b53d346dfe87954f7330ee10ecabc937cc7854635155d46053828e85c10b5a5aff7a04720e6a97b9f42999bac
+  languageName: node
+  linkType: hard
+
+"use-sidecar@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "use-sidecar@npm:1.1.2"
+  dependencies:
+    detect-node-es: ^1.1.0
+    tslib: ^2.0.0
+  peerDependencies:
+    "@types/react": ^16.9.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 925d1922f9853e516eaad526b6fed1be38008073067274f0ecc3f56b17bb8ab63480140dd7c271f94150027c996cea4efe83d3e3525e8f3eda22055f6a39220b
   languageName: node
   linkType: hard
 
