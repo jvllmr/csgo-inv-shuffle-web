@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import {
   selectAuthenticated,
-  setAuthenticated,
   setAuthID,
+  setAuthenticated,
 } from "../redux/auth";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
