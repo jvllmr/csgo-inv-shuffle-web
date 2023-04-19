@@ -3555,7 +3555,7 @@ __metadata:
     "@vitejs/plugin-legacy": ^3.0.1 || ^4.0.0
     "@vitejs/plugin-react": ^3.0.0
     eslint: ^8.30.0
-    eslint-config-alloy: ^4.7.0
+    eslint-config-alloy: ^4.7.0 || ^5.0.0
     eslint-plugin-react: ^7.31.11
     react: ^18.2.0
     react-beautiful-dnd: ^13.1.1
@@ -3992,18 +3992,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-alloy@npm:^4.7.0":
-  version: 4.7.0
-  resolution: "eslint-config-alloy@npm:4.7.0"
+"eslint-config-alloy@npm:^4.7.0 || ^5.0.0":
+  version: 5.0.0
+  resolution: "eslint-config-alloy@npm:5.0.0"
   peerDependencies:
     "@babel/eslint-parser": 7.x
     "@babel/preset-react": 7.x
-    "@typescript-eslint/eslint-plugin": ">=5.38.1"
+    "@typescript-eslint/eslint-plugin": ">=5.55.0"
     "@typescript-eslint/parser": 5.x
     eslint: ">=8.24.0"
     eslint-plugin-react: ">=7.31.8"
     eslint-plugin-vue: ">=9.5.1"
-    typescript: 4.x
+    typescript: 5.x
     vue-eslint-parser: 9.x
   peerDependenciesMeta:
     "@babel/eslint-parser":
@@ -4022,7 +4022,7 @@ __metadata:
       optional: true
     vue-eslint-parser:
       optional: true
-  checksum: 1f17c3780e434f387797d8bb3d7a6d268cbe708c6e4db4f445fe55b466199c37d3b48ab02785a6e59b800ac2daeea51038d0f3cb604244059769fef04118921a
+  checksum: 0bdc7522744a87a81e575c77648d1bf389832eeb5debd0f97e09d63033c5da7741a03e635a03154bfdd00b4234c078b0031ec5be6751dfeb788d2f46a318fa28
   languageName: node
   linkType: hard
 
