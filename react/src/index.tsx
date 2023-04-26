@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import Auth from "./components/auth";
 import Content from "./components/content";
