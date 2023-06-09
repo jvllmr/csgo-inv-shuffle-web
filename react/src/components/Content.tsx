@@ -5,9 +5,9 @@ import { selectInv } from "../redux/inv";
 import { selectMap, setMap } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-import Inventory from "./inventory";
-import { Item } from "./item";
-import SlotMap, { TeamSide } from "./slotmap";
+import Inventory from "./Inventory";
+import { Item } from "./Item";
+import SlotMap, { TeamSide } from "./SlotMap";
 
 export default function Content() {
   const map = useAppSelector(selectMap);
@@ -149,7 +149,7 @@ export default function Content() {
     map_cpy[Number(index) - 1] = slot;
 
     if (rollback) return;
-
+    // @ts-ignore
     if (map_cpy != [...map]) dispatch(setMap(map_cpy)); // @vite-ignore
   }
   const onDragStart = (start: DragStart) => {

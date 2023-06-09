@@ -19,8 +19,8 @@ import { selectAuthenticated, selectSteamID } from "../redux/auth";
 import { selectInv, selectInvDBReady, setInv } from "../redux/inv";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
-import ItemBox, { Item, Sticker } from "./item";
-import User from "./user";
+import ItemBox, { Item, Sticker } from "./Item";
+import User from "./User";
 
 interface TimeoutProps {
   timeout: number;

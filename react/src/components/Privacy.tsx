@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Text } from "@mantine/core";
 import ReactMarkdown from "react-markdown";
-import Shell from "./shell";
+import Shell from "./Shell";
 
 export default function Privacy() {
   const [text, setText] = useState("");

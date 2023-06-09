@@ -26,8 +26,8 @@ import {
 } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-import ItemBox, { Item } from "./item";
-import { useScrollbarRef } from "./shell";
+import ItemBox, { Item } from "./Item";
+import { useScrollbarRef } from "./Shell";
 
 export enum TeamSide {
   T = "T",

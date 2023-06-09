@@ -39,7 +39,7 @@ import {
 } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { POST } from "../utils/api_requests";
-import User from "./user";
+import User from "./User";
 
 interface ShellProps {
   mainPage?: boolean;
