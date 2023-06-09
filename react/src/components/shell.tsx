@@ -23,7 +23,7 @@ import {
   IconDownload,
   IconTrash,
   IconUpload,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { selectAuthenticated, selectSteamID } from "../redux/auth";
 import {

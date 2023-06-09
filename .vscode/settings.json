@@ -7,7 +7,7 @@
   "python.testing.pytestEnabled": true,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
-  
+  "typescript.experimental.tsserver.web.enableProjectWideIntellisense": true,
   "typescript.format.enable": true,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

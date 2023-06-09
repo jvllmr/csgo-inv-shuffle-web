@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { IconCheck, IconRefresh, IconSearch } from "@tabler/icons";
+import { IconCheck, IconRefresh, IconSearch } from "@tabler/icons-react";
 import { selectAuthenticated, selectSteamID } from "../redux/auth";
 import { selectInv, selectInvDBReady, setInv } from "../redux/inv";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
@@ -193,7 +193,7 @@ export default function Inventory() {
             >
               {(provided: DroppableProvided) => {
                 return (
-                  <ScrollArea.Autosize maxHeight="75vh" type="always">
+                  <ScrollArea.Autosize mah="75vh" type="always">
                     <div
                       style={{
                         height: "100%",

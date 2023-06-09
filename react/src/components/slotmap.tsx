@@ -5,7 +5,7 @@ import {
   DroppableStateSnapshot,
 } from "react-beautiful-dnd";
 
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons";
+import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 
 import {
   Box,
