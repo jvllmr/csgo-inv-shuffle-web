@@ -1,6 +1,6 @@
 from csgoinvshuffle.item import Item
 from flask import Flask
-from flask.json import JSONEncoder
+from flask.json.provider import DefaultJSONProvider
 from flask_cors import CORS
 
 from csgoinvshuffleweb.config import DevConfig, ProdConfig
@@ -8,8 +8,9 @@ from csgoinvshuffleweb.extensions import create_cache, create_guard, create_vali
 from csgoinvshuffleweb.routes import blueprints
 
 
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, o):
+class CustomJSONProvider(DefaultJSONProvider):
+    @staticmethod
+    def default(o):
         if isinstance(o, Item):
             return dict(o)
         return super().default(o)
@@ -18,7 +19,8 @@ class CustomJSONEncoder(JSONEncoder):
 def create_app(testapp=False, **config_vars) -> Flask:
     app = Flask(__name__)
 
-    app.json_encoder = CustomJSONEncoder
+    app.json_provider_class = CustomJSONProvider
+    app.json = CustomJSONProvider(app=app)
     if app.debug or testapp:
         app.config.from_object(DevConfig())
 

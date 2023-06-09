@@ -25,7 +25,7 @@ def user(steam_user_id: int):
     return DummyUserClass(steam_user_id)
 
 
-@fixture
+@fixture(scope="session")
 def app():
     app = create_app(testapp=True, SECRET_KEY="top_secret")
     app.response_class = TestingResponse
@@ -42,15 +42,14 @@ def json_slotmap(app: Flask):
 def authed_client(app: Flask, guard: CustomGuard, user: DummyUserClass):
     with app.test_client() as client:
         client.set_cookie(
-            "localhost.localdomain",
-            "access_token",
-            guard.encode_eternal_jwt_token(
+            key="access_token",
+            value=guard.encode_eternal_jwt_token(
                 user,
                 bypass_user_check=True,
             ),
         )
         yield client
-        client.delete_cookie("localhost.localdomain", "access_token")
+        client.delete_cookie(key="access_token")
 
 
 @fixture
@@ -58,6 +57,6 @@ def cache(app: Flask):
     return cache_object
 
 
-@fixture
+@fixture(scope="session")
 def guard(app: Flask):
     return guard_object
