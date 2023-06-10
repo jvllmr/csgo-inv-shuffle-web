@@ -33,7 +33,6 @@ def get_pp_link(query: NoCacheQuery):
     """Get the link to the authenticated user's steam profile picture"""
     steam_id = flask_praetorian.current_user_id()
     if (cached := cache.get(f"pp_{steam_id}")) and not query.no_cache:
-
         return cached
     for child in get_profile_data():
         if child.tag == "avatarIcon":
@@ -55,7 +54,6 @@ def get_inv(query: NoCacheQuery):
     if (cached := cache.get(f"inventory_{steam_id}")) and not query.no_cache:
         return cached
     try:
-
         if datetime.timedelta(minutes=10) > (
             re_timeout := (
                 datetime.datetime.now()

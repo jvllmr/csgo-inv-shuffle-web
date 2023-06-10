@@ -1,16 +1,16 @@
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/lib/integration/react";
-import Auth from "./components/auth";
-import Content from "./components/content";
+import Auth from "./components/Auth";
+import Content from "./components/Content";
 
 import { MantineProvider, MantineProviderProps, Paper } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import * as ReactDOM from "react-dom/client";
-import HowTo from "./components/howto";
-import Logout from "./components/logout";
-import Privacy from "./components/privacy";
-import Shell from "./components/shell";
+import HowTo from "./components/HowTo";
+import Logout from "./components/Logout";
+import Privacy from "./components/Privacy";
+import Shell from "./components/Shell";
 import "./index.css";
 import store, { persistor } from "./redux";
 function Index() {

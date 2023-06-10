@@ -1,4 +1,4 @@
-import { Item } from "../components/item";
+import { Item } from "../components/Item";
 import store from "../redux";
 
 export function getItem(id: string | number): Item | undefined {

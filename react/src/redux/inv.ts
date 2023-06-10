@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Item } from "../components/item";
+import { Item } from "../components/Item";
 import { RootState } from "../redux";
 const invDBReadyEvent = new Event("invDBReady");
 interface InitialState {
