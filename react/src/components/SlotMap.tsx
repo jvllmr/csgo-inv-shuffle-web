@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Droppable,
-  DroppableProvided,
-  DroppableStateSnapshot,
-} from "react-beautiful-dnd";
 
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 
+import { useDroppable } from "@dnd-kit/core";
 import {
   Box,
   Button,
@@ -26,7 +22,7 @@ import {
 } from "../redux/map";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { getItem, hasIntersectingSlots, hasItem } from "../utils/inventory";
-import ItemBox, { Item } from "./Item";
+import DraggableItemBox, { Item, ItemBox } from "./Item";
 import { useScrollbarRef } from "./Shell";
 
 export enum TeamSide {
@@ -59,76 +55,83 @@ function Slot(props: SlotProps) {
     items.push(...slot["general"]);
   }
 
-  return (
-    <Droppable droppableId={`${team}-${props.index}`}>
-      {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
-        const { isDraggingOver, draggingOverWith } = snapshot;
-        let style: React.CSSProperties = { height: "100%" };
+  const {
+    isOver: isDraggingOver,
+    setNodeRef,
+    active: activeDrag,
+  } = useDroppable({ id: `${team}-${props.index}` });
 
-        if (isDraggingOver && draggingOverWith) {
-          const item = getItem(draggingOverWith.split("_", 1)[0]);
-          if (
-            !item ||
-            (item &&
-              !hasItem(item, items) &&
-              !hasIntersectingSlots(item, items) &&
-              ((item &&
-                props.side === TeamSide.CT &&
-                (item.shuffle_slots_ct.length || item.shuffle_slots.length)) ||
-                (item &&
-                  props.side === TeamSide.T &&
-                  (item.shuffle_slots_t.length || item.shuffle_slots.length))))
+  const dragOverItem = useMemo(
+    () =>
+      activeDrag
+        ? getItem(
+            // @ts-ignore
+            activeDrag.id.split("_", 1)[0]
           )
-            style = {
-              ...style,
-              zIndex: 500,
-              backgroundColor: "rgba(255,255,255, .2)",
-            };
-        }
+        : null,
+    [activeDrag]
+  );
+  const style = useMemo(() => {
+    let resStyle: React.CSSProperties = { height: "100%" };
+    if (isDraggingOver) {
+      if (
+        !dragOverItem ||
+        (dragOverItem &&
+          !hasItem(dragOverItem, items) &&
+          !hasIntersectingSlots(dragOverItem, items) &&
+          ((dragOverItem &&
+            props.side === TeamSide.CT &&
+            (dragOverItem.shuffle_slots_ct.length ||
+              dragOverItem.shuffle_slots.length)) ||
+            (dragOverItem &&
+              props.side === TeamSide.T &&
+              (dragOverItem.shuffle_slots_t.length ||
+                dragOverItem.shuffle_slots.length))))
+      )
+        resStyle.backgroundColor = "rgba(255,255,255, .2)";
+    }
+    return resStyle;
+  }, [dragOverItem, isDraggingOver]);
 
-        return (
-          <Paper
-            withBorder
-            radius={0}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            sx={{
-              // border: "1px solid #1C2023",
-              width: "20vw",
-              minHeight: 150,
-              overflow: "hidden",
-              // backgroundColor: "#232329",
-            }}
-            id={`${props.side}_${props.index}`}
-          >
-            <SimpleGrid
-              cols={3}
-              breakpoints={[
-                { maxWidth: 980, cols: 3, spacing: "md" },
-                { maxWidth: 755, cols: 2, spacing: "sm" },
-                { maxWidth: 600, cols: 1, spacing: "sm" },
-              ]}
-              p="xs"
-            >
-              {items.map((item: Item, index: number) => {
-                return (
-                  <ItemBox
-                    key={item.id}
-                    place={`${props.side}${props.index}`}
-                    item={item}
-                    index={index}
-                  />
-                );
-              })}
-              {items.length % 4 === 0 && (
-                <div style={{ height: 135, width: 105 }} />
-              )}
-              {provided.placeholder}
-            </SimpleGrid>
-          </Paper>
-        );
+  return (
+    <Paper
+      withBorder
+      radius={0}
+      ref={setNodeRef}
+      sx={{
+        // border: "1px solid #1C2023",
+        width: "20vw",
+        minHeight: 150,
+        overflow: "hidden",
+        // backgroundColor: "#232329",
       }}
-    </Droppable>
+      id={`${props.side}_${props.index}`}
+    >
+      <div style={style}>
+        <SimpleGrid
+          cols={3}
+          breakpoints={[
+            { maxWidth: 980, cols: 3, spacing: "md" },
+            { maxWidth: 755, cols: 2, spacing: "sm" },
+            { maxWidth: 600, cols: 1, spacing: "sm" },
+          ]}
+          p="xs"
+        >
+          {items.map((item: Item, index: number) => {
+            return (
+              <DraggableItemBox
+                key={item.id}
+                place={`${props.side}_${props.index}`}
+                item={item}
+              />
+            );
+          })}
+          {isDraggingOver && dragOverItem && !hasItem(dragOverItem, items) ? (
+            <ItemBox item={dragOverItem} />
+          ) : null}
+        </SimpleGrid>
+      </div>
+    </Paper>
   );
 }
 
@@ -149,7 +152,7 @@ export default function SlotMap() {
   const scrollbarRef = useScrollbarRef();
   useEffect(() => {
     if (mapDBReady) {
-      if (authenticated && (!map || !map.length)) {
+      if (authenticated && !map?.length) {
         dispatch(setMap([{ CT: [], T: [], general: [] }]));
         dispatch(deleteBackward());
       } else if (map.length !== count) {
@@ -164,7 +167,7 @@ export default function SlotMap() {
       dispatch(deleteBackward());
     }
   }, [mapDBReady, authenticated, dispatch]);
-
+  const { setNodeRef, isOver: isOverTrash } = useDroppable({ id: "trash" });
   return (
     <>
       <Card withBorder mr="50vw">
@@ -177,7 +180,6 @@ export default function SlotMap() {
           <Box
             m="xs"
             sx={{
-              zIndex: 1000,
               display: "flex",
               justifyContent: "space-evenly",
               width: "98%",
@@ -190,24 +192,12 @@ export default function SlotMap() {
               alt="T SIDE"
             />
 
-            <Droppable droppableId="trash">
-              {(
-                provided: DroppableProvided,
-                snapshot: DroppableStateSnapshot
-              ) => {
-                provided.placeholder = undefined;
-                const { isDraggingOver } = snapshot;
+            <div ref={setNodeRef}>
+              <Text color={isOverTrash ? "dimmed" : "red"}>
+                <IconTrash size={50} />
+              </Text>
+            </div>
 
-                return (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    <Text color={isDraggingOver ? "dimmed" : "red"}>
-                      <IconTrash size={50} />
-                    </Text>
-                    {provided.placeholder}
-                  </div>
-                );
-              }}
-            </Droppable>
             <Image
               width={50}
               className="no-select"

@@ -3,7 +3,7 @@
   "env": {
     // Your environments (which contains several predefined global variables)
     //
-    // browser: true,
+    "browser": true
     // node: true,
     // mocha: true,
     // jest: true,

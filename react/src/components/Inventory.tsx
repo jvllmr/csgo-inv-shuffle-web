@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Droppable, DroppableProvided } from "react-beautiful-dnd";
 
+import { useDroppable } from "@dnd-kit/core";
 import {
   Alert,
   Box,
@@ -19,7 +19,7 @@ import { selectAuthenticated, selectSteamID } from "../redux/auth";
 import { selectInv, selectInvDBReady, setInv } from "../redux/inv";
 import { useAppDispatch, useAppSelector } from "../redux_hooks";
 import { GET } from "../utils/api_requests";
-import ItemBox, { Item, Sticker } from "./Item";
+import DraggableItemBox, { Item, Sticker } from "./Item";
 import User from "./User";
 
 interface TimeoutProps {
@@ -114,7 +114,7 @@ export default function Inventory() {
       setRefreshing(false);
     }
   }, [inventory, timeout, dispatch, invDBReady, fetchInv, authenticated]);
-
+  const { setNodeRef } = useDroppable({ id: "inventory" });
   return (
     <>
       {error && (
@@ -185,104 +185,91 @@ export default function Inventory() {
               <User noImage />
             </Center>
           )}
+
           {inventory.length && authenticated ? (
-            <Droppable
-              droppableId="inventory"
-              direction="horizontal"
-              isDropDisabled
-            >
-              {(provided: DroppableProvided) => {
-                return (
-                  <ScrollArea.Autosize mah="75vh" type="always">
-                    <div
-                      style={{
-                        height: "100%",
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        paddingRight: 28,
-                        paddingLeft: 12,
-                      }}
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                    >
-                      <SimpleGrid
-                        sx={{
-                          height: "100%",
-                        }}
-                        cols={4}
-                        breakpoints={[
-                          { maxWidth: 980, cols: 3, spacing: "md" },
-                          { maxWidth: 755, cols: 2, spacing: "sm" },
-                          { maxWidth: 600, cols: 1, spacing: "sm" },
-                        ]}
-                      >
-                        {inventory
-                          .filter((item: Item) => {
-                            return (
-                              item.custom_name
-                                .toLowerCase()
-                                .includes(search.toLowerCase()) ||
-                              item.market_hash_name
-                                .toLowerCase()
-                                .includes(search.toLowerCase()) ||
-                              item.stickers
-                                .map((sticker: Sticker) => {
-                                  return sticker.name
-                                    .toLowerCase()
-                                    .includes(search.toLowerCase());
-                                })
-                                .reduce((prev: boolean, curr: boolean) => {
-                                  return prev || curr;
-                                }, false)
-                            );
+            <ScrollArea.Autosize mah="75vh" type="always">
+              <div
+                style={{
+                  height: "100%",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  paddingRight: 28,
+                  paddingLeft: 12,
+                }}
+                ref={setNodeRef}
+              >
+                <SimpleGrid
+                  sx={{
+                    height: "100%",
+                  }}
+                  cols={4}
+                  breakpoints={[
+                    { maxWidth: 980, cols: 3, spacing: "md" },
+                    { maxWidth: 755, cols: 2, spacing: "sm" },
+                    { maxWidth: 600, cols: 1, spacing: "sm" },
+                  ]}
+                >
+                  {inventory
+                    .filter((item: Item) => {
+                      return (
+                        item.custom_name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        item.market_hash_name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        item.stickers
+                          .map((sticker: Sticker) => {
+                            return sticker.name
+                              .toLowerCase()
+                              .includes(search.toLowerCase());
                           })
-                          .sort((x: Item, y: Item) => {
-                            const rarity_to_number: { [key: string]: number } =
-                              {
-                                common: 0,
-                                uncommon: 1,
-                                rare: 2,
-                                mythical: 3,
-                                legendary: 4,
-                                ancient: 5,
-                                contraband: 6,
-                              };
+                          .reduce((prev: boolean, curr: boolean) => {
+                            return prev || curr;
+                          }, false)
+                      );
+                    })
+                    .sort((x: Item, y: Item) => {
+                      const rarity_to_number: { [key: string]: number } = {
+                        common: 0,
+                        uncommon: 1,
+                        rare: 2,
+                        mythical: 3,
+                        legendary: 4,
+                        ancient: 5,
+                        contraband: 6,
+                      };
 
-                            if (!x.rarity && !y.rarity) return 0;
-                            if (!x.rarity) return -1;
-                            if (!y.rarity) return 1;
+                      if (!x.rarity && !y.rarity) return 0;
+                      if (!x.rarity) return -1;
+                      if (!y.rarity) return 1;
 
-                            if (
-                              rarity_to_number[x.rarity.toLowerCase()] <
-                              rarity_to_number[y.rarity.toLowerCase()]
-                            )
-                              return 1;
+                      if (
+                        rarity_to_number[x.rarity.toLowerCase()] <
+                        rarity_to_number[y.rarity.toLowerCase()]
+                      )
+                        return 1;
 
-                            if (
-                              rarity_to_number[y.rarity.toLowerCase()] >
-                              rarity_to_number[x.rarity.toLowerCase()]
-                            )
-                              return -1;
+                      if (
+                        rarity_to_number[y.rarity.toLowerCase()] >
+                        rarity_to_number[x.rarity.toLowerCase()]
+                      )
+                        return -1;
 
-                            return 0;
-                          })
-                          .map((item: Item, index: number) => {
-                            return (
-                              <ItemBox
-                                key={item.id}
-                                place="inv"
-                                item={item}
-                                index={index}
-                              />
-                            );
-                          })}
-                        {provided.placeholder}
-                      </SimpleGrid>
-                    </div>
-                  </ScrollArea.Autosize>
-                );
-              }}
-            </Droppable>
+                      return 0;
+                    })
+                    .map((item: Item, index: number) => {
+                      return (
+                        <DraggableItemBox
+                          key={item.id}
+                          place="inv"
+                          item={item}
+                        />
+                      );
+                    })}
+                </SimpleGrid>
+              </div>
+            </ScrollArea.Autosize>
           ) : null}
         </Card.Section>
       </Card>
