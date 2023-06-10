@@ -1,7 +1,7 @@
 {
-    "private": true,
-    "name":"csgoinvshuffleweb",
-    "workspaces": [
-        "react"
-    ]
+  "private": true,
+  "name": "csgoinvshuffleweb",
+  "workspaces": [
+    "react"
+  ]
 }
