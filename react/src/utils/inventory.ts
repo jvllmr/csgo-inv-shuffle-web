@@ -16,18 +16,18 @@ export function hasItem(item: Item | string, items: Item[]): boolean {
 
 export function hasIntersectingSlots(
   item: Item | string,
-  items: Item[]
+  items: Item[],
 ): boolean {
   if (typeof item === "string") item = getItem(item)!;
   const items_slots = items.map((_item: Item) =>
     _item.shuffle_slots.concat(
       ..._item.shuffle_slots_ct,
-      ..._item.shuffle_slots_t
-    )
+      ..._item.shuffle_slots_t,
+    ),
   );
   const item_slots = item.shuffle_slots.concat(
     ...item.shuffle_slots_ct,
-    ...item.shuffle_slots_t
+    ...item.shuffle_slots_t,
   );
 
   for (const _item of items_slots) {
