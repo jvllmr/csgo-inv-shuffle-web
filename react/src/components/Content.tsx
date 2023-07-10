@@ -20,13 +20,13 @@ export default function Content() {
   const inventory = useAppSelector(selectInv);
   const dispatch = useAppDispatch();
   const [activeDragId, setActiveDragId] = useState<UniqueIdentifier | null>(
-    null
+    null,
   );
 
   const activeDragItem = useMemo(
     // @ts-ignore
     () => (activeDragId ? getItem(activeDragId.split("_", 1)[0]) : null),
-    [activeDragId]
+    [activeDragId],
   );
 
   const onDragEnd = useCallback(
@@ -79,12 +79,12 @@ export default function Content() {
           (hasItem(
             item_id,
             // @ts-ignore
-            map_cpy[Number(destination.id.split("-", 2)[1]) - 1]["general"]
+            map_cpy[Number(destination.id.split("-", 2)[1]) - 1]["general"],
           ) ||
             (hasItem(
               item_id,
               // @ts-ignore
-              map_cpy[Number(destination.id.split("-", 2)[1]) - 1][team]
+              map_cpy[Number(destination.id.split("-", 2)[1]) - 1][team],
             ) &&
               // @ts-ignore
               destination.id.split("-", 2)[1] !== index))
@@ -121,7 +121,7 @@ export default function Content() {
       const addToSlot = (
         place: "general" | "CT" | "T",
         _item: Item,
-        slotList: number[]
+        slotList: number[],
       ) => {
         if (slotList.length) {
           const items: Item[] = [...slot[place]];
@@ -181,7 +181,7 @@ export default function Content() {
       // eslint-disable-next-line eqeqeq
       if (map_cpy != [...map]) dispatch(setMap(map_cpy)); // @vite-ignore
     },
-    [map, inventory, dispatch]
+    [map, inventory, dispatch],
   );
   const onDragStart = useCallback(
     ({ active: { id } }: DragStartEvent) => {
@@ -252,7 +252,7 @@ export default function Content() {
     if (source_element) source_element.style.backgroundColor = null;
     */
     },
-    [map]
+    [map],
   );
 
   return (
