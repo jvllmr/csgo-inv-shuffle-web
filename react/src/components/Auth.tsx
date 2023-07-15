@@ -24,7 +24,7 @@ export default function Auth() {
         if (resp.status === 200) {
           dispatch(setAuthenticated(true));
           dispatch(
-            setAuthID(steam_id.split("/")[steam_id.split("/").length - 1])
+            setAuthID(steam_id.split("/")[steam_id.split("/").length - 1]),
           );
         }
       });
