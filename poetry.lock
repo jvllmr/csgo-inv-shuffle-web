@@ -804,18 +804,18 @@ pyjwt = ">=2.0,<3.0"
 
 [[package]]
 name = "gunicorn"
-version = "20.1.0"
+version = "21.0.0"
 description = "WSGI HTTP Server for UNIX"
 category = "main"
 optional = false
 python-versions = ">=3.5"
 files = [
-    {file = "gunicorn-20.1.0-py3-none-any.whl", hash = "sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e"},
-    {file = "gunicorn-20.1.0.tar.gz", hash = "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"},
+    {file = "gunicorn-21.0.0-py3-none-any.whl", hash = "sha256:f3a52f282306059b3a39761559c086d326449a2d67eb8ab224f057caa7cd1cff"},
+    {file = "gunicorn-21.0.0.tar.gz", hash = "sha256:d01d18d61ba58fa1e3a1ae4f15c77989a95478edbaaf95f3e3ff92a2b69d1ff2"},
 ]
 
 [package.dependencies]
-setuptools = ">=3.0"
+packaging = "*"
 
 [package.extras]
 eventlet = ["eventlet (>=0.24.1)"]
@@ -1237,7 +1237,7 @@ setuptools = "*"
 name = "packaging"
 version = "23.1"
 description = "Core utilities for Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1979,7 +1979,7 @@ jeepney = ">=0.6"
 name = "setuptools"
 version = "67.8.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2344,4 +2344,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c20b3a4de2eaaef25c0726b6c4400d91806a1c27d6c2ddb79727834d71ea00e0"
+content-hash = "0d26912235f533fa706259fb341b732beab7d2cf28565a56ca8f6769d4b9b7d6"
