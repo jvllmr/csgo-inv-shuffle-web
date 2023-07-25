@@ -8,7 +8,7 @@ async function basic_request(
   method: string,
   path: string,
   body: string | null = null,
-  try_: number = 1
+  try_: number = 1,
 ): Promise<Response> {
   const args: RequestInit = {
     method: method,
