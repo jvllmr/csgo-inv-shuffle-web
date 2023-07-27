@@ -66,10 +66,10 @@ function Slot(props: SlotProps) {
       activeDrag
         ? getItem(
             // @ts-ignore
-            activeDrag.id.split("_", 1)[0]
+            activeDrag.id.split("_", 1)[0],
           )
         : null,
-    [activeDrag]
+    [activeDrag],
   );
   const style = useMemo(() => {
     let resStyle: React.CSSProperties = { height: "100%" };
@@ -143,7 +143,7 @@ export default function SlotMap() {
       [...Array(count).keys()].map((index: number) => {
         return index + 1;
       }),
-    [count]
+    [count],
   );
   const authenticated = useAppSelector(selectAuthenticated);
 
