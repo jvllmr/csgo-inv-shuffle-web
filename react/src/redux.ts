@@ -24,7 +24,7 @@ document.addEventListener("mapDBReady", async () => {
       forward_maps: await DBgetForwardMaps(),
       backward_maps: await DBgetBackwardMaps(),
       DBready: true,
-    })
+    }),
   );
 });
 
