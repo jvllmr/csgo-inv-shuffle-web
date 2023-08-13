@@ -48,7 +48,7 @@ interface ShellProps {
 
 export const ScrollBarContext =
   React.createContext<React.MutableRefObject<HTMLDivElement | null> | null>(
-    null
+    null,
   );
 
 export const useScrollbarRef = () => useContext(ScrollBarContext);
@@ -155,7 +155,7 @@ function Shell(props: ShellProps) {
 
                             dispatch(setMap(json));
                           }
-                        }
+                        },
                       );
                     }}
                   >
@@ -171,7 +171,7 @@ function Shell(props: ShellProps) {
                             const text = await resp.text();
                             downloadFile("csgo_saved_item_shuffles.txt", text);
                           }
-                        }
+                        },
                       );
                     }}
                   >
@@ -184,7 +184,7 @@ function Shell(props: ShellProps) {
                     onClick={() =>
                       downloadFile(
                         `csgoinvshuffle_export_${steamID}.json`,
-                        JSON.stringify(map)
+                        JSON.stringify(map),
                       )
                     }
                   >

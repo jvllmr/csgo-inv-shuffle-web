@@ -84,17 +84,17 @@ export default function Inventory() {
               setTimeoutState(Number(json));
             } else {
               setError(
-                `Your Inventory could not be loaded. Status code ${resp.status}`
+                `Your Inventory could not be loaded. Status code ${resp.status}`,
               );
             }
-          }
+          },
         );
       }
 
       if (refreshing) setRefreshing(false);
       return [];
     },
-    [dispatch, refreshing, steamid64]
+    [dispatch, refreshing, steamid64],
   );
 
   useEffect(() => {
