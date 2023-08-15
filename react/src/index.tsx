@@ -57,5 +57,5 @@ root.render(
     <PersistGate persistor={persistor}>
       <Index />
     </PersistGate>
-  </Provider>
+  </Provider>,
 );
