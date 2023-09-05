@@ -4,12 +4,12 @@ repos:
     hooks:
       - id: pyaphid
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.4.0
+    rev: v3.10.1
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
   - repo: https://github.com/hadialqattan/pycln
-    rev: "v2.1.5"
+    rev: "v2.2.2"
     hooks:
       - id: pycln
   - repo: https://github.com/PyCQA/isort
@@ -17,17 +17,17 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.7.0
     hooks:
       - id: black
   - repo: https://github.com/pycqa/flake8
-    rev: "6.0.0"
+    rev: "6.1.0"
     hooks:
       - id: flake8
         additional_dependencies:
           - "flake8-pyproject"
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.9-for-vscode
+    rev: v3.0.3
     hooks:
       - id: prettier
         additional_dependencies:
